@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Pomiary</string>
+    <string name="tab_std_lh">Standard LH</string>
+    <string name="tab_std_rh">Standard RH</string>
+    <string name="tab_max_lh">Maxi LH</string>
+    <string name="tab_max_rh">Maxi RH</string>
+    <string name="tab_settings">Settings</string>
+    <string name="check_std">Check standard...</string>
+    <string name="check_maxi">Check maxi...</string>
+    <string name="save_msg">Save settings...</string>
+    <string name="text_P6_0">P6 (zero), mm</string>
+    <string name="text_P6_1">P6 (1), mm</string>
+    <string name="text_P6_2">P6 (2), mm</string>
+    <string name="text_P6_3">P6 (3), mm</string>
+    <string name="text_P6_4">P6 (4), mm</string>
+    <string name="text_P6_5">P6 (5), mm</string>
+    <string name="text_P6_6">P6 (6), mm</string>
+    <string name="text_P6_7">P6 (7), mm</string>
+    <string name="text_P6_8">P6 (8), mm</string>
+    <string name="text_P6_9">P6 (9), mm</string>
+    <string name="text_P6_10">P6 (10), mm</string>
+    <string name="text_P7_0">P7 (zero), mm</string>
+    <string name="text_P7_1">P7 (1), mm</string>
+    <string name="text_P7_2">P7 (2), mm</string>
+    <string name="text_P7_3">P7 (3), mm</string>
+    <string name="result_Ok">OK</string>
+    <string name="result_Nok">NOK</string>
+</resources>
