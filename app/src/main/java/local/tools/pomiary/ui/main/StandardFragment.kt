@@ -47,7 +47,7 @@ class StandardFragment : Fragment() {
         R.id.editStandardP6_8,
     )
 
-    private var editsStandardP7 = arrayOf(
+    private val editsStandardP7 = arrayOf(
         R.id.editStandardP7_0,
         R.id.editStandardP7_1,
         R.id.editStandardP7_2,
@@ -85,7 +85,7 @@ class StandardFragment : Fragment() {
         R.id.textNokStandardP6_8,
     )
 
-    private var textsNokStandardP7 = arrayOf(
+    private val textsNokStandardP7 = arrayOf(
         R.id.textNokStandardP7_0,
         R.id.textNokStandardP7_1,
         R.id.textNokStandardP7_2,

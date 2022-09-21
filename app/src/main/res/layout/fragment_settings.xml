@@ -18,43 +18,825 @@
         android:focusable="true"
         android:src="@android:drawable/ic_menu_save" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:fadeScrollbars="false"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tolerance Standard" />
-            </TableRow>
-
-        </TableLayout>
-
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/textToleranceStandard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tolerance Maxi" />
-            </TableRow>
+                    android:text="@string/tolerance_standard" />
 
-        </TableLayout>
-    </LinearLayout>
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_0" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_0_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_0_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_1" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_1_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_1_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_2" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_2_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_2_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_3" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_3_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_3_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_4" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_4_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_4_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_5" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_5_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_5_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_6" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_6_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_6_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_7" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_7_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_7_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP6_8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_8" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_8_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP6_8_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP7_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_0" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_0_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_0_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP7_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_1" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_1_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_1_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP7_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_2" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_2_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_2_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textStandardP7_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_3" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_3_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editStandardP7_3_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textToleranceMaxi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tolerance_maxi" />
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_0" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_0_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_0_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_1" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_1_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_1_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_2" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_2_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_2_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_3" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_3_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_3_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_4" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_4_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_4_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_5" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_5_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_5_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_6" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_6_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_6_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_7" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_7_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_7_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_8"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_8" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_8_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_8_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_9" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_9_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_9_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP6_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P6_10" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_10_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP6_10_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP7_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_0" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_0_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_0_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP7_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_1" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_1_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_1_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP7_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_2" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_2_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_2_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textMaxiP7_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_P7_3" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_3_zero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+
+                        <EditText
+                            android:id="@+id/editMaxiP7_3_offset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="3"
+                            android:inputType="numberSigned|numberDecimal"
+                            android:selectAllOnFocus="true" />
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 </FrameLayout>
