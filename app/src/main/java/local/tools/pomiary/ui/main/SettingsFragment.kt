@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.R
@@ -47,7 +48,7 @@ class SettingsFragment : Fragment() {
             Pair(626.0F, 2.5F),
             Pair(728.0F, 2.5F),
             Pair(830.0F, 2.5F),
-            Pair(842.5F, 3.0F)
+            Pair(839.5F, 3.0F)
         )
 
         private var toleranceMaxiP7 = arrayOf(
@@ -55,6 +56,86 @@ class SettingsFragment : Fragment() {
             Pair(22.5F, 1.5F),
             Pair(107.5F, 2.5F),
             Pair(130.5F, 2.5F)
+        )
+
+        private val editsStandardP6_zeros = arrayOf(
+            R.id.editStandardP6_0_zero,
+            R.id.editStandardP6_1_zero,
+            R.id.editStandardP6_2_zero,
+            R.id.editStandardP6_3_zero,
+            R.id.editStandardP6_4_zero,
+            R.id.editStandardP6_5_zero,
+            R.id.editStandardP6_6_zero,
+            R.id.editStandardP6_7_zero,
+            R.id.editStandardP6_8_zero,
+        )
+
+        private val editsStandardP6_offsets = arrayOf(
+            R.id.editStandardP6_0_offset,
+            R.id.editStandardP6_1_offset,
+            R.id.editStandardP6_2_offset,
+            R.id.editStandardP6_3_offset,
+            R.id.editStandardP6_4_offset,
+            R.id.editStandardP6_5_offset,
+            R.id.editStandardP6_6_offset,
+            R.id.editStandardP6_7_offset,
+            R.id.editStandardP6_8_offset,
+        )
+
+        private val editsStandardP7_zeros = arrayOf(
+            R.id.editStandardP7_0_zero,
+            R.id.editStandardP7_1_zero,
+            R.id.editStandardP7_2_zero,
+            R.id.editStandardP7_3_zero,
+        )
+
+        private val editsStandardP7_offsets = arrayOf(
+            R.id.editStandardP7_0_offset,
+            R.id.editStandardP7_1_offset,
+            R.id.editStandardP7_2_offset,
+            R.id.editStandardP7_3_offset,
+        )
+
+        private val editsMaxiP6_zeros = arrayOf(
+            R.id.editMaxiP6_0_zero,
+            R.id.editMaxiP6_1_zero,
+            R.id.editMaxiP6_2_zero,
+            R.id.editMaxiP6_3_zero,
+            R.id.editMaxiP6_4_zero,
+            R.id.editMaxiP6_5_zero,
+            R.id.editMaxiP6_6_zero,
+            R.id.editMaxiP6_7_zero,
+            R.id.editMaxiP6_8_zero,
+            R.id.editMaxiP6_9_zero,
+            R.id.editMaxiP6_10_zero,
+        )
+
+        private val editsMaxiP6_offsets = arrayOf(
+            R.id.editMaxiP6_0_offset,
+            R.id.editMaxiP6_1_offset,
+            R.id.editMaxiP6_2_offset,
+            R.id.editMaxiP6_3_offset,
+            R.id.editMaxiP6_4_offset,
+            R.id.editMaxiP6_5_offset,
+            R.id.editMaxiP6_6_offset,
+            R.id.editMaxiP6_7_offset,
+            R.id.editMaxiP6_8_offset,
+            R.id.editMaxiP6_9_offset,
+            R.id.editMaxiP6_10_offset,
+        )
+
+        private val editsMaxiP7_zeros = arrayOf(
+            R.id.editMaxiP7_0_zero,
+            R.id.editMaxiP7_1_zero,
+            R.id.editMaxiP7_2_zero,
+            R.id.editMaxiP7_3_zero,
+        )
+
+        private val editsMaxiP7_offsets = arrayOf(
+            R.id.editMaxiP7_0_offset,
+            R.id.editMaxiP7_1_offset,
+            R.id.editMaxiP7_2_offset,
+            R.id.editMaxiP7_3_offset,
         )
 
         // TODO: Rename parameter arguments, choose names that match
@@ -113,19 +194,55 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun writeEdits(view: View, tolerances: Array<Pair<Float, Float>>, editsZeros: Array<Int>, editsOffsets: Array<Int>) {
+        tolerances.forEachIndexed { index, tolerance ->
+            val editZero = view.findViewById<EditText>(editsZeros[index])
+            editZero.setText(tolerance.first.toString())
+
+            val editOffset = view.findViewById<EditText>(editsOffsets[index])
+            editOffset.setText(tolerance.second.toString())
+        }
+    }
+
+    private fun readEdits(view: View, tolerances: Array<Pair<Float, Float>>, editsZeros: Array<Int>, editsOffsets: Array<Int>) {
+        tolerances.forEachIndexed { index, _ ->
+            val editZero = view.findViewById<EditText>(editsZeros[index])
+            val textZero = editZero.text.toString()
+            val zeroValue = textZero.toFloatOrNull()
+
+            val editOffset = view.findViewById<EditText>(editsOffsets[index])
+            val textOffset = editOffset.text.toString()
+            val offsetValue = textOffset.toFloatOrNull()
+
+            tolerances[index] = Pair(zeroValue ?: 0.0F, offsetValue ?: 0.0F)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_settings, container, false)
+
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonSaveSettings)
         refreshButton.setOnClickListener { saveSettings() }
+
+        writeEdits(viewOfLayout, toleranceStandardP6, editsStandardP6_zeros, editsStandardP6_offsets)
+        writeEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
+        writeEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
+        writeEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
+
         return viewOfLayout
     }
 
     private fun saveSettings() {
         val message: String = requireContext().resources.getString(R.string.save_msg)
         Snackbar.make(viewOfLayout, message, 250).show()
+
+        readEdits(viewOfLayout, toleranceStandardP6, editsStandardP6_zeros, editsStandardP6_offsets)
+        readEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
+        readEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
+        readEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
     }
 }
