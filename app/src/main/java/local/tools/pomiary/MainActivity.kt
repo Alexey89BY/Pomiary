@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
 
-        SettingsFragment.loadSettings()
+        SettingsFragment.loadSettings(this)
     }
 
     companion object {

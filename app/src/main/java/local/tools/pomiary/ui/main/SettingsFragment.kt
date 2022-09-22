@@ -1,14 +1,17 @@
 package local.tools.pomiary.ui.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.R
+
 
 /**
  * A simple [Fragment] subclass.
@@ -138,6 +141,12 @@ class SettingsFragment : Fragment() {
             R.id.editMaxiP7_3_offset,
         )
 
+        private const val settingsFileName = "tolerances"
+        private const val settingsStandardP6_prefix = "standardP6_%d_%d"
+        private const val settingsStandardP7_prefix = "standardP7_%d_%d"
+        private const val settingsMaxiP6_prefix = "maxiP6_%d_%d"
+        private const val settingsMaxiP7_prefix = "maxiP7_%d_%d"
+
         // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private const val ARG_PARAM1 = "param1"
@@ -178,8 +187,33 @@ class SettingsFragment : Fragment() {
         }
 
         @JvmStatic
-        fun loadSettings() {
+        fun loadSettings(context: Context) {
+            val preferences = context.getSharedPreferences(settingsFileName, 0)
+            readTolerances(preferences, settingsStandardP6_prefix, toleranceStandardP6)
+            readTolerances(preferences, settingsStandardP7_prefix, toleranceStandardP7)
+            readTolerances(preferences, settingsMaxiP6_prefix, toleranceMaxiP6)
+            readTolerances(preferences, settingsMaxiP7_prefix, toleranceMaxiP7)
+        }
 
+        @JvmStatic
+        fun readTolerances(preferences: SharedPreferences, prefix: String, tolerances: Array<Pair<Float, Float>>) {
+            tolerances.forEachIndexed { index, tolerance ->
+                val zeroPrefix = prefix.format(index, 0)
+                val first = preferences.getFloat(zeroPrefix, tolerance.first)
+                val offsetPrefix = prefix.format(index, 1)
+                val second = preferences.getFloat(offsetPrefix, tolerance.second)
+                tolerances[index] = Pair(first, second)
+            }
+        }
+
+        @JvmStatic
+        fun writeTolerances(editor: SharedPreferences.Editor, prefix: String, tolerances: Array<Pair<Float, Float>>) {
+            tolerances.forEachIndexed { index, tolerance ->
+                val zeroPrefix = prefix.format(index, 0)
+                editor.putFloat(zeroPrefix, tolerance.first)
+                val offsetPrefix = prefix.format(index, 1)
+                editor.putFloat(offsetPrefix, tolerance.second)
+            }
         }
     }
 
@@ -244,5 +278,13 @@ class SettingsFragment : Fragment() {
         readEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
         readEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
         readEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
+
+        val preferences = viewOfLayout.context.getSharedPreferences(settingsFileName, 0)
+        val editor = preferences.edit()
+        writeTolerances(editor, settingsStandardP6_prefix, toleranceStandardP6)
+        writeTolerances(editor, settingsStandardP7_prefix, toleranceStandardP7)
+        writeTolerances(editor, settingsMaxiP6_prefix, toleranceMaxiP6)
+        writeTolerances(editor, settingsMaxiP7_prefix, toleranceMaxiP7)
+        editor.apply()
     }
 }
