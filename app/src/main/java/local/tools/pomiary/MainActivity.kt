@@ -49,39 +49,65 @@ class MainActivity : AppCompatActivity() {
                 points[index] = (pointRaw - pointZero).absoluteValue
             }
 
-            var shiftsSum = 0.0F
+            var shiftUpMin = 0.0F
+            var shiftUpIndex = -1
+            var shiftDownMax = 0.0F
+            var shiftDownIndex = -1
             for (index in 1 until points.size-1)
             {
-                val pointShift = tolerancesRaw[index].first - points[index]
-                shiftsSum += pointShift
+                val shiftDown = tolerancesRaw[index].first - tolerancesRaw[index].second - points[index]
+                if ((shiftDown > shiftDownMax) or (shiftDownIndex < 0))
+                {
+                    shiftDownMax = shiftDown
+                    shiftDownIndex = index
+                }
+
+                val shiftUp = tolerancesRaw[index].first + tolerancesRaw[index].second - points[index]
+                if ((shiftUp < shiftUpMin) or (shiftUpIndex < 0))
+                {
+                    shiftUpMin = shiftUp
+                    shiftUpIndex = index
+                }
             }
 
-            val totalShift = shiftsSum / (points.size - 2)
+            val totalShift = (shiftUpMin + shiftDownMax) / 2
             points.forEachIndexed { index, point ->
                 points[index] = point + totalShift
             }
 
             points.forEachIndexed { index, pointValue ->
-                val toleranceMin = tolerancesRaw[index].first-tolerancesRaw[index].second
-                val toleranceMax = tolerancesRaw[index].first+tolerancesRaw[index].second
+                val textView = view.findViewById<TextView>(textsResultIds[index])
+                textView.text = buildString { append(" %.1f ") }.format(
+                    pointValue
+                )
+            }
 
+            val toleranceNok = SettingsFragment.getToleranceNok()
+            points.forEachIndexed { index, pointValue ->
                 val textNok = view.findViewById<TextView>(textsNokIds[index])
-                if ((pointValue < toleranceMin) or (toleranceMax < pointValue)) {
-                    textNok.text = view.resources.getString(R.string.result_Nok)
+
+                val pointError = (pointValue - tolerancesRaw[index].first).absoluteValue
+                val nokText: String
+                if (pointError > tolerancesRaw[index].second + toleranceNok) {
+                    nokText = view.resources.getString(R.string.result_Nok)
+                    //textNok.setBackgroundColor(Color.BLACK)
                     textNok.setTextColor(Color.RED)
+                } else if (pointError > tolerancesRaw[index].second) {
+                    nokText = view.resources.getString(R.string.result_Nok)
+                    //textNok.setBackgroundColor(Color.BLACK)
+                    textNok.setTextColor(Color.YELLOW)
                 } else {
-                    textNok.text = view.resources.getString(R.string.result_Ok)
+                    nokText = view.resources.getString(R.string.result_Ok)
+                    //textNok.setBackgroundColor(Color.BLACK)
                     textNok.setTextColor(Color.GREEN)
                 }
 
-                val textView = view.findViewById<TextView>(textsResultIds[index])
-                textView.text = buildString { append(" %.1f mm (%.1f - %.1f)") }.format(
-                    pointValue,
-                    toleranceMin,
-                    toleranceMax,
+                textNok.text = buildString { append(" %s (%.1f - %.1f)") }.format(
+                    nokText,
+                    tolerancesRaw[index].first - tolerancesRaw[index].second,
+                    tolerancesRaw[index].first + tolerancesRaw[index].second
                 )
             }
         }
-
     }
 }
