@@ -35,7 +35,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
         val fragment: Fragment = when (position) {
             0, 1 -> StandardFragment.newInstance()
             2, 3 -> MaxiFragment.newInstance()
-            else -> SettingsFragment.newInstance("")
+            else -> SettingsFragment.newInstance()
         }
         return fragment
     }

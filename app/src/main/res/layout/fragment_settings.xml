@@ -56,6 +56,7 @@
                             android:id="@+id/textStandardP6_0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_0_zero"
                             android:text="@string/text_P6_0" />
 
                         <EditText
@@ -83,6 +84,7 @@
                             android:id="@+id/textStandardP6_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_1_zero"
                             android:text="@string/text_P6_1" />
 
                         <EditText
@@ -110,6 +112,7 @@
                             android:id="@+id/textStandardP6_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_2_zero"
                             android:text="@string/text_P6_2" />
 
                         <EditText
@@ -137,6 +140,7 @@
                             android:id="@+id/textStandardP6_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_3_zero"
                             android:text="@string/text_P6_3" />
 
                         <EditText
@@ -164,6 +168,7 @@
                             android:id="@+id/textStandardP6_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_4_zero"
                             android:text="@string/text_P6_4" />
 
                         <EditText
@@ -191,6 +196,7 @@
                             android:id="@+id/textStandardP6_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_5_zero"
                             android:text="@string/text_P6_5" />
 
                         <EditText
@@ -218,6 +224,7 @@
                             android:id="@+id/textStandardP6_6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_6_zero"
                             android:text="@string/text_P6_6" />
 
                         <EditText
@@ -245,6 +252,7 @@
                             android:id="@+id/textStandardP6_7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_7_zero"
                             android:text="@string/text_P6_7" />
 
                         <EditText
@@ -272,6 +280,7 @@
                             android:id="@+id/textStandardP6_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP6_8_zero"
                             android:text="@string/text_P6_8" />
 
                         <EditText
@@ -293,20 +302,13 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"></TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"></TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/textStandardP7_0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP7_0_zero"
                             android:text="@string/text_P7_0" />
 
                         <EditText
@@ -334,6 +336,7 @@
                             android:id="@+id/textStandardP7_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP7_1_zero"
                             android:text="@string/text_P7_1" />
 
                         <EditText
@@ -361,6 +364,7 @@
                             android:id="@+id/textStandardP7_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP7_2_zero"
                             android:text="@string/text_P7_2" />
 
                         <EditText
@@ -388,6 +392,7 @@
                             android:id="@+id/textStandardP7_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editStandardP7_3_zero"
                             android:text="@string/text_P7_3" />
 
                         <EditText
@@ -408,6 +413,44 @@
                     </TableRow>
 
                 </TableLayout>
+
+                <TextView
+                    android:id="@+id/textToleranceNok"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tolerance_nok" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:id="@+id/textToleranceNokValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/editNok_zero"
+                        android:text="@string/tolerance_nok_value" />
+
+                    <EditText
+                        android:id="@+id/editNok_zero"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="3"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:selectAllOnFocus="true" />
+
+                    <EditText
+                        android:id="@+id/editNok_offset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="3"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:selectAllOnFocus="true" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -435,6 +478,7 @@
                             android:id="@+id/textMaxiP6_0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_0_zero"
                             android:text="@string/text_P6_0" />
 
                         <EditText
@@ -462,6 +506,7 @@
                             android:id="@+id/textMaxiP6_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_1_zero"
                             android:text="@string/text_P6_1" />
 
                         <EditText
@@ -489,6 +534,7 @@
                             android:id="@+id/textMaxiP6_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_2_zero"
                             android:text="@string/text_P6_2" />
 
                         <EditText
@@ -516,6 +562,7 @@
                             android:id="@+id/textMaxiP6_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_3_zero"
                             android:text="@string/text_P6_3" />
 
                         <EditText
@@ -543,6 +590,7 @@
                             android:id="@+id/textMaxiP6_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_4_zero"
                             android:text="@string/text_P6_4" />
 
                         <EditText
@@ -570,6 +618,7 @@
                             android:id="@+id/textMaxiP6_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_5_zero"
                             android:text="@string/text_P6_5" />
 
                         <EditText
@@ -597,6 +646,7 @@
                             android:id="@+id/textMaxiP6_6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_6_zero"
                             android:text="@string/text_P6_6" />
 
                         <EditText
@@ -624,6 +674,7 @@
                             android:id="@+id/textMaxiP6_7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_7_zero"
                             android:text="@string/text_P6_7" />
 
                         <EditText
@@ -652,6 +703,7 @@
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_8_zero"
                             android:text="@string/text_P6_8" />
 
                         <EditText
@@ -679,6 +731,7 @@
                             android:id="@+id/textMaxiP6_9"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_9_zero"
                             android:text="@string/text_P6_9" />
 
                         <EditText
@@ -706,6 +759,7 @@
                             android:id="@+id/textMaxiP6_10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP6_10_zero"
                             android:text="@string/text_P6_10" />
 
                         <EditText
@@ -733,6 +787,7 @@
                             android:id="@+id/textMaxiP7_0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP7_0_zero"
                             android:text="@string/text_P7_0" />
 
                         <EditText
@@ -760,6 +815,7 @@
                             android:id="@+id/textMaxiP7_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP7_1_zero"
                             android:text="@string/text_P7_1" />
 
                         <EditText
@@ -787,6 +843,7 @@
                             android:id="@+id/textMaxiP7_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP7_2_zero"
                             android:text="@string/text_P7_2" />
 
                         <EditText
@@ -814,6 +871,7 @@
                             android:id="@+id/textMaxiP7_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/editMaxiP7_3_zero"
                             android:text="@string/text_P7_3" />
 
                         <EditText

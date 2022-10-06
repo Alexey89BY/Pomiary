@@ -61,6 +61,10 @@ class SettingsFragment : Fragment() {
             Pair(130.5F, 2.5F)
         )
 
+        private var toleranceNok = arrayOf(
+            Pair(0.0F, 0.5F),
+        )
+
         private val editsStandardP6_zeros = arrayOf(
             R.id.editStandardP6_0_zero,
             R.id.editStandardP6_1_zero,
@@ -141,28 +145,31 @@ class SettingsFragment : Fragment() {
             R.id.editMaxiP7_3_offset,
         )
 
+        private val editsNok_zeros = arrayOf(
+            R.id.editNok_zero,
+        )
+
+        private val editsNok_offsets = arrayOf(
+            R.id.editNok_offset,
+        )
+
         private const val settingsFileName = "tolerances"
         private const val settingsStandardP6_prefix = "standardP6_%d_%d"
         private const val settingsStandardP7_prefix = "standardP7_%d_%d"
         private const val settingsMaxiP6_prefix = "maxiP6_%d_%d"
         private const val settingsMaxiP7_prefix = "maxiP7_%d_%d"
+        private const val settingsNok_prefix = "nok_%d_%d"
 
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private const val ARG_PARAM1 = "param1"
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
          * @return A new instance of fragment SettingsFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String) =
+        fun newInstance() =
             SettingsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
                 }
             }
 
@@ -187,12 +194,18 @@ class SettingsFragment : Fragment() {
         }
 
         @JvmStatic
+        fun getToleranceNok(): Float {
+            return toleranceNok[0].second
+        }
+
+        @JvmStatic
         fun loadSettings(context: Context) {
             val preferences = context.getSharedPreferences(settingsFileName, 0)
             readTolerances(preferences, settingsStandardP6_prefix, toleranceStandardP6)
             readTolerances(preferences, settingsStandardP7_prefix, toleranceStandardP7)
             readTolerances(preferences, settingsMaxiP6_prefix, toleranceMaxiP6)
             readTolerances(preferences, settingsMaxiP7_prefix, toleranceMaxiP7)
+            readTolerances(preferences, settingsNok_prefix, toleranceNok)
         }
 
         @JvmStatic
@@ -218,13 +231,10 @@ class SettingsFragment : Fragment() {
     }
 
     private lateinit var viewOfLayout: View
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
         }
     }
 
@@ -266,6 +276,7 @@ class SettingsFragment : Fragment() {
         writeEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
         writeEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
         writeEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
+        writeEdits(viewOfLayout, toleranceNok, editsNok_zeros, editsNok_offsets)
 
         return viewOfLayout
     }
@@ -278,6 +289,7 @@ class SettingsFragment : Fragment() {
         readEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
         readEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
         readEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
+        readEdits(viewOfLayout, toleranceNok, editsNok_zeros, editsNok_offsets)
 
         val preferences = viewOfLayout.context.getSharedPreferences(settingsFileName, 0)
         val editor = preferences.edit()
@@ -285,6 +297,7 @@ class SettingsFragment : Fragment() {
         writeTolerances(editor, settingsStandardP7_prefix, toleranceStandardP7)
         writeTolerances(editor, settingsMaxiP6_prefix, toleranceMaxiP6)
         writeTolerances(editor, settingsMaxiP7_prefix, toleranceMaxiP7)
+        writeTolerances(editor, settingsNok_prefix, toleranceNok)
         editor.apply()
     }
 }
