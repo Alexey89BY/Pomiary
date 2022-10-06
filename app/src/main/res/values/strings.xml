@@ -5,9 +5,9 @@
     <string name="tab_max_lh">Maxi LH</string>
     <string name="tab_max_rh">Maxi RH</string>
     <string name="tab_settings">Settings</string>
-    <string name="check_std">Check standard...</string>
-    <string name="check_maxi">Check maxi...</string>
-    <string name="save_msg">Save settings...</string>
+    <string name="check_std">Check standard&#8230;</string>
+    <string name="check_maxi">Check maxi&#8230;</string>
+    <string name="save_msg">Save settings&#8230;</string>
     <string name="text_P6_0">P6 (*), mm</string>
     <string name="text_P6_1">P6 (1), mm</string>
     <string name="text_P6_2">P6 (2), mm</string>
@@ -27,4 +27,6 @@
     <string name="result_Nok">NOK</string>
     <string name="tolerance_standard">Tolerance Standard</string>
     <string name="tolerance_maxi">Tolerance Maxi</string>
+    <string name="tolerance_nok">Tolerance NOK</string>
+    <string name="tolerance_nok_value">NOK, mm</string>
 </resources>
