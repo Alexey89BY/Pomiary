@@ -54,13 +54,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP6_0"
+                    android:id="@+id/textResultStandardP6_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP6_0"
+                    android:id="@+id/textNokStandardP6_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -86,13 +88,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP6_1"
+                    android:id="@+id/textResultStandardP6_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP6_1"
+                    android:id="@+id/textNokStandardP6_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -118,13 +122,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP6_2"
+                    android:id="@+id/textResultStandardP6_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP6_2"
+                    android:id="@+id/textNokStandardP6_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -147,16 +153,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true" />
-
-                <TextView
-                    android:id="@+id/textNokStandardP6_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textResultStandardP6_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokStandardP6_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -179,16 +188,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true" />
-
-                <TextView
-                    android:id="@+id/textNokStandardP6_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textResultStandardP6_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokStandardP6_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -211,16 +223,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true" />
-
-                <TextView
-                    android:id="@+id/textNokStandardP6_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textResultStandardP6_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokStandardP6_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -243,16 +258,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true" />
-
-                <TextView
-                    android:id="@+id/textNokStandardP6_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textResultStandardP6_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokStandardP6_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -275,16 +293,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true" />
-
-                <TextView
-                    android:id="@+id/textNokStandardP6_7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textResultStandardP6_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokStandardP6_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -310,13 +331,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP6_8"
+                    android:id="@+id/textResultStandardP6_8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP6_8"
+                    android:id="@+id/textNokStandardP6_8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -348,13 +371,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP7_0"
+                    android:id="@+id/textResultStandardP7_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP7_0"
+                    android:id="@+id/textNokStandardP7_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -380,13 +405,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP7_1"
+                    android:id="@+id/textResultStandardP7_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP7_1"
+                    android:id="@+id/textNokStandardP7_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -412,13 +439,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP7_2"
+                    android:id="@+id/textResultStandardP7_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP7_2"
+                    android:id="@+id/textNokStandardP7_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
@@ -444,13 +473,15 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokStandardP7_3"
+                    android:id="@+id/textResultStandardP7_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textResultStandardP7_3"
+                    android:id="@+id/textNokStandardP7_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
