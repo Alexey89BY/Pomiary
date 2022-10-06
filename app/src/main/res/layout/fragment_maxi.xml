@@ -51,15 +51,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -83,15 +85,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -114,15 +118,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -145,15 +151,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -176,15 +184,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -207,15 +217,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -238,15 +250,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -269,15 +283,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -300,15 +316,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -331,15 +349,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -362,15 +382,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP6_10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP6_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP6_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -399,15 +421,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP7_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP7_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP7_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -430,15 +454,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP7_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP7_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP7_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -461,15 +487,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP7_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP7_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP7_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
 
@@ -492,15 +520,17 @@
                     android:selectAllOnFocus="true" />
 
                 <TextView
-                    android:id="@+id/textNokMaxiP7_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
                     android:id="@+id/textResultMaxiP7_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textNokMaxiP7_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </TableRow>
         </TableLayout>
