@@ -53,16 +53,15 @@ class MainActivity : AppCompatActivity() {
             var shiftUpIndex = -1
             var shiftDownMax = 0.0F
             var shiftDownIndex = -1
-            for (index in 1 until points.size-1)
-            {
-                val shiftDown = tolerancesRaw[index].first - tolerancesRaw[index].second - points[index]
+            points.forEachIndexed { index, pointValue ->
+                val shiftDown = tolerancesRaw[index].first - tolerancesRaw[index].second - pointValue
                 if ((shiftDown > shiftDownMax) or (shiftDownIndex < 0))
                 {
                     shiftDownMax = shiftDown
                     shiftDownIndex = index
                 }
 
-                val shiftUp = tolerancesRaw[index].first + tolerancesRaw[index].second - points[index]
+                val shiftUp = tolerancesRaw[index].first + tolerancesRaw[index].second - pointValue
                 if ((shiftUp < shiftUpMin) or (shiftUpIndex < 0))
                 {
                     shiftUpMin = shiftUp
@@ -71,8 +70,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             val totalShift = (shiftUpMin + shiftDownMax) / 2
-            points.forEachIndexed { index, point ->
-                points[index] = point + totalShift
+            points.forEachIndexed { index, pointValue ->
+                points[index] = pointValue + totalShift
             }
 
             points.forEachIndexed { index, pointValue ->
