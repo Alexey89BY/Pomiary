@@ -22,7 +22,7 @@ class SettingsFragment : Fragment() {
 
     companion object {
         private var toleranceStandardP6 = arrayOf(
-            Pair(0.0F, 1.5F),
+            Pair(0.0F, 3.0F),
             Pair(21.0F, 1.5F),
             Pair(123.0F, 2.5F),
             Pair(225.0F, 2.5F),
@@ -41,7 +41,7 @@ class SettingsFragment : Fragment() {
         )
 
         private var toleranceMaxiP6 = arrayOf(
-            Pair(0.0F, 1.5F),
+            Pair(0.0F, 3.0F),
             Pair(14.0F, 1.5F),
             Pair(116.0F, 2.5F),
             Pair(218.0F, 2.5F),
@@ -55,7 +55,7 @@ class SettingsFragment : Fragment() {
         )
 
         private var toleranceMaxiP7 = arrayOf(
-            Pair(0.0F, 1.5F),
+            Pair(0.0F, 2.5F),
             Pair(22.5F, 1.5F),
             Pair(107.5F, 2.5F),
             Pair(130.5F, 2.5F)
