@@ -83,24 +83,23 @@ class MainActivity : AppCompatActivity() {
 
             val toleranceNok = SettingsFragment.getToleranceNok()
             points.forEachIndexed { index, pointValue ->
-                val textNok = view.findViewById<TextView>(textsNokIds[index])
-
-                val pointError = (pointValue - tolerancesRaw[index].first).absoluteValue
+                val pointError = (pointValue - tolerancesRaw[index].first).absoluteValue - tolerancesRaw[index].second
                 val nokText: String
-                if (pointError > tolerancesRaw[index].second + toleranceNok) {
+                val nokColor: Int
+                if (pointError > toleranceNok) {
                     nokText = view.resources.getString(R.string.result_Nok)
-                    //textNok.setBackgroundColor(Color.BLACK)
-                    textNok.setTextColor(Color.RED)
-                } else if (pointError > tolerancesRaw[index].second) {
+                    nokColor = Color.RED
+                } else if (pointError > 0.0F) {
                     nokText = view.resources.getString(R.string.result_Nok)
-                    //textNok.setBackgroundColor(Color.BLACK)
-                    textNok.setTextColor(Color.YELLOW)
+                    nokColor = Color.YELLOW
                 } else {
                     nokText = view.resources.getString(R.string.result_Ok)
-                    //textNok.setBackgroundColor(Color.BLACK)
-                    textNok.setTextColor(Color.GREEN)
+                    nokColor = Color.GREEN
                 }
 
+                val textNok = view.findViewById<TextView>(textsNokIds[index])
+                textNok.setTextColor(nokColor)
+                //textNok.setBackgroundColor(Color.BLACK)
                 textNok.text = buildString { append(" %s (%.1f - %.1f)") }.format(
                     nokText,
                     tolerancesRaw[index].first - tolerancesRaw[index].second,
