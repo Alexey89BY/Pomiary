@@ -12,6 +12,8 @@ import local.tools.pomiary.ui.main.SectionsPagerAdapter
 import local.tools.pomiary.databinding.ActivityMainBinding
 import local.tools.pomiary.ui.main.SettingsFragment
 import kotlin.math.absoluteValue
+import kotlin.math.max
+import kotlin.math.min
 
 class MainActivity : AppCompatActivity() {
 
@@ -69,7 +71,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            val totalShift = (shiftUpMin + shiftDownMax) / 2
+            var totalShift = 0.0F
+            if ((shiftDownMax > 0) and (shiftUpMin < 0)) {
+                totalShift = (shiftUpMin + shiftDownMax) / 2
+            }
+            else if (shiftDownMax > 0) {
+                totalShift = min(shiftDownMax, shiftUpMin)
+            }
+            else if (shiftUpMin < 0) {
+                totalShift = max(shiftUpMin, shiftDownMax)
+            }
+
             points.forEachIndexed { index, pointValue ->
                 points[index] = pointValue + totalShift
             }
