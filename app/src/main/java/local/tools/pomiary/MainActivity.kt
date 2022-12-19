@@ -86,34 +86,36 @@ class MainActivity : AppCompatActivity() {
                 points[index] = pointValue + totalShift
             }
 
+            val pointsColors = IntArray(points.size)
+            val toleranceNok = SettingsFragment.getToleranceNok()
+            points.forEachIndexed { index, pointValue ->
+                val pointError = (pointValue - tolerancesRaw[index].first).absoluteValue - tolerancesRaw[index].second
+                pointsColors[index] = if (pointError > toleranceNok) {
+                    Color.RED
+                } else if (pointError > 0.0F) {
+                    Color.YELLOW
+                } else {
+                    Color.GREEN
+                }
+            }
+
             points.forEachIndexed { index, pointValue ->
                 val textView = view.findViewById<TextView>(textsResultIds[index])
+                textView.setTextColor(pointsColors[index])
+                //textView.setBackgroundColor(Color.BLACK)
                 textView.text = buildString { append(" %.1f ") }.format(
                     pointValue
                 )
             }
 
-            val toleranceNok = SettingsFragment.getToleranceNok()
-            points.forEachIndexed { index, pointValue ->
-                val pointError = (pointValue - tolerancesRaw[index].first).absoluteValue - tolerancesRaw[index].second
-                val nokText: String
-                val nokColor: Int
-                if (pointError > toleranceNok) {
-                    nokText = view.resources.getString(R.string.result_Nok)
-                    nokColor = Color.RED
-                } else if (pointError > 0.0F) {
-                    nokText = view.resources.getString(R.string.result_Nok)
-                    nokColor = Color.YELLOW
-                } else {
-                    nokText = view.resources.getString(R.string.result_Ok)
-                    nokColor = Color.GREEN
-                }
-
-                val textNok = view.findViewById<TextView>(textsNokIds[index])
-                textNok.setTextColor(nokColor)
-                //textNok.setBackgroundColor(Color.BLACK)
-                textNok.text = buildString { append(" %s (%.1f - %.1f)") }.format(
-                    nokText,
+            val wrongText: String = view.resources.getString(R.string.result_Nok)
+            val goodText: String = view.resources.getString(R.string.result_Ok)
+            points.forEachIndexed { index, _ ->
+                val textView = view.findViewById<TextView>(textsNokIds[index])
+                textView.setTextColor(pointsColors[index])
+                //textView.setBackgroundColor(Color.BLACK)
+                textView.text = buildString { append(" %s (%.1f - %.1f)") }.format(
+                    if (pointsColors[index] == Color.GREEN) goodText else wrongText,
                     tolerancesRaw[index].first - tolerancesRaw[index].second,
                     tolerancesRaw[index].first + tolerancesRaw[index].second
                 )
