@@ -1,13 +1,13 @@
 package local.tools.pomiary.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import local.tools.pomiary.MainActivity
+import local.tools.pomiary.PointsAligner
 import local.tools.pomiary.R
 
 /**
@@ -103,10 +103,10 @@ class MaxiFragment : Fragment() {
         Snackbar.make(viewOfLayout, message, 250).show()
 
         val toleranceMaxiP6 = SettingsFragment.getToleranceMaxiP6()
-        MainActivity.alignPoints(viewOfLayout, toleranceMaxiP6, editsMaxiP6, textsResultMaxiP6, textsNokMaxiP6)
+        PointsAligner.alignPoints(viewOfLayout, toleranceMaxiP6, editsMaxiP6, textsResultMaxiP6, textsNokMaxiP6)
 
         val toleranceMaxiP7 = SettingsFragment.getToleranceMaxiP7()
-        MainActivity.alignPoints(viewOfLayout, toleranceMaxiP7, editsMaxiP7, textsResultMaxiP7, textsNokMaxiP7)
+        PointsAligner.alignPoints(viewOfLayout, toleranceMaxiP7, editsMaxiP7, textsResultMaxiP7, textsNokMaxiP7)
     }
 
     companion object {

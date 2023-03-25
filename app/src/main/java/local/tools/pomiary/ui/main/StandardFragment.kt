@@ -1,13 +1,13 @@
 package local.tools.pomiary.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import local.tools.pomiary.MainActivity
+import local.tools.pomiary.PointsAligner
 import local.tools.pomiary.R
 
 /**
@@ -97,10 +97,10 @@ class StandardFragment : Fragment() {
         Snackbar.make(viewOfLayout, message, 250).show()
 
         val toleranceStandardP6 = SettingsFragment.getToleranceStandardP6()
-        MainActivity.alignPoints(viewOfLayout, toleranceStandardP6, editsStandardP6, textsResultStandardP6, textsNokStandardP6)
+        PointsAligner.alignPoints(viewOfLayout, toleranceStandardP6, editsStandardP6, textsResultStandardP6, textsNokStandardP6)
 
         val toleranceStandardP7 = SettingsFragment.getToleranceStandardP7()
-        MainActivity.alignPoints(viewOfLayout, toleranceStandardP7, editsStandardP7, textsResultStandardP7, textsNokStandardP7)
+        PointsAligner.alignPoints(viewOfLayout, toleranceStandardP7, editsStandardP7, textsResultStandardP7, textsNokStandardP7)
     }
 
     companion object {
