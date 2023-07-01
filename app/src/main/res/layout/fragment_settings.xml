@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,7 +28,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchShowBasePoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="13"
+                android:text="@string/show_base_point" />
+
+            <TextView
+                android:id="@+id/textToleranceNok"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tolerance_nok" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/textToleranceNokValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/editNok_zero"
+                    android:text="@string/tolerance_nok_value" />
+
+                <EditText
+                    android:id="@+id/editNok_zero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="3"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true" />
+
+                <EditText
+                    android:id="@+id/editNok_offset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="3"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -413,43 +456,6 @@
                     </TableRow>
 
                 </TableLayout>
-
-                <TextView
-                    android:id="@+id/textToleranceNok"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tolerance_nok" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:id="@+id/textToleranceNokValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:labelFor="@id/editNok_zero"
-                        android:text="@string/tolerance_nok_value" />
-
-                    <EditText
-                        android:id="@+id/editNok_zero"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="3"
-                        android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
-
-                    <EditText
-                        android:id="@+id/editNok_offset"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="3"
-                        android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
-                </LinearLayout>
 
             </LinearLayout>
 
