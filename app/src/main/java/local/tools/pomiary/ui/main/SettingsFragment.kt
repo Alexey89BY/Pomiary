@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import local.tools.pomiary.R
 
 
@@ -64,6 +65,8 @@ class SettingsFragment : Fragment() {
         private var toleranceNok = arrayOf(
             Pair(0.0F, 0.5F),
         )
+
+        private var isShowBasePoint = true
 
         private val editsStandardP6_zeros = arrayOf(
             R.id.editStandardP6_0_zero,
@@ -159,6 +162,7 @@ class SettingsFragment : Fragment() {
         private const val settingsMaxiP6_prefix = "maxiP6_%d_%d"
         private const val settingsMaxiP7_prefix = "maxiP7_%d_%d"
         private const val settingsNok_prefix = "nok_%d_%d"
+        private const val settingsShowBasePoint_prefix = "show_bp"
 
         /**
          * Use this factory method to create a new instance of
@@ -199,13 +203,21 @@ class SettingsFragment : Fragment() {
         }
 
         @JvmStatic
+        fun getShowBasePoint(): Boolean {
+            return isShowBasePoint
+        }
+
+        @JvmStatic
         fun loadSettings(context: Context) {
             val preferences = context.getSharedPreferences(settingsFileName, 0)
+
             readTolerances(preferences, settingsStandardP6_prefix, toleranceStandardP6)
             readTolerances(preferences, settingsStandardP7_prefix, toleranceStandardP7)
             readTolerances(preferences, settingsMaxiP6_prefix, toleranceMaxiP6)
             readTolerances(preferences, settingsMaxiP7_prefix, toleranceMaxiP7)
             readTolerances(preferences, settingsNok_prefix, toleranceNok)
+
+            isShowBasePoint = preferences.getBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
         }
 
         @JvmStatic
@@ -278,6 +290,9 @@ class SettingsFragment : Fragment() {
         writeEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
         writeEdits(viewOfLayout, toleranceNok, editsNok_zeros, editsNok_offsets)
 
+        val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
+        switchBasePoint.isChecked = isShowBasePoint
+
         return viewOfLayout
     }
 
@@ -291,6 +306,9 @@ class SettingsFragment : Fragment() {
         readEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
         readEdits(viewOfLayout, toleranceNok, editsNok_zeros, editsNok_offsets)
 
+        val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
+        isShowBasePoint = switchBasePoint.isChecked
+
         val preferences = viewOfLayout.context.getSharedPreferences(settingsFileName, 0)
         val editor = preferences.edit()
         writeTolerances(editor, settingsStandardP6_prefix, toleranceStandardP6)
@@ -298,6 +316,7 @@ class SettingsFragment : Fragment() {
         writeTolerances(editor, settingsMaxiP6_prefix, toleranceMaxiP6)
         writeTolerances(editor, settingsMaxiP7_prefix, toleranceMaxiP7)
         writeTolerances(editor, settingsNok_prefix, toleranceNok)
+        editor.putBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
         editor.apply()
     }
 }
