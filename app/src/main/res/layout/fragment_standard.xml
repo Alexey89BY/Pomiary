@@ -35,6 +35,7 @@
             android:paddingRight="10dp">
 
             <TableRow
+                android:id="@+id/rowStandardP6_0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -49,7 +50,6 @@
                     android:id="@+id/editStandardP6_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="4"
                     android:inputType="numberSigned|numberDecimal"
                     android:selectAllOnFocus="true" />
 
@@ -84,6 +84,7 @@
                     android:id="@+id/editStandardP6_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ems="4"
                     android:inputType="numberSigned|numberDecimal"
                     android:selectAllOnFocus="true" />
 
@@ -353,6 +354,7 @@
                 android:background="?android:attr/listDivider" />
 
             <TableRow
+                android:id="@+id/rowStandardP7_0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
