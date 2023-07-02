@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -30,10 +31,22 @@ class MaxiFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_maxi, container, false)
+
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshMaxi)
         refreshButton.setOnClickListener { recalculateValues() }
+
+        showRow(viewOfLayout, R.id.rowMaxiP6_0, SettingsFragment.getShowBasePoint())
+        showRow(viewOfLayout, R.id.rowMaxiP7_0, SettingsFragment.getShowBasePoint())
+
         return viewOfLayout
     }
+
+
+    private fun showRow(viewOfLayout: View, rowId: Int, isVisible: Boolean) {
+        val rowView = viewOfLayout.findViewById<TableRow>(rowId)
+        rowView.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
 
     private val editsMaxiP6 = arrayOf(
         R.id.editMaxiP6_0,
