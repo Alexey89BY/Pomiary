@@ -17,11 +17,13 @@ import local.tools.pomiary.R
  * create an instance of this fragment.
  */
 class StandardFragment : Fragment() {
+    private var fragmentTitle: String = String()
     private lateinit var viewOfLayout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            fragmentTitle = it.getString(ARG_TITLE, fragmentTitle)
         }
     }
 
@@ -110,10 +112,12 @@ class StandardFragment : Fragment() {
         Snackbar.make(viewOfLayout, message, 250).show()
 
         val toleranceStandardP6 = SettingsFragment.getToleranceStandardP6()
-        PointsAligner.alignPoints(viewOfLayout, toleranceStandardP6, editsStandardP6, textsResultStandardP6, textsNokStandardP6)
+        val pointsStandardP6 = PointsAligner.alignPoints(viewOfLayout, toleranceStandardP6, editsStandardP6, textsResultStandardP6, textsNokStandardP6)
 
         val toleranceStandardP7 = SettingsFragment.getToleranceStandardP7()
-        PointsAligner.alignPoints(viewOfLayout, toleranceStandardP7, editsStandardP7, textsResultStandardP7, textsNokStandardP7)
+        val pointsStandardP7 = PointsAligner.alignPoints(viewOfLayout, toleranceStandardP7, editsStandardP7, textsResultStandardP7, textsNokStandardP7)
+
+        HistoryFragment.savePoints(this, fragmentTitle, pointsStandardP6, pointsStandardP7)
     }
 
     companion object {
@@ -122,10 +126,13 @@ class StandardFragment : Fragment() {
          * this fragment using the provided parameters.
          * @return A new instance of fragment StandardFragment.
          */
+        const val ARG_TITLE = "title"
+
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(title: CharSequence) =
             StandardFragment().apply {
                 arguments = Bundle().apply {
+                    putString(ARG_TITLE, title.toString())
                 }
             }
     }
