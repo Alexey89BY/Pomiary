@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import local.tools.pomiary.ui.main.SectionsPagerAdapter
 import local.tools.pomiary.databinding.ActivityMainBinding
 import local.tools.pomiary.ui.main.SettingsFragment
+import local.tools.pomiary.ui.main.HistoryFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,5 +26,6 @@ class MainActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
 
         SettingsFragment.loadSettings(this)
+        HistoryFragment.checkHistory(this)
     }
 }

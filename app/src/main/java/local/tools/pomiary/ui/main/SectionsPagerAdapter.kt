@@ -19,6 +19,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
             R.string.tab_std_rh,
             R.string.tab_max_lh,
             R.string.tab_max_rh,
+            R.string.tab_history,
             R.string.tab_settings
         )
     }
@@ -32,9 +33,11 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     }
 
     override fun getItem(position: Int): Fragment {
+        val title = getPageTitle(position)
         val fragment: Fragment = when (position) {
-            0, 1 -> StandardFragment.newInstance()
-            2, 3 -> MaxiFragment.newInstance()
+            0, 1 -> StandardFragment.newInstance(title)
+            2, 3 -> MaxiFragment.newInstance(title)
+            4 -> HistoryFragment.newInstance()
             else -> SettingsFragment.newInstance()
         }
         return fragment

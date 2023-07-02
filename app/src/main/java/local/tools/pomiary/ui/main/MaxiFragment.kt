@@ -17,11 +17,13 @@ import local.tools.pomiary.R
  * create an instance of this fragment.
  */
 class MaxiFragment : Fragment() {
+    private var fragmentTitle: String = String()
     private lateinit var viewOfLayout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            fragmentTitle = it.getString(ARG_TITLE, fragmentTitle)
         }
     }
 
@@ -116,10 +118,12 @@ class MaxiFragment : Fragment() {
         Snackbar.make(viewOfLayout, message, 250).show()
 
         val toleranceMaxiP6 = SettingsFragment.getToleranceMaxiP6()
-        PointsAligner.alignPoints(viewOfLayout, toleranceMaxiP6, editsMaxiP6, textsResultMaxiP6, textsNokMaxiP6)
+        val pointsMaxiP6 = PointsAligner.alignPoints(viewOfLayout, toleranceMaxiP6, editsMaxiP6, textsResultMaxiP6, textsNokMaxiP6)
 
         val toleranceMaxiP7 = SettingsFragment.getToleranceMaxiP7()
-        PointsAligner.alignPoints(viewOfLayout, toleranceMaxiP7, editsMaxiP7, textsResultMaxiP7, textsNokMaxiP7)
+        val pointsMaxiP7 = PointsAligner.alignPoints(viewOfLayout, toleranceMaxiP7, editsMaxiP7, textsResultMaxiP7, textsNokMaxiP7)
+
+        HistoryFragment.savePoints(this, fragmentTitle, pointsMaxiP6, pointsMaxiP7)
     }
 
     companion object {
@@ -128,10 +132,13 @@ class MaxiFragment : Fragment() {
          * this fragment using the provided parameters.
          * @return A new instance of fragment MaxiFragment.
          */
+        const val ARG_TITLE = "title"
+
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(title: CharSequence) =
             MaxiFragment().apply {
                 arguments = Bundle().apply {
+                    putString(ARG_TITLE, title.toString())
                 }
             }
     }
