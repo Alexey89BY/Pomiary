@@ -1,20 +1,21 @@
 package local.tools.pomiary.ui.main
 
-import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import local.tools.pomiary.R
 
 /**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
+ * A [FragmentStateAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
-    FragmentPagerAdapter(fm) {
+class SectionsPagerAdapter(private val fa: FragmentActivity) :
+    FragmentStateAdapter(fa) {
 
-    companion object {
-        private val TAB_TITLES = arrayOf(
+    private val sectionsList: MutableList<Pair<Fragment,String>> = ArrayList()
+
+    fun createTabs() {
+        val tabTitles = arrayOf(
             R.string.tab_std_lh,
             R.string.tab_std_rh,
             R.string.tab_max_lh,
@@ -22,24 +23,28 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
             R.string.tab_history,
             R.string.tab_settings
         )
-    }
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return context.resources.getString(TAB_TITLES[position])
-    }
-
-    override fun getCount(): Int {
-        return TAB_TITLES.size
-    }
-
-    override fun getItem(position: Int): Fragment {
-        val title = getPageTitle(position)
-        val fragment: Fragment = when (position) {
-            0, 1 -> StandardFragment.newInstance(title)
-            2, 3 -> MaxiFragment.newInstance(title)
-            4 -> HistoryFragment.newInstance()
-            else -> SettingsFragment.newInstance()
+        tabTitles.forEachIndexed() {index, id ->
+            val title = fa.resources.getString(id)
+            val fragment: Fragment = when (index) {
+                0, 1 -> StandardFragment.newInstance(title)
+                2, 3 -> MaxiFragment.newInstance(title)
+                4 -> HistoryFragment.newInstance()
+                else -> SettingsFragment.newInstance()
+            }
+            sectionsList.add(Pair(fragment,title))
         }
-        return fragment
+    }
+
+    fun getTabTitle(position: Int): CharSequence {
+        return sectionsList[position].second
+    }
+
+    override fun getItemCount(): Int {
+        return sectionsList.size
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        return sectionsList[position].first
     }
 }

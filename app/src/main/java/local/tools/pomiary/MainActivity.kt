@@ -1,13 +1,14 @@
 package local.tools.pomiary
 
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import local.tools.pomiary.ui.main.SectionsPagerAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import local.tools.pomiary.databinding.ActivityMainBinding
-import local.tools.pomiary.ui.main.SettingsFragment
 import local.tools.pomiary.ui.main.HistoryFragment
+import local.tools.pomiary.ui.main.SectionsPagerAdapter
+import local.tools.pomiary.ui.main.SettingsFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,10 +21,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewPager: ViewPager = binding.viewPager
-        viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
+        val adapter = SectionsPagerAdapter(this)
+        adapter.createTabs()
+        val viewPager: ViewPager2 = binding.viewPager
+        viewPager.adapter = adapter
         val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = adapter.getTabTitle(position)
+        }.attach()
 
         SettingsFragment.loadSettings(this)
         HistoryFragment.checkHistory(this)
