@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import local.tools.pomiary.DataStorage
+import local.tools.pomiary.MainActivity
 import local.tools.pomiary.R
 
 
@@ -22,53 +24,9 @@ import local.tools.pomiary.R
 class SettingsFragment : Fragment() {
 
     companion object {
-        private var toleranceStandardP6 = arrayOf(
-            Pair(0.0F, 3.0F),
-            Pair(21.0F, 1.5F),
-            Pair(123.0F, 2.5F),
-            Pair(225.0F, 2.5F),
-            Pair(327.0F, 2.5F),
-            Pair(429.0F, 2.5F),
-            Pair(531.0F, 2.5F),
-            Pair(633.0F, 2.5F),
-            Pair(655.0F, 3.0F)
-        )
-
-        private var toleranceStandardP7 = arrayOf(
-            Pair(0.0F, 2.5F),
-            Pair(29.0F, 2.5F),
-            Pair(114.0F, 2.5F),
-            Pair(149.0F, 2.5F)
-        )
-
-        private var toleranceMaxiP6 = arrayOf(
-            Pair(0.0F, 3.0F),
-            Pair(14.0F, 1.5F),
-            Pair(116.0F, 2.5F),
-            Pair(218.0F, 2.5F),
-            Pair(320.0F, 2.5F),
-            Pair(422.0F, 2.5F),
-            Pair(524.0F, 2.5F),
-            Pair(626.0F, 2.5F),
-            Pair(728.0F, 2.5F),
-            Pair(830.0F, 2.5F),
-            Pair(839.5F, 3.0F)
-        )
-
-        private var toleranceMaxiP7 = arrayOf(
-            Pair(0.0F, 2.5F),
-            Pair(22.5F, 1.5F),
-            Pair(107.5F, 2.5F),
-            Pair(130.5F, 2.5F)
-        )
-
-        private var toleranceNok = arrayOf(
-            Pair(0.0F, 0.5F),
-        )
-
         private var isShowBasePoint = true
 
-        private val editsStandardP6_zeros = arrayOf(
+        private val editsStandardP6_zeros = listOf(
             R.id.editStandardP6_0_zero,
             R.id.editStandardP6_1_zero,
             R.id.editStandardP6_2_zero,
@@ -80,7 +38,7 @@ class SettingsFragment : Fragment() {
             R.id.editStandardP6_8_zero,
         )
 
-        private val editsStandardP6_offsets = arrayOf(
+        private val editsStandardP6_offsets = listOf(
             R.id.editStandardP6_0_offset,
             R.id.editStandardP6_1_offset,
             R.id.editStandardP6_2_offset,
@@ -92,21 +50,21 @@ class SettingsFragment : Fragment() {
             R.id.editStandardP6_8_offset,
         )
 
-        private val editsStandardP7_zeros = arrayOf(
+        private val editsStandardP7_zeros = listOf(
             R.id.editStandardP7_0_zero,
             R.id.editStandardP7_1_zero,
             R.id.editStandardP7_2_zero,
             R.id.editStandardP7_3_zero,
         )
 
-        private val editsStandardP7_offsets = arrayOf(
+        private val editsStandardP7_offsets = listOf(
             R.id.editStandardP7_0_offset,
             R.id.editStandardP7_1_offset,
             R.id.editStandardP7_2_offset,
             R.id.editStandardP7_3_offset,
         )
 
-        private val editsMaxiP6_zeros = arrayOf(
+        private val editsMaxiP6_zeros = listOf(
             R.id.editMaxiP6_0_zero,
             R.id.editMaxiP6_1_zero,
             R.id.editMaxiP6_2_zero,
@@ -120,7 +78,7 @@ class SettingsFragment : Fragment() {
             R.id.editMaxiP6_10_zero,
         )
 
-        private val editsMaxiP6_offsets = arrayOf(
+        private val editsMaxiP6_offsets = listOf(
             R.id.editMaxiP6_0_offset,
             R.id.editMaxiP6_1_offset,
             R.id.editMaxiP6_2_offset,
@@ -134,25 +92,25 @@ class SettingsFragment : Fragment() {
             R.id.editMaxiP6_10_offset,
         )
 
-        private val editsMaxiP7_zeros = arrayOf(
+        private val editsMaxiP7_zeros = listOf(
             R.id.editMaxiP7_0_zero,
             R.id.editMaxiP7_1_zero,
             R.id.editMaxiP7_2_zero,
             R.id.editMaxiP7_3_zero,
         )
 
-        private val editsMaxiP7_offsets = arrayOf(
+        private val editsMaxiP7_offsets = listOf(
             R.id.editMaxiP7_0_offset,
             R.id.editMaxiP7_1_offset,
             R.id.editMaxiP7_2_offset,
             R.id.editMaxiP7_3_offset,
         )
 
-        private val editsNok_zeros = arrayOf(
+        private val editsNok_zeros = listOf(
             R.id.editNok_zero,
         )
 
-        private val editsNok_offsets = arrayOf(
+        private val editsNok_offsets = listOf(
             R.id.editNok_offset,
         )
 
@@ -177,67 +135,44 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-        @JvmStatic
-        fun getToleranceStandardP6(): Array<Pair<Float,Float>> {
-            return toleranceStandardP6
-        }
 
-        @JvmStatic
-        fun getToleranceStandardP7(): Array<Pair<Float,Float>> {
-            return toleranceStandardP7
-        }
-
-        @JvmStatic
-        fun getToleranceMaxiP6(): Array<Pair<Float,Float>> {
-            return toleranceMaxiP6
-        }
-
-        @JvmStatic
-        fun getToleranceMaxiP7(): Array<Pair<Float,Float>> {
-            return toleranceMaxiP7
-        }
-
-        @JvmStatic
-        fun getToleranceNok(): Float {
-            return toleranceNok[0].second
-        }
-
-        @JvmStatic
         fun getShowBasePoint(): Boolean {
             return isShowBasePoint
         }
 
-        @JvmStatic
+
         fun loadSettings(context: Context) {
             val preferences = context.getSharedPreferences(settingsFileName, 0)
 
-            readTolerances(preferences, settingsStandardP6_prefix, toleranceStandardP6)
-            readTolerances(preferences, settingsStandardP7_prefix, toleranceStandardP7)
-            readTolerances(preferences, settingsMaxiP6_prefix, toleranceMaxiP6)
-            readTolerances(preferences, settingsMaxiP7_prefix, toleranceMaxiP7)
-            readTolerances(preferences, settingsNok_prefix, toleranceNok)
+            readTolerances(preferences, settingsStandardP6_prefix, DataStorage.getToleranceStandardP6())
+            readTolerances(preferences, settingsStandardP7_prefix, DataStorage.getToleranceStandardP7())
+            readTolerances(preferences, settingsMaxiP6_prefix, DataStorage.getToleranceMaxiP6())
+            readTolerances(preferences, settingsMaxiP7_prefix, DataStorage.getToleranceMaxiP7())
+            readTolerances(preferences, settingsNok_prefix, DataStorage.getToleranceNok())
 
             isShowBasePoint = preferences.getBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
+
+            //MainActivity.broadcastSettingsChange()
         }
 
-        @JvmStatic
-        fun readTolerances(preferences: SharedPreferences, prefix: String, tolerances: Array<Pair<Float, Float>>) {
+
+        private fun readTolerances(preferences: SharedPreferences, prefix: String, tolerances: Array<DataStorage.PointTolerance>) {
             tolerances.forEachIndexed { index, tolerance ->
                 val zeroPrefix = prefix.format(index, 0)
-                val first = preferences.getFloat(zeroPrefix, tolerance.first)
+                val origin = preferences.getFloat(zeroPrefix, tolerance.origin)
                 val offsetPrefix = prefix.format(index, 1)
-                val second = preferences.getFloat(offsetPrefix, tolerance.second)
-                tolerances[index] = Pair(first, second)
+                val offset = preferences.getFloat(offsetPrefix, tolerance.offset)
+                tolerances[index] = DataStorage.PointTolerance(origin, offset)
             }
         }
 
-        @JvmStatic
-        fun writeTolerances(editor: SharedPreferences.Editor, prefix: String, tolerances: Array<Pair<Float, Float>>) {
+
+        fun writeTolerances(editor: SharedPreferences.Editor, prefix: String, tolerances: Array<DataStorage.PointTolerance>) {
             tolerances.forEachIndexed { index, tolerance ->
                 val zeroPrefix = prefix.format(index, 0)
-                editor.putFloat(zeroPrefix, tolerance.first)
+                editor.putFloat(zeroPrefix, tolerance.origin)
                 val offsetPrefix = prefix.format(index, 1)
-                editor.putFloat(offsetPrefix, tolerance.second)
+                editor.putFloat(offsetPrefix, tolerance.offset)
             }
         }
     }
@@ -250,17 +185,17 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun writeEdits(view: View, tolerances: Array<Pair<Float, Float>>, editsZeros: Array<Int>, editsOffsets: Array<Int>) {
+    private fun writeEdits(view: View, tolerances: Array<DataStorage.PointTolerance>, editsZeros: List<Int>, editsOffsets: List<Int>) {
         tolerances.forEachIndexed { index, tolerance ->
             val editZero = view.findViewById<EditText>(editsZeros[index])
-            editZero.setText(tolerance.first.toString())
+            editZero.setText(tolerance.origin.toString())
 
             val editOffset = view.findViewById<EditText>(editsOffsets[index])
-            editOffset.setText(tolerance.second.toString())
+            editOffset.setText(tolerance.offset.toString())
         }
     }
 
-    private fun readEdits(view: View, tolerances: Array<Pair<Float, Float>>, editsZeros: Array<Int>, editsOffsets: Array<Int>) {
+    private fun readEdits(view: View, tolerances: Array<DataStorage.PointTolerance>, editsZeros: List<Int>, editsOffsets: List<Int>) {
         tolerances.forEachIndexed { index, _ ->
             val editZero = view.findViewById<EditText>(editsZeros[index])
             val textZero = editZero.text.toString()
@@ -270,7 +205,7 @@ class SettingsFragment : Fragment() {
             val textOffset = editOffset.text.toString()
             val offsetValue = textOffset.toFloatOrNull()
 
-            tolerances[index] = Pair(zeroValue ?: 0.0F, offsetValue ?: 0.0F)
+            tolerances[index] = DataStorage.PointTolerance(zeroValue ?: 0.0F, offsetValue ?: 0.0F)
         }
     }
 
@@ -284,11 +219,11 @@ class SettingsFragment : Fragment() {
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonSaveSettings)
         refreshButton.setOnClickListener { saveSettings() }
 
-        writeEdits(viewOfLayout, toleranceStandardP6, editsStandardP6_zeros, editsStandardP6_offsets)
-        writeEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
-        writeEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
-        writeEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
-        writeEdits(viewOfLayout, toleranceNok, editsNok_zeros, editsNok_offsets)
+        writeEdits(viewOfLayout, DataStorage.getToleranceStandardP6(), editsStandardP6_zeros, editsStandardP6_offsets)
+        writeEdits(viewOfLayout, DataStorage.getToleranceStandardP7(), editsStandardP7_zeros, editsStandardP7_offsets)
+        writeEdits(viewOfLayout, DataStorage.getToleranceMaxiP6(), editsMaxiP6_zeros, editsMaxiP6_offsets)
+        writeEdits(viewOfLayout, DataStorage.getToleranceMaxiP7(), editsMaxiP7_zeros, editsMaxiP7_offsets)
+        writeEdits(viewOfLayout, DataStorage.getToleranceNok(), editsNok_zeros, editsNok_offsets)
 
         val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
         switchBasePoint.isChecked = isShowBasePoint
@@ -300,23 +235,25 @@ class SettingsFragment : Fragment() {
         val message: String = requireContext().resources.getString(R.string.save_msg)
         Snackbar.make(viewOfLayout, message, 250).show()
 
-        readEdits(viewOfLayout, toleranceStandardP6, editsStandardP6_zeros, editsStandardP6_offsets)
-        readEdits(viewOfLayout, toleranceStandardP7, editsStandardP7_zeros, editsStandardP7_offsets)
-        readEdits(viewOfLayout, toleranceMaxiP6, editsMaxiP6_zeros, editsMaxiP6_offsets)
-        readEdits(viewOfLayout, toleranceMaxiP7, editsMaxiP7_zeros, editsMaxiP7_offsets)
-        readEdits(viewOfLayout, toleranceNok, editsNok_zeros, editsNok_offsets)
+        readEdits(viewOfLayout, DataStorage.getToleranceStandardP6(), editsStandardP6_zeros, editsStandardP6_offsets)
+        readEdits(viewOfLayout, DataStorage.getToleranceStandardP7(), editsStandardP7_zeros, editsStandardP7_offsets)
+        readEdits(viewOfLayout, DataStorage.getToleranceMaxiP6(), editsMaxiP6_zeros, editsMaxiP6_offsets)
+        readEdits(viewOfLayout, DataStorage.getToleranceMaxiP7(), editsMaxiP7_zeros, editsMaxiP7_offsets)
+        readEdits(viewOfLayout, DataStorage.getToleranceNok(), editsNok_zeros, editsNok_offsets)
 
         val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
         isShowBasePoint = switchBasePoint.isChecked
 
         val preferences = viewOfLayout.context.getSharedPreferences(settingsFileName, 0)
         val editor = preferences.edit()
-        writeTolerances(editor, settingsStandardP6_prefix, toleranceStandardP6)
-        writeTolerances(editor, settingsStandardP7_prefix, toleranceStandardP7)
-        writeTolerances(editor, settingsMaxiP6_prefix, toleranceMaxiP6)
-        writeTolerances(editor, settingsMaxiP7_prefix, toleranceMaxiP7)
-        writeTolerances(editor, settingsNok_prefix, toleranceNok)
+        writeTolerances(editor, settingsStandardP6_prefix, DataStorage.getToleranceStandardP6())
+        writeTolerances(editor, settingsStandardP7_prefix, DataStorage.getToleranceStandardP7())
+        writeTolerances(editor, settingsMaxiP6_prefix, DataStorage.getToleranceMaxiP6())
+        writeTolerances(editor, settingsMaxiP7_prefix, DataStorage.getToleranceMaxiP7())
+        writeTolerances(editor, settingsNok_prefix, DataStorage.getToleranceNok())
         editor.putBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
         editor.apply()
+
+        MainActivity.broadcastSettingsChange()
     }
 }
