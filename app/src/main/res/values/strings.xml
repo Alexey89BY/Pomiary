@@ -6,6 +6,7 @@
     <string name="tab_max_rh">RH Maxi</string>
     <string name="tab_history">History</string>
     <string name="tab_settings">Settings</string>
+    <string name="tab_graph">Graph</string>
     <string name="check_std">Check standard&#8230;</string>
     <string name="check_maxi">Check maxi&#8230;</string>
     <string name="save_msg">Save settings&#8230;</string>
