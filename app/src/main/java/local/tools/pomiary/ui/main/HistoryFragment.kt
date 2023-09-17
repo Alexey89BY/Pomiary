@@ -10,7 +10,7 @@ import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import local.tools.pomiary.PointsAligner
+import local.tools.pomiary.DataStorage
 import local.tools.pomiary.R
 import java.io.File
 import java.time.LocalDateTime
@@ -73,14 +73,12 @@ class HistoryFragment : Fragment() {
                 }
             }
 
-        @JvmStatic
         private fun getHistoryFile(context: Context): File {
             val filesDir = context.getExternalFilesDir(null)
             return File(filesDir, "history.csv")
         }
 
 
-        @JvmStatic
         fun checkHistory(
             context: Context
         )  {
@@ -91,20 +89,25 @@ class HistoryFragment : Fragment() {
         }
 
 
+        fun generateTimeStamp(): String {
+            return DateTimeFormatter.ofPattern("dd.MM.yy HH:mm").format(LocalDateTime.now())
+        }
+
+
         private const val delimiter = " "
 
-        @JvmStatic
         fun savePoints(
             fragment: Fragment,
             title: String,
-            points1: Array<PointsAligner.Point>,
-            points2: Array<PointsAligner.Point>
+            timeStamp: String,
+            points1: Array<DataStorage.PointData>,
+            points2: Array<DataStorage.PointData>
         ) {
             val context = fragment.requireContext()
             val file = getHistoryFile(context)
 
             if (file.exists()) {
-                file.appendText(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
+                file.appendText(timeStamp)
                 file.appendText(delimiter)
                 file.appendText(title)
                 writePointsToFile(file, points1)
@@ -113,7 +116,7 @@ class HistoryFragment : Fragment() {
             }
         }
 
-        private fun writePointsToFile(file: File, pointsArray: Array<PointsAligner.Point>) {
+        private fun writePointsToFile(file: File, pointsArray: Array<DataStorage.PointData>) {
             pointsArray.forEachIndexed {index, it ->
                 val nokText = "*"
                 val baseText = "!"
@@ -122,7 +125,7 @@ class HistoryFragment : Fragment() {
                 if (index == 0) {
                     file.appendText(baseText)
                 } else
-                if (it.result != PointsAligner.PointResult.OK) {
+                if (it.result != DataStorage.PointResult.OK) {
                     file.appendText(nokText)
                 }
             }
