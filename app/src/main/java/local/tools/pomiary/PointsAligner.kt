@@ -4,11 +4,11 @@ import android.graphics.Color
 import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 class PointsAligner {
     companion object {
         private const val roundFactor = 0.1F
+        private const val errorEpsilon = roundFactor / 2
 
 
         private fun getPointsFromText(
@@ -24,7 +24,7 @@ class PointsAligner {
 
 
         fun roundPoint(value: Float): Float {
-            return (value / roundFactor).roundToInt() * roundFactor
+            return kotlin.math.round(value / roundFactor) * roundFactor
         }
 
 
@@ -32,7 +32,7 @@ class PointsAligner {
             val pointError = (value - tolerance.origin).absoluteValue - tolerance.offset
             val toleranceNok = DataStorage.getToleranceNok()[0].offset
             return when {
-                (pointError < roundFactor) -> DataStorage.PointResult.OK
+                (pointError < errorEpsilon) -> DataStorage.PointResult.OK
                 (pointError < toleranceNok) -> DataStorage.PointResult.TOLERANCE
                 else -> DataStorage.PointResult.CRITICAL
             }
@@ -64,26 +64,25 @@ class PointsAligner {
             var shiftDownIndex = -1
             points.forEachIndexed { index, pointValue ->
                 val shiftDown =
-                    tolerancesRaw[index].origin - tolerancesRaw[index].offset - pointValue
+                    (tolerancesRaw[index].origin - tolerancesRaw[index].offset) - pointValue
                 if ((shiftDown > shiftDownMax) or (shiftDownIndex < 0)) {
                     shiftDownMax = shiftDown
                     shiftDownIndex = index
                 }
 
-                val shiftUp = tolerancesRaw[index].origin + tolerancesRaw[index].offset - pointValue
+                val shiftUp =
+                    (tolerancesRaw[index].origin + tolerancesRaw[index].offset) - pointValue
                 if ((shiftUp < shiftUpMin) or (shiftUpIndex < 0)) {
                     shiftUpMin = shiftUp
                     shiftUpIndex = index
                 }
             }
 
-            var totalShift = 0.0F
-            if ((shiftDownMax > 0) and (shiftUpMin < 0)) {
-                totalShift = (shiftUpMin + shiftDownMax) / 2
-            } else if (shiftDownMax > 0) {
-                totalShift = min(shiftDownMax, shiftUpMin)
-            } else if (shiftUpMin < 0) {
-                totalShift = max(shiftUpMin, shiftDownMax)
+            val totalShift = when {
+                (shiftUpMin > 0) and (shiftDownMax > 0) -> min(shiftUpMin, shiftDownMax)
+                (shiftUpMin < 0) and (shiftDownMax < 0) -> max(shiftUpMin, shiftDownMax)
+                //(shiftUpMin < 0) and (shiftDownMax > 0) -> (shiftUpMin + shiftDownMax) / 2
+                else -> 0.0F
             }
 
             points.forEachIndexed { index, _ ->
