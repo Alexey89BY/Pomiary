@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +7,6 @@
     android:keepScreenOn="true"
     tools:context=".ui.main.MaxiFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonRefreshMaxi"
         android:layout_width="wrap_content"
@@ -18,6 +16,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:clickable="true"
+        android:contentDescription="@string/check_maxi"
         android:focusable="true"
         android:src="@android:drawable/ic_popup_sync" />
 
@@ -66,7 +65,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_0"
@@ -100,7 +101,9 @@
                         android:layout_height="wrap_content"
                         android:ems="4"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_1"
@@ -133,7 +136,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_2"
@@ -166,7 +171,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_3"
@@ -199,7 +206,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_4"
@@ -232,7 +241,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_5"
@@ -265,7 +276,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_6"
@@ -298,7 +311,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_7"
@@ -331,7 +346,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_8"
@@ -364,7 +381,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_9"
@@ -397,7 +416,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP6_10"
@@ -437,7 +458,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP7_0"
@@ -470,7 +493,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP7_1"
@@ -503,7 +528,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP7_2"
@@ -536,7 +563,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultMaxiP7_3"

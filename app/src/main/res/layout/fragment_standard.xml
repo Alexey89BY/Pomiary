@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fadeScrollbars="false"
     android:keepScreenOn="true"
     tools:context=".ui.main.StandardFragment">
-
-    <!-- TODO: Update blank fragment layout -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonRefreshStandard"
@@ -19,6 +16,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:clickable="true"
+        android:contentDescription="@string/check_std"
         android:focusable="true"
         android:src="@android:drawable/ic_popup_sync" />
 
@@ -69,7 +67,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_0"
@@ -104,7 +104,9 @@
                         android:layout_height="wrap_content"
                         android:ems="4"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_1"
@@ -138,7 +140,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_2"
@@ -172,8 +176,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
                         android:selectAllOnFocus="true"
-                        android:textSize="18sp" />
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_3"
@@ -207,8 +212,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
                         android:selectAllOnFocus="true"
-                        android:textSize="18sp" />
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_4"
@@ -242,8 +248,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
                         android:selectAllOnFocus="true"
-                        android:textSize="18sp" />
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_5"
@@ -277,8 +284,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
                         android:selectAllOnFocus="true"
-                        android:textSize="18sp" />
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_6"
@@ -312,8 +320,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
                         android:selectAllOnFocus="true"
-                        android:textSize="18sp" />
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_7"
@@ -347,7 +356,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP6_8"
@@ -388,7 +399,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP7_0"
@@ -422,7 +435,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP7_1"
@@ -456,7 +471,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP7_2"
@@ -490,7 +507,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:selectAllOnFocus="true" />
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
 
                     <TextView
                         android:id="@+id/textResultStandardP7_3"
