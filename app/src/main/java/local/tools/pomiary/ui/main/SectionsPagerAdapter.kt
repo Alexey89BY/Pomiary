@@ -13,16 +13,12 @@ import local.tools.pomiary.R
 class SectionsPagerAdapter(private val fa: FragmentActivity) :
     FragmentStateAdapter(fa) {
 
-    private var pageIdStandardLH = -1
-    private var pageIdStandardRH = -1
-    private var pageIdMaxiLH = -1
-    private var pageIdMaxiRH = -1
+    private var pageIdStandard = -1
+    private var pageIdMaxi = -1
 
     private val pagesList = listOf(
-        R.string.tab_std_lh,
-        R.string.tab_std_rh,
-        R.string.tab_max_lh,
-        R.string.tab_max_rh,
+        R.string.tab_std,
+        R.string.tab_max,
         R.string.tab_graph,
         R.string.tab_history,
         R.string.tab_settings
@@ -40,45 +36,27 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
         when (position) {
             0 -> {
                 val fragment = StandardFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageStandardLeft())
-                pageIdStandardLH = fragment.id
+                fragment.attachToStorage(DataStorage.getStorageStandardLeft(), DataStorage.getStorageStandardRight())
+                pageIdStandard = fragment.id
                 return fragment
             }
             1 -> {
-                val fragment = StandardFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageStandardRight())
-                pageIdStandardRH = fragment.id
-                return fragment
-            }
-            2 -> {
                 val fragment = MaxiFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageMaxiLeft())
-                pageIdMaxiLH = fragment.id
+                fragment.attachToStorage(DataStorage.getStorageMaxiLeft(), DataStorage.getStorageMaxiRight())
+                pageIdMaxi = fragment.id
                 return fragment
             }
-            3 -> {
-                val fragment = MaxiFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageMaxiRight())
-                pageIdMaxiRH = fragment.id
-                return fragment
-            }
-            4 -> return BlankFragment.newInstance()
-            5 -> return HistoryFragment.newInstance()
+            2 -> return BlankFragment.newInstance()
+            3 -> return HistoryFragment.newInstance()
             else -> return SettingsFragment.newInstance()
         }
     }
 
     fun broadcastSettingsChange() {
-        val pageStandardLH = fa.supportFragmentManager.findFragmentById(pageIdStandardLH)
-        (pageStandardLH as? StandardFragment)?.onSettingsChange()
+        val pageStandard = fa.supportFragmentManager.findFragmentById(pageIdStandard)
+        (pageStandard as? StandardFragment)?.onSettingsChange()
 
-        val pageStandardRH = fa.supportFragmentManager.findFragmentById(pageIdStandardRH)
-        (pageStandardRH as? StandardFragment)?.onSettingsChange()
-
-        val pageMaxiLH = fa.supportFragmentManager.findFragmentById(pageIdMaxiLH)
-        (pageMaxiLH as? MaxiFragment)?.onSettingsChange()
-
-        val pageMaxiRH = fa.supportFragmentManager.findFragmentById(pageIdMaxiRH)
-        (pageMaxiRH as? MaxiFragment)?.onSettingsChange()
+        val pageMaxi = fa.supportFragmentManager.findFragmentById(pageIdMaxi)
+        (pageMaxi as? MaxiFragment)?.onSettingsChange()
     }
 }

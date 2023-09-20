@@ -48,6 +48,16 @@ class PointsAligner {
         }
 
 
+        //val wrongText: String = view.resources.getString(R.string.result_Nok)
+        //val goodText: String = view.resources.getString(R.string.result_Ok)
+        fun messageByResult(result: DataStorage.PointResult): String {
+            return when (result) {
+                DataStorage.PointResult.OK -> "OK"
+                else -> "NOK"
+            }
+        }
+
+
         private fun shiftAndCheckPoints(
             pointsData: Array<DataStorage.PointData>,
             pointsRaw: Array<Float>,
@@ -62,6 +72,7 @@ class PointsAligner {
             var shiftUpIndex = -1
             var shiftDownMax = 0.0F
             var shiftDownIndex = -1
+
             points.forEachIndexed { index, pointValue ->
                 val shiftDown =
                     (tolerancesRaw[index].origin - tolerancesRaw[index].offset) - pointValue
@@ -85,6 +96,8 @@ class PointsAligner {
                 else -> 0.0F
             }
 
+            var result = DataStorage.PointResult.OK
+
             points.forEachIndexed { index, _ ->
                 val pointValue = points[index] + totalShift
                 val pointResult = testPoint(pointValue, tolerancesRaw[index])
@@ -92,12 +105,16 @@ class PointsAligner {
                 //if ((pointResult == PointResult.CRITICAL) and ((index == shiftDownIndex) or (index == shiftUpIndex))) {
                 //    pointResult = PointResult.CRITICAL_LIMITED
                 //}
+                if (pointResult != DataStorage.PointResult.OK)
+                {
+                    result = DataStorage.PointResult.CRITICAL
+                }
 
                 pointsData[index].value = pointValue
                 pointsData[index].result = pointResult
             }
 
-            return DataStorage.PointResult.OK//pointsShifted
+            return result
         }
 
 

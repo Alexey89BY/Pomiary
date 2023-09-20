@@ -23,7 +23,7 @@ import local.tools.pomiary.R
  */
 class MaxiFragment : Fragment() {
     private lateinit var viewOfLayout: View
-    private lateinit var dataStorage: DataStorage.DataSubSet
+    private lateinit var dataStorages: Array<DataStorage.DataSubSet>
     private lateinit var spinnerItems: Array<String>
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private var storageCurrentIndex = -1
@@ -45,9 +45,7 @@ class MaxiFragment : Fragment() {
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshMaxi)
         refreshButton.setOnClickListener { recalculateValues() }
 
-        spinnerItems = Array(dataStorage.data.size) { index ->
-            DataStorage.getStorageDataTitle(dataStorage, index)
-        }
+        spinnerItems = StandardFragment.buildStoragesSpinnerArray(dataStorages)
 
         val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerMaxi)
         spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems)
@@ -67,16 +65,18 @@ class MaxiFragment : Fragment() {
             }
         }
 
+        val tolerancesMaxiP6 = DataStorage.getToleranceMaxiP6()
         editsMaxiP6.forEachIndexed { index, id ->
             val editText = viewOfLayout.findViewById<EditText>(id)
             val textView = viewOfLayout.findViewById<TextView>(textsResultMaxiP6[index])
-            editText.addTextChangedListener(PointTextWatcher(dataStorage.tolerancesP6[index], textView))
+            editText.addTextChangedListener(PointTextWatcher(tolerancesMaxiP6[index], textView))
         }
 
+        val tolerancesMaxiP7 = DataStorage.getToleranceMaxiP7()
         editsMaxiP7.forEachIndexed { index, id ->
             val editText = viewOfLayout.findViewById<EditText>(id)
             val textView = viewOfLayout.findViewById<TextView>(textsResultMaxiP7[index])
-            editText.addTextChangedListener(PointTextWatcher(dataStorage.tolerancesP7[index], textView))
+            editText.addTextChangedListener(PointTextWatcher(tolerancesMaxiP7[index], textView))
         }
 
         onSettingsChange()
@@ -165,7 +165,7 @@ class MaxiFragment : Fragment() {
             //StandardFragment.getStringsFromEdits(viewOfLayout, editsMaxiP7, oldStorage.sectionP7.pointsRaw)
 
             storageCurrentIndex = newIndex
-            val newStorage = dataStorage.data[storageCurrentIndex]
+            val newStorage = StandardFragment.storageDataBySpinnerIndex(dataStorages, storageCurrentIndex)
             StandardFragment.setPointInputsToEdits(viewOfLayout, newStorage.sectionP6.points, editsMaxiP6)
             StandardFragment.setPointInputsToEdits(viewOfLayout, newStorage.sectionP7.points, editsMaxiP7)
 
@@ -184,16 +184,17 @@ class MaxiFragment : Fragment() {
         val message: String = requireContext().resources.getString(R.string.check_maxi)
         Snackbar.make(viewOfLayout, message, 250).show()
 
-        val currentStorage = dataStorage.data[storageCurrentIndex]
+        val dataStorage = StandardFragment.storageBySpinnerIndex(dataStorages, storageCurrentIndex)
+        val currentStorage = StandardFragment.storageDataBySpinnerIndex(dataStorages, storageCurrentIndex)
 
         currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
 
         StandardFragment.getPointInputsFromEdits(viewOfLayout, editsMaxiP6, currentStorage.sectionP6.points)
-        PointsAligner.alignPoints(
+        currentStorage.sectionP6.result = PointsAligner.alignPoints(
             dataStorage.tolerancesP6, currentStorage.sectionP6.points)
 
         StandardFragment.getPointInputsFromEdits(viewOfLayout, editsMaxiP7, currentStorage.sectionP7.points)
-        PointsAligner.alignPoints(
+        currentStorage.sectionP7.result = PointsAligner.alignPoints(
             dataStorage.tolerancesP7, currentStorage.sectionP7.points)
 
         HistoryFragment.savePoints(this, dataStorage.title, currentStorage.timeStamp,
@@ -203,12 +204,15 @@ class MaxiFragment : Fragment() {
         StandardFragment.setPointResultsToView(viewOfLayout, currentStorage.sectionP7.points, textsResultMaxiP7)
 
         //StandardFragment.setTimeStampToView(viewOfLayout, currentStorage.timeStamp, R.id.textTimeStampMaxi)
-        spinnerItems[storageCurrentIndex] = DataStorage.getStorageDataTitle(dataStorage, storageCurrentIndex)
+        spinnerItems[storageCurrentIndex] = DataStorage.getStorageDataTitle(dataStorage, currentStorage)
         spinnerAdapter.notifyDataSetChanged()
     }
 
-    fun attachToStorage(dataSubset: DataStorage.DataSubSet) {
-        dataStorage = dataSubset
+    fun attachToStorage(
+        dataSubsetLH: DataStorage.DataSubSet,
+        dataSubsetRH: DataStorage.DataSubSet
+    ) {
+        dataStorages = arrayOf(dataSubsetLH, dataSubsetRH)
     }
 
     companion object {
