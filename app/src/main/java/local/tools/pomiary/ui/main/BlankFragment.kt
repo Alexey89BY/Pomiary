@@ -100,8 +100,8 @@ class BlankFragment : Fragment() {
 
 
     private fun addToSpinner(dataSubset: DataStorage.DataSubSet) {
-        dataSubset.data.forEachIndexed { index, sillSealData ->
-            spinnerItems.add(DataStorage.getStorageDataTitle(dataSubset, index))
+        dataSubset.data.forEachIndexed { _, sillSealData ->
+            spinnerItems.add(DataStorage.getStorageDataTitle(dataSubset, sillSealData))
             graphData1Items.add(sillSealData)
             graphData2Items.add(dataSubset)
         }

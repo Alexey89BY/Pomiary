@@ -9,7 +9,25 @@ class DataStorage {
     enum class PointResult {
         OK,
         TOLERANCE,
-        CRITICAL,
+        CRITICAL, ;
+
+        fun toInt(): Int {
+            return when (this) {
+                OK -> 1
+                CRITICAL -> 2
+                else -> 0
+            }
+        }
+
+        companion object {
+            fun fromInt(result: Int): PointResult {
+                return when (result) {
+                    1 -> OK
+                    2 -> CRITICAL
+                    else -> TOLERANCE
+                }
+            }
+        }
     }
 
     data class PointData (
@@ -20,10 +38,12 @@ class DataStorage {
 
     @Suppress("ArrayInDataClass")
     data class SectionData(
-        var points: Array<PointData>
+        var points: Array<PointData>,
+        var result: PointResult
     )
 
     data class SillSealData(
+        var title: String,
         var timeStamp: String = String(),
         var sectionP6: SectionData,
         var sectionP7: SectionData,
@@ -52,12 +72,12 @@ class DataStorage {
         private const val maxiSectionP7Size = 4
 
         private val storageDataSteps = listOf(
-            " - 1.1 - ",
-            " - 1.2 - ",
-            " - 1.3 - ",
-            " - 2.1 - ",
-            " - 2.2 - ",
-            " - 2.3 - ",
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "2.2",
+            "2.3",
         )
 
         private var toleranceStandardP6 = arrayOf(
@@ -104,46 +124,58 @@ class DataStorage {
             PointTolerance(0.0F, 0.5F),
         )
 
-        private val storageStandardLH = Array(storageDataSize) {
+        private val storageStandardLH = Array(storageDataSize) { index ->
             SillSealData(
+                title = storageDataSteps[index],
                 sectionP6 = SectionData(
-                  points = Array(standardSectionP6Size) { PointData() }
+                    points = Array(standardSectionP6Size) { PointData() },
+                    result = PointResult.OK
                 ),
                 sectionP7 = SectionData(
-                    points = Array(standardSectionP7Size) { PointData() }
+                    points = Array(standardSectionP7Size) { PointData() },
+                    result = PointResult.OK
                 )
             )
         }
 
-        private val storageStandardRH = Array(storageDataSize) {
+        private val storageStandardRH = Array(storageDataSize) { index ->
             SillSealData(
+                title = storageDataSteps[index],
                 sectionP6 = SectionData(
-                    points = Array(standardSectionP6Size) { PointData() }
+                    points = Array(standardSectionP6Size) { PointData() },
+                    result = PointResult.OK
                 ),
                 sectionP7 = SectionData(
-                    points = Array(standardSectionP7Size) { PointData() }
+                    points = Array(standardSectionP7Size) { PointData() },
+                    result = PointResult.OK
                 )
             )
         }
 
-        private val storageMaxiLH = Array(storageDataSize) {
+        private val storageMaxiLH = Array(storageDataSize) { index ->
             SillSealData(
+                title = storageDataSteps[index],
                 sectionP6 = SectionData(
-                    points = Array(maxiSectionP6Size) { PointData() }
+                    points = Array(maxiSectionP6Size) { PointData() },
+                    result = PointResult.OK
                 ),
                 sectionP7 = SectionData(
-                    points = Array(maxiSectionP7Size) { PointData() }
+                    points = Array(maxiSectionP7Size) { PointData() },
+                    result = PointResult.OK
                 )
             )
         }
 
-        private val storageMaxiRH = Array(storageDataSize) {
+        private val storageMaxiRH = Array(storageDataSize) { index ->
             SillSealData(
+                title = storageDataSteps[index],
                 sectionP6 = SectionData(
-                    points = Array(maxiSectionP6Size) { PointData() }
+                    points = Array(maxiSectionP6Size) { PointData() },
+                    result = PointResult.OK
                 ),
                 sectionP7 = SectionData(
-                    points = Array(maxiSectionP7Size) { PointData() }
+                    points = Array(maxiSectionP7Size) { PointData() },
+                    result = PointResult.OK
                 )
             )
         }
@@ -217,10 +249,14 @@ class DataStorage {
 
 
         fun getStorageDataTitle(
-            dataSubset: DataSubSet,
-            index: Int,
+            subset: DataSubSet,
+            data: SillSealData
         ): String {
-            return dataSubset.title + storageDataSteps[index] + dataSubset.data[index].timeStamp
+            return subset.title +
+                    " - " + data.title +
+                    " - " + data.timeStamp +
+                    " - " + PointsAligner.messageByResult(data.sectionP6.result) +
+                    " / " + PointsAligner.messageByResult(data.sectionP7.result)
         }
 
         fun broadcastSettingsChange() {
@@ -305,6 +341,7 @@ class DataStorage {
         private const val jsonSectionPointsRawName = "ri"
         private const val jsonSectionPointsAlignedName = "pa"
         private const val jsonSectionPointsResultName = "pr"
+        private const val jsonSectionResultName = "sr"
 
         private fun storageSectionToJson(section: SectionData): JSONObject {
             val jsonPointsRaw = JSONArray()
@@ -314,15 +351,11 @@ class DataStorage {
             section.points.forEach {
                 jsonPointsRaw.put(it.rawInput)
                 jsonPointsAligned.put(it.value.toDouble())
-                val result: Int = when (it.result) {
-                    PointResult.OK -> { 1 }
-                    PointResult.CRITICAL -> { 2 }
-                    else -> { 0 }
-                }
-                jsonPointsResult.put(result)
+                jsonPointsResult.put(it.result.toInt())
             }
 
             val jsonSection = JSONObject()
+            jsonSection.put(jsonSectionResultName, section.result.toInt())
             jsonSection.put(jsonSectionPointsRawName, jsonPointsRaw)
             jsonSection.put(jsonSectionPointsAlignedName, jsonPointsAligned)
             jsonSection.put(jsonSectionPointsResultName, jsonPointsResult)
@@ -335,14 +368,13 @@ class DataStorage {
             val jsonPointsAligned = jsonObject.getJSONArray(jsonSectionPointsAlignedName)
             val jsonPointsResult = jsonObject.getJSONArray(jsonSectionPointsResultName)
 
+            val sectionResult = PointResult.fromInt(jsonObject.getInt(jsonSectionResultName))
+            section.result = sectionResult
+
             section.points.forEachIndexed { index, _ ->
                 val pointRawInput = jsonPointsRaw.getString(index)
                 val pointValue = jsonPointsAligned.getDouble(index).toFloat()
-                val pointResult =  when (jsonPointsResult.getInt(index)) {
-                    1 -> PointResult.OK
-                    2 -> PointResult.CRITICAL
-                    else -> PointResult.TOLERANCE
-                }
+                val pointResult = PointResult.fromInt(jsonPointsResult.getInt(index))
 
                 section.points[index] = PointData(
                     rawInput = pointRawInput,
