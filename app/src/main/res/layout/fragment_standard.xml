@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:clickable="true"
-        android:contentDescription="@string/check_std"
+        android:contentDescription="@string/check_msg"
         android:focusable="true"
         android:src="@android:drawable/ic_popup_sync" />
 
@@ -370,6 +370,80 @@
 
                     <TextView
                         android:id="@+id/textRangeStandardP6_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/rowStandardP6_9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textP6_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/editStandardP6_9"
+                        android:text="@string/text_P6_9" />
+
+                    <EditText
+                        android:id="@+id/editStandardP6_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:id="@+id/textResultStandardP6_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textRangeStandardP6_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/rowStandardP6_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textP6_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/editStandardP6_10"
+                        android:text="@string/text_P6_10" />
+
+                    <EditText
+                        android:id="@+id/editStandardP6_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:maxLength="@integer/maxPointDigits"
+                        android:selectAllOnFocus="true"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:id="@+id/textResultStandardP6_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textRangeStandardP6_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="" />

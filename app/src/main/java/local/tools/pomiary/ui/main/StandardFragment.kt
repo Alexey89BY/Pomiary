@@ -26,7 +26,7 @@ import local.tools.pomiary.R
  */
 class StandardFragment : Fragment() {
     private lateinit var viewOfLayout: View
-    private lateinit var dataStorages: Array<DataStorage.DataSubSet>
+    private lateinit var dataStorage: DataStorage.DataSubSet
     private lateinit var spinnerItems: Array<String>
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private var storageCurrentIndex = -1
@@ -48,7 +48,7 @@ class StandardFragment : Fragment() {
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshStandard)
         refreshButton.setOnClickListener { recalculateValues() }
 
-        spinnerItems = buildStoragesSpinnerArray(dataStorages)
+        spinnerItems = buildStoragesSpinnerArray()
 
         val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerStandard)
         spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems)
@@ -68,19 +68,23 @@ class StandardFragment : Fragment() {
             }
         }
 
-        val tolerancesStandardP6 = DataStorage.getToleranceStandardP6()
-        editsStandardP6.forEachIndexed { index, id ->
-            val editText = viewOfLayout.findViewById<EditText>(id)
+        val tolerancesP6 = dataStorage.tolerancesP6
+        tolerancesP6.forEachIndexed { index, tolerance ->
+            val editText = viewOfLayout.findViewById<EditText>(editsStandardP6[index])
             val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP6[index])
-            editText.addTextChangedListener(PointTextWatcher(tolerancesStandardP6[index], textView))
+            editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
             }
 
-        val tolerancesStandardP7 = DataStorage.getToleranceStandardP7()
-        editsStandardP7.forEachIndexed { index, id ->
-            val editText = viewOfLayout.findViewById<EditText>(id)
+        val tolerancesP7 = dataStorage.tolerancesP7
+        tolerancesP7.forEachIndexed { index, tolerance ->
+            val editText = viewOfLayout.findViewById<EditText>(editsStandardP7[index])
             val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP7[index])
-            editText.addTextChangedListener(PointTextWatcher(tolerancesStandardP7[index], textView))
+            editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
         }
+
+        val isMaxi = editsStandardP6.size <= tolerancesP6.size
+        showRow(R.id.rowStandardP6_9, isMaxi)
+        showRow(R.id.rowStandardP6_10, isMaxi)
 
         onSettingsChange()
 
@@ -89,10 +93,10 @@ class StandardFragment : Fragment() {
 
 
     fun onSettingsChange() {
-        setRangesToViews(viewOfLayout, DataStorage.getToleranceStandardP6(), textsRangeStandardP6)
-        setRangesToViews(viewOfLayout, DataStorage.getToleranceStandardP7(), textsRangeStandardP7)
-        showRow(viewOfLayout, R.id.rowStandardP6_0, SettingsFragment.getShowBasePoint())
-        showRow(viewOfLayout, R.id.rowStandardP7_0, SettingsFragment.getShowBasePoint())
+        setRangesToViews(dataStorage.tolerancesP6, textsRangeStandardP6)
+        setRangesToViews(dataStorage.tolerancesP7, textsRangeStandardP7)
+        showRow(R.id.rowStandardP6_0, SettingsFragment.getShowBasePoint())
+        showRow(R.id.rowStandardP7_0, SettingsFragment.getShowBasePoint())
     }
 
 
@@ -106,6 +110,8 @@ class StandardFragment : Fragment() {
         R.id.editStandardP6_6,
         R.id.editStandardP6_7,
         R.id.editStandardP6_8,
+        R.id.editStandardP6_9,
+        R.id.editStandardP6_10,
     )
 
     private val editsStandardP7 = listOf(
@@ -125,6 +131,8 @@ class StandardFragment : Fragment() {
         R.id.textResultStandardP6_6,
         R.id.textResultStandardP6_7,
         R.id.textResultStandardP6_8,
+        R.id.textResultStandardP6_9,
+        R.id.textResultStandardP6_10,
     )
 
     private val textsResultStandardP7 = listOf(
@@ -144,6 +152,8 @@ class StandardFragment : Fragment() {
         R.id.textRangeStandardP6_6,
         R.id.textRangeStandardP6_7,
         R.id.textRangeStandardP6_8,
+        R.id.textRangeStandardP6_9,
+        R.id.textRangeStandardP6_10,
     )
 
     private val textsRangeStandardP7 = listOf(
@@ -162,36 +172,36 @@ class StandardFragment : Fragment() {
             //getStringsFromEdits(viewOfLayout, editsStandardP7, oldStorage.sectionP7.pointsRaw)
 
             storageCurrentIndex = newIndex
-            val newStorage = storageDataBySpinnerIndex(dataStorages, storageCurrentIndex)
+            val newStorage = storageDataBySpinnerIndex(storageCurrentIndex)
 
-            setPointInputsToEdits(viewOfLayout, newStorage.sectionP6.points, editsStandardP6)
-            setPointInputsToEdits(viewOfLayout, newStorage.sectionP7.points, editsStandardP7)
+            setPointInputsToEdits(newStorage.sectionP6.points, editsStandardP6)
+            setPointInputsToEdits(newStorage.sectionP7.points, editsStandardP7)
 
             if (newStorage.timeStamp.isNotBlank()) {
-                setPointResultsToView(viewOfLayout, newStorage.sectionP6.points, textsResultStandardP6)
-                setPointResultsToView(viewOfLayout, newStorage.sectionP7.points, textsResultStandardP7)
+                setPointResultsToView(newStorage.sectionP6.points, textsResultStandardP6)
+                setPointResultsToView(newStorage.sectionP7.points, textsResultStandardP7)
             } else {
                 // clear views
-                clearViews(viewOfLayout, textsResultStandardP6)
-                clearViews(viewOfLayout, textsResultStandardP7)
+                clearViews(textsResultStandardP6)
+                clearViews(textsResultStandardP7)
             }
         }
     }
 
     private fun recalculateValues() {
-        val message: String = requireContext().resources.getString(R.string.check_std)
+        val message: String = requireContext().resources.getString(R.string.check_msg)
         Snackbar.make(viewOfLayout, message, 250).show()
 
-        val dataStorage = storageBySpinnerIndex(dataStorages, storageCurrentIndex)
-        val currentStorage = storageDataBySpinnerIndex(dataStorages, storageCurrentIndex)
+        val dataStorage = storageBySpinnerIndex(storageCurrentIndex)
+        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
 
         currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
 
-        getPointInputsFromEdits(viewOfLayout, editsStandardP6, currentStorage.sectionP6.points)
+        getPointInputsFromEdits(editsStandardP6, currentStorage.sectionP6.points)
         currentStorage.sectionP6.result = PointsAligner.alignPoints(
             dataStorage.tolerancesP6, currentStorage.sectionP6.points)
 
-        getPointInputsFromEdits(viewOfLayout, editsStandardP7, currentStorage.sectionP7.points)
+        getPointInputsFromEdits(editsStandardP7, currentStorage.sectionP7.points)
         currentStorage.sectionP7.result = PointsAligner.alignPoints(
             dataStorage.tolerancesP7, currentStorage.sectionP7.points)
 
@@ -199,8 +209,8 @@ class StandardFragment : Fragment() {
             this, dataStorage.title, currentStorage.timeStamp,
             currentStorage.sectionP6.points, currentStorage.sectionP7.points)
 
-        setPointResultsToView(viewOfLayout, currentStorage.sectionP6.points, textsResultStandardP6)
-        setPointResultsToView(viewOfLayout, currentStorage.sectionP7.points, textsResultStandardP7)
+        setPointResultsToView(currentStorage.sectionP6.points, textsResultStandardP6)
+        setPointResultsToView(currentStorage.sectionP7.points, textsResultStandardP7)
 
         //setTimeStampToView(viewOfLayout, currentStorage.timeStamp, R.id.textTimeStampStandard)
         spinnerItems[storageCurrentIndex] = DataStorage.getStorageDataTitle(dataStorage, currentStorage)
@@ -208,12 +218,128 @@ class StandardFragment : Fragment() {
     }
 
     fun attachToStorage(
-        dataSubsetLH: DataStorage.DataSubSet,
-        dataSubsetRH: DataStorage.DataSubSet
+        dataSubset: DataStorage.DataSubSet
     ) {
-        dataStorages = arrayOf(dataSubsetLH, dataSubsetRH)
+        dataStorage = dataSubset
     }
 
+
+    private fun getPointInputsFromEdits(editsIds: List<Int>, pointsArray: Array<DataStorage.PointData>) {
+        pointsArray.forEachIndexed { index, _ ->
+            val editText = viewOfLayout.findViewById<EditText>(editsIds[index])
+            pointsArray[index].rawInput = editText.text.toString()
+        }
+    }
+
+    private fun setPointInputsToEdits(pointsArray: Array<DataStorage.PointData>, editsIds: List<Int>) {
+        pointsArray.forEachIndexed { index, point ->
+            val editText = viewOfLayout.findViewById<EditText>(editsIds[index])
+            editText.setText(point.rawInput)
+        }
+    }
+
+    private fun clearViews(textViewIds: List<Int>) {
+        textViewIds.forEach { id ->
+            val textView = viewOfLayout.findViewById<TextView>(id)
+            textView.text = String()
+        }
+    }
+
+    private fun setRangesToViews(
+        tolerances: Array<DataStorage.PointTolerance>,
+        textViewIds: List<Int>
+    ) {
+        tolerances.forEachIndexed { index, tolerance ->
+            val textView = viewOfLayout.findViewById<TextView>(textViewIds[index])
+            textView.text = when (index) {
+                0 -> {
+                    buildString { append(" %.1f \u00B1 %.1f") }.format(
+                        tolerance.origin,
+                        tolerance.offset
+                    )
+                }
+                else -> {
+                    buildString { append(" %.1f \u2026 %.1f") }.format(
+                        tolerance.origin - tolerance.offset,
+                        tolerance.origin + tolerance.offset
+                    )
+                }
+            }
+        }
+    }
+
+    private fun setPointResultsToView (
+        points: Array<DataStorage.PointData>,
+        textsResultIds: List<Int>
+    ) {
+        val pointsColors = List(points.size) { index ->
+            PointsAligner.colorByResult(points[index].result)
+        }
+
+        points.forEachIndexed { index, point ->
+            val textView = viewOfLayout.findViewById<TextView>(textsResultIds[index])
+            textView.setTextColor(pointsColors[index])
+            //textView.setBackgroundColor(Color.BLACK)
+            when (index) {
+                0 -> {
+                    textView.text = buildString { append(" %.1f ") }.format(
+                        point.value
+                    )
+                }
+                else -> {
+                    textView.text = buildString { append(" %s %.1f ") }.format(
+                        PointsAligner.messageByResult(point.result),
+                        point.value
+                    )
+                }
+            }
+        }
+    }
+
+    private fun buildStoragesSpinnerArray(): Array<String> {
+        return Array(dataStorage.data.size) { index ->
+            DataStorage.getStorageDataTitle(
+                storageBySpinnerIndex(index),
+                storageDataBySpinnerIndex(index)
+            )
+        }
+    }
+
+
+    private fun storageBySpinnerIndex(
+        spinnerIndex: Int
+    ): DataStorage.DataSubSet {
+        return dataStorage
+    }
+
+
+    private fun storageDataBySpinnerIndex(
+        spinnerIndex: Int
+    ): DataStorage.SillSealData {
+        return dataStorage.data[spinnerIndex]
+    }
+
+
+    private fun showRow(
+        rowId: Int,
+        //editId: Int,
+        isVisible: Boolean
+    ) {
+        val rowView = viewOfLayout.findViewById<TableRow>(rowId)
+        rowView.visibility = if (isVisible) View.VISIBLE else View.GONE
+
+        //val editText = viewOfLayout.findViewById<EditText>(editId)
+        //editText.text.clear()
+    }
+
+    /*
+    fun sendToGraph(fragmentTitle: String, currentStorage: DataStorage.SillSealData) {
+        BlankFragment.setData(fragmentTitle, currentStorage.timeStamp,
+            currentStorage.sectionP6.points, DataStorage.getToleranceStandardP6(),
+            currentStorage.sectionP7.points, DataStorage.getToleranceStandardP7())
+        //MainActivity.openGraphTab()
+    }
+    */
 
     companion object {
         /**
@@ -227,135 +353,5 @@ class StandardFragment : Fragment() {
                 arguments = Bundle().apply {
                 }
             }
-
-        fun getPointInputsFromEdits(view: View, editsIds: List<Int>, pointsArray: Array<DataStorage.PointData>) {
-            editsIds.forEachIndexed { index, id ->
-                val editText = view.findViewById<EditText>(id)
-                pointsArray[index].rawInput = editText.text.toString()
-            }
-        }
-
-        fun setPointInputsToEdits(view: View, pointsArray: Array<DataStorage.PointData>, editsIds: List<Int>) {
-            pointsArray.forEachIndexed { index, point ->
-                val editText = view.findViewById<EditText>(editsIds[index])
-                editText.setText(point.rawInput)
-            }
-        }
-
-        fun clearViews(view: View, textViewIds: List<Int>) {
-            textViewIds.forEach { id ->
-                val textView = view.findViewById<TextView>(id)
-                textView.text = String()
-            }
-        }
-
-        fun setRangesToViews(
-            view: View,
-            tolerances: Array<DataStorage.PointTolerance>,
-            textViewIds: List<Int>
-        ) {
-            tolerances.forEachIndexed { index, tolerance ->
-                val textView = view.findViewById<TextView>(textViewIds[index])
-                textView.text = when (index) {
-                    0 -> {
-                        buildString { append(" %.1f \u00B1 %.1f") }.format(
-                            tolerance.origin,
-                            tolerance.offset
-                        )
-                    }
-                    else -> {
-                        buildString { append(" %.1f \u2026 %.1f") }.format(
-                            tolerance.origin - tolerance.offset,
-                            tolerance.origin + tolerance.offset
-                        )
-                    }
-                }
-            }
-        }
-
-        fun setPointResultsToView (
-            view: View,
-            points: Array<DataStorage.PointData>,
-            textsResultIds: List<Int>
-        ) {
-            val pointsColors = List(points.size) { index ->
-                PointsAligner.colorByResult(points[index].result)
-            }
-
-            points.forEachIndexed { index, point ->
-                val textView = view.findViewById<TextView>(textsResultIds[index])
-                textView.setTextColor(pointsColors[index])
-                //textView.setBackgroundColor(Color.BLACK)
-                when (index) {
-                    0 -> {
-                        textView.text = buildString { append(" %.1f ") }.format(
-                            point.value
-                        )
-                    }
-                    else -> {
-                        textView.text = buildString { append(" %s %.1f ") }.format(
-                            PointsAligner.messageByResult(point.result),
-                            point.value
-                        )
-                    }
-                }
-            }
-        }
-
-        fun buildStoragesSpinnerArray(
-            dataStorages: Array<DataStorage.DataSubSet>
-        ): Array<String> {
-            return Array(dataStorages[0].data.size + dataStorages[1].data.size) { index ->
-                DataStorage.getStorageDataTitle(
-                    storageBySpinnerIndex(dataStorages, index),
-                    storageDataBySpinnerIndex(dataStorages, index)
-                )
-            }
-        }
-
-
-        fun storageBySpinnerIndex(
-            dataStorages: Array<DataStorage.DataSubSet>,
-            spinnerIndex: Int
-        ): DataStorage.DataSubSet {
-            return when {
-                spinnerIndex < dataStorages[0].data.size -> dataStorages[0]
-                else -> dataStorages[1]
-            }
-        }
-
-
-        fun storageDataBySpinnerIndex(
-            dataStorages: Array<DataStorage.DataSubSet>,
-            spinnerIndex: Int
-        ): DataStorage.SillSealData {
-            return when {
-                spinnerIndex < dataStorages[0].data.size -> dataStorages[0].data[spinnerIndex]
-                else -> dataStorages[1].data[spinnerIndex - dataStorages[0].data.size]
-            }
-        }
-
-
-        fun showRow(
-            viewOfLayout: View,
-            rowId: Int,
-            //editId: Int,
-            isVisible: Boolean
-        ) {
-            val rowView = viewOfLayout.findViewById<TableRow>(rowId)
-            rowView.visibility = if (isVisible) View.VISIBLE else View.GONE
-
-            //val editText = viewOfLayout.findViewById<EditText>(editId)
-            //editText.text.clear()
-        }
-
-        /*
-        fun sendToGraph(fragmentTitle: String, currentStorage: DataStorage.SillSealData) {
-            BlankFragment.setData(fragmentTitle, currentStorage.timeStamp,
-                currentStorage.sectionP6.points, DataStorage.getToleranceStandardP6(),
-                currentStorage.sectionP7.points, DataStorage.getToleranceStandardP7())
-            //MainActivity.openGraphTab()
-        }
-        */
     }
 }

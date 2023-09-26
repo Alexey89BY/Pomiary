@@ -59,10 +59,8 @@ class BlankFragment : Fragment() {
         viewGraph = ViewCanvas(activity)
         rootView.findViewById<LinearLayout>(R.id.containerGraph).addView(viewGraph)
 
-        addToSpinner(DataStorage.getStorageStandardLeft())
-        addToSpinner(DataStorage.getStorageStandardRight())
-        addToSpinner(DataStorage.getStorageMaxiLeft())
-        addToSpinner(DataStorage.getStorageMaxiRight())
+        addToSpinner(DataStorage.getStorageStandard())
+        addToSpinner(DataStorage.getStorageMaxi())
 
         val spinner = rootView.findViewById<Spinner>(R.id.spinnerGraph)
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems)
@@ -124,7 +122,7 @@ class BlankFragment : Fragment() {
                 }
             }
 
-
+        /*
         fun setData(
             title: String,
             timeStamp: String,
@@ -141,6 +139,7 @@ class BlankFragment : Fragment() {
             graphData.tolerancesP7 = tolerancesP7
             viewGraph.invalidate()
         }
+        */
     }
 
 

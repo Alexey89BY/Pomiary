@@ -65,19 +65,25 @@ class DataStorage {
 
     companion object {
 
-        private const val storageDataSize = 6
+        private const val storageDataSize = 12
         private const val standardSectionP6Size = 9
         private const val standardSectionP7Size = 4
         private const val maxiSectionP6Size = 11
         private const val maxiSectionP7Size = 4
 
         private val storageDataSteps = listOf(
-            "1.1",
-            "1.2",
-            "1.3",
-            "2.1",
-            "2.2",
-            "2.3",
+            "LH 1.1",
+            "LH 1.2",
+            "LH 1.3",
+            "LH 2.1",
+            "LH 2.2",
+            "LH 2.3",
+            "RH 1.1",
+            "RH 1.2",
+            "RH 1.3",
+            "RH 2.1",
+            "RH 2.2",
+            "RH 2.3",
         )
 
         private var toleranceStandardP6 = arrayOf(
@@ -124,7 +130,7 @@ class DataStorage {
             PointTolerance(0.0F, 0.5F),
         )
 
-        private val storageStandardLH = Array(storageDataSize) { index ->
+        private val storageStandard = Array(storageDataSize) { index ->
             SillSealData(
                 title = storageDataSteps[index],
                 sectionP6 = SectionData(
@@ -138,21 +144,7 @@ class DataStorage {
             )
         }
 
-        private val storageStandardRH = Array(storageDataSize) { index ->
-            SillSealData(
-                title = storageDataSteps[index],
-                sectionP6 = SectionData(
-                    points = Array(standardSectionP6Size) { PointData() },
-                    result = PointResult.OK
-                ),
-                sectionP7 = SectionData(
-                    points = Array(standardSectionP7Size) { PointData() },
-                    result = PointResult.OK
-                )
-            )
-        }
-
-        private val storageMaxiLH = Array(storageDataSize) { index ->
+        private val storageMaxi = Array(storageDataSize) { index ->
             SillSealData(
                 title = storageDataSteps[index],
                 sectionP6 = SectionData(
@@ -166,62 +158,30 @@ class DataStorage {
             )
         }
 
-        private val storageMaxiRH = Array(storageDataSize) { index ->
-            SillSealData(
-                title = storageDataSteps[index],
-                sectionP6 = SectionData(
-                    points = Array(maxiSectionP6Size) { PointData() },
-                    result = PointResult.OK
-                ),
-                sectionP7 = SectionData(
-                    points = Array(maxiSectionP7Size) { PointData() },
-                    result = PointResult.OK
-                )
-            )
-        }
-
-        private val subsetStandardLH = DataSubSet(
-            title = "LH Standard",
-            data = storageStandardLH,
+        private val subsetStandard = DataSubSet(
+            title = "Standard",
+            data = storageStandard,
             tolerancesP6 = toleranceStandardP6,
             tolerancesP7 = toleranceStandardP7,
         )
 
-        private val subsetStandardRH = DataSubSet(
-            title = "RH Standard",
-            data = storageStandardRH,
-            tolerancesP6 = toleranceStandardP6,
-            tolerancesP7 = toleranceStandardP7,
-        )
-        private val subsetMaxiLH = DataSubSet(
-            title = "LH Maxi",
-            data = storageMaxiLH,
-            tolerancesP6 = toleranceMaxiP6,
-            tolerancesP7 = toleranceMaxiP7,
-        )
-        private val subsetMaxiRH = DataSubSet(
-            title = "RH Maxi",
-            data = storageMaxiRH,
+        private val subsetMaxi = DataSubSet(
+            title = "Maxi",
+            data = storageMaxi,
             tolerancesP6 = toleranceMaxiP6,
             tolerancesP7 = toleranceMaxiP7,
         )
 
 
-        fun getStorageStandardLeft(): DataSubSet {
-            return subsetStandardLH
+        fun getStorageStandard(): DataSubSet {
+            return subsetStandard
         }
 
-        fun getStorageStandardRight(): DataSubSet {
-            return subsetStandardRH
+
+        fun getStorageMaxi(): DataSubSet {
+            return subsetMaxi
         }
 
-        fun getStorageMaxiLeft(): DataSubSet {
-            return subsetMaxiLH
-        }
-
-        fun getStorageMaxiRight(): DataSubSet {
-            return subsetMaxiRH
-        }
 
         fun getToleranceStandardP6(): Array<PointTolerance> {
             return toleranceStandardP6
@@ -253,29 +213,17 @@ class DataStorage {
             data: SillSealData
         ): String {
             return subset.title +
-                    " - " + data.title +
+                    " " + data.title +
                     " - " + data.timeStamp +
                     " - " + PointsAligner.messageByResult(data.sectionP6.result) +
                     " / " + PointsAligner.messageByResult(data.sectionP7.result)
         }
 
         fun broadcastSettingsChange() {
-            val toleranceStandardP6 = getToleranceStandardP6()
-            val toleranceStandardP7 = getToleranceStandardP7()
-
-            subsetStandardLH.tolerancesP6 = toleranceStandardP6
-            subsetStandardLH.tolerancesP7 = toleranceStandardP7
-            subsetStandardRH.tolerancesP6 = toleranceStandardP6
-            subsetStandardRH.tolerancesP7 = toleranceStandardP7
-
-            val toleranceMaxiP6 = getToleranceMaxiP6()
-            val toleranceMaxiP7 = getToleranceMaxiP7()
-
-            subsetMaxiLH.tolerancesP6 = toleranceMaxiP6
-            subsetMaxiLH.tolerancesP7 = toleranceMaxiP7
-            subsetMaxiRH.tolerancesP6 = toleranceMaxiP6
-            subsetMaxiRH.tolerancesP7 = toleranceMaxiP7
-
+            subsetStandard.tolerancesP6 = getToleranceStandardP6()
+            subsetStandard.tolerancesP7 = getToleranceStandardP7()
+            subsetMaxi.tolerancesP6 = getToleranceMaxiP6()
+            subsetMaxi.tolerancesP7 = getToleranceMaxiP7()
         }
 
 
@@ -287,10 +235,8 @@ class DataStorage {
 
             try {
                 val json = JSONObject(file.readText())
-                storageSubsetFromJson(json.getJSONArray(subsetStandardLH.title), subsetStandardLH)
-                storageSubsetFromJson(json.getJSONArray(subsetStandardRH.title), subsetStandardRH)
-                storageSubsetFromJson(json.getJSONArray(subsetMaxiLH.title), subsetMaxiLH)
-                storageSubsetFromJson(json.getJSONArray(subsetMaxiRH.title), subsetMaxiRH)
+                storageSubsetFromJson(json.getJSONArray(subsetStandard.title), subsetStandard)
+                storageSubsetFromJson(json.getJSONArray(subsetMaxi.title), subsetMaxi)
             }
             catch (_: Exception) {
 
@@ -300,10 +246,8 @@ class DataStorage {
 
         fun saveData(context: Context) {
             val json = JSONObject()
-            json.put(subsetStandardLH.title, storageSubsetToJson(subsetStandardLH))
-            json.put(subsetStandardRH.title, storageSubsetToJson(subsetStandardRH))
-            json.put(subsetMaxiLH.title, storageSubsetToJson(subsetMaxiLH))
-            json.put(subsetMaxiRH.title, storageSubsetToJson(subsetMaxiRH))
+            json.put(subsetStandard.title, storageSubsetToJson(subsetStandard))
+            json.put(subsetMaxi.title, storageSubsetToJson(subsetMaxi))
 
             val filesDir = context.getExternalFilesDir(null)
             val file = File(filesDir, jsonFileName)
