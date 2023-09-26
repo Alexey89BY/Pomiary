@@ -36,13 +36,13 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
         when (position) {
             0 -> {
                 val fragment = StandardFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageStandardLeft(), DataStorage.getStorageStandardRight())
+                fragment.attachToStorage(DataStorage.getStorageStandard())
                 pageIdStandard = fragment.id
                 return fragment
             }
             1 -> {
-                val fragment = MaxiFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageMaxiLeft(), DataStorage.getStorageMaxiRight())
+                val fragment = StandardFragment.newInstance()
+                fragment.attachToStorage(DataStorage.getStorageMaxi(),)
                 pageIdMaxi = fragment.id
                 return fragment
             }
@@ -57,6 +57,6 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
         (pageStandard as? StandardFragment)?.onSettingsChange()
 
         val pageMaxi = fa.supportFragmentManager.findFragmentById(pageIdMaxi)
-        (pageMaxi as? MaxiFragment)?.onSettingsChange()
+        (pageMaxi as? StandardFragment)?.onSettingsChange()
     }
 }
