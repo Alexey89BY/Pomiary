@@ -17,7 +17,7 @@ class PointsAligner {
         ): Array<Float> {
             val pointsRaw = Array(pointsData.size) { index ->
                 val floatValue = pointsData[index].rawInput.toFloatOrNull()
-                floatValue ?: tolerancesRaw[index].origin
+                floatValue ?: if (index != 0) tolerancesRaw[index].origin else 0.0F
             }
             return pointsRaw
         }
