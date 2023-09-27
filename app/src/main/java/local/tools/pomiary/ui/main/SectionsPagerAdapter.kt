@@ -13,8 +13,8 @@ import local.tools.pomiary.R
 class SectionsPagerAdapter(private val fa: FragmentActivity) :
     FragmentStateAdapter(fa) {
 
-    private var pageIdStandard = -1
-    private var pageIdMaxi = -1
+    private var pageStandard: StandardFragment? = null
+    private var pageMaxi: StandardFragment? = null
 
     private val pagesList = listOf(
         R.string.tab_std,
@@ -37,13 +37,13 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
             0 -> {
                 val fragment = StandardFragment.newInstance()
                 fragment.attachToStorage(DataStorage.getStorageStandard())
-                pageIdStandard = fragment.id
+                pageStandard = fragment
                 return fragment
             }
             1 -> {
                 val fragment = StandardFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageMaxi(),)
-                pageIdMaxi = fragment.id
+                fragment.attachToStorage(DataStorage.getStorageMaxi())
+                pageMaxi = fragment
                 return fragment
             }
             2 -> return BlankFragment.newInstance()
@@ -53,10 +53,7 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
     }
 
     fun broadcastSettingsChange() {
-        val pageStandard = fa.supportFragmentManager.findFragmentById(pageIdStandard)
-        (pageStandard as? StandardFragment)?.onSettingsChange()
-
-        val pageMaxi = fa.supportFragmentManager.findFragmentById(pageIdMaxi)
-        (pageMaxi as? StandardFragment)?.onSettingsChange()
+        pageStandard?.onSettingsChange()
+        pageMaxi?.onSettingsChange()
     }
 }

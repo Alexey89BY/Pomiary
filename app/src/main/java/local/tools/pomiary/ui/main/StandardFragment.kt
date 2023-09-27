@@ -70,16 +70,20 @@ class StandardFragment : Fragment() {
 
         val tolerancesP6 = dataStorage.tolerancesP6
         tolerancesP6.forEachIndexed { index, tolerance ->
-            val editText = viewOfLayout.findViewById<EditText>(editsStandardP6[index])
-            val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP6[index])
-            editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
+            if (index != 0) {
+                val editText = viewOfLayout.findViewById<EditText>(editsStandardP6[index])
+                val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP6[index])
+                editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
             }
+        }
 
         val tolerancesP7 = dataStorage.tolerancesP7
         tolerancesP7.forEachIndexed { index, tolerance ->
-            val editText = viewOfLayout.findViewById<EditText>(editsStandardP7[index])
-            val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP7[index])
-            editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
+            if (index != 0) {
+                val editText = viewOfLayout.findViewById<EditText>(editsStandardP7[index])
+                val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP7[index])
+                editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
+            }
         }
 
         val isMaxi = editsStandardP6.size <= tolerancesP6.size
@@ -95,8 +99,8 @@ class StandardFragment : Fragment() {
     fun onSettingsChange() {
         setRangesToViews(dataStorage.tolerancesP6, textsRangeStandardP6)
         setRangesToViews(dataStorage.tolerancesP7, textsRangeStandardP7)
-        showRow(R.id.rowStandardP6_0, SettingsFragment.getShowBasePoint())
-        showRow(R.id.rowStandardP7_0, SettingsFragment.getShowBasePoint())
+        showBasePoint(R.id.editStandardP6_0, SettingsFragment.getShowBasePoint())
+        showBasePoint(R.id.editStandardP7_0, SettingsFragment.getShowBasePoint())
     }
 
 
@@ -252,12 +256,14 @@ class StandardFragment : Fragment() {
         tolerances.forEachIndexed { index, tolerance ->
             val textView = viewOfLayout.findViewById<TextView>(textViewIds[index])
             textView.text = when (index) {
+                /*
                 0 -> {
                     buildString { append(" %.1f \u00B1 %.1f") }.format(
                         tolerance.origin,
                         tolerance.offset
                     )
                 }
+                */
                 else -> {
                     buildString { append(" %.1f \u2026 %.1f") }.format(
                         tolerance.origin - tolerance.offset,
@@ -278,20 +284,17 @@ class StandardFragment : Fragment() {
 
         points.forEachIndexed { index, point ->
             val textView = viewOfLayout.findViewById<TextView>(textsResultIds[index])
-            textView.setTextColor(pointsColors[index])
             //textView.setBackgroundColor(Color.BLACK)
-            when (index) {
-                0 -> {
-                    textView.text = buildString { append(" %.1f ") }.format(
-                        point.value
-                    )
-                }
-                else -> {
-                    textView.text = buildString { append(" %s %.1f ") }.format(
-                        PointsAligner.messageByResult(point.result),
-                        point.value
-                    )
-                }
+            if (index == 0) {
+                textView.text = buildString { append(" %.1f ") }.format(
+                    point.value
+                )
+            } else {
+                textView.setTextColor(pointsColors[index])
+                textView.text = buildString { append(" %s %.1f ") }.format(
+                    PointsAligner.messageByResult(point.result),
+                    point.value
+                )
             }
         }
     }
@@ -322,14 +325,22 @@ class StandardFragment : Fragment() {
 
     private fun showRow(
         rowId: Int,
-        //editId: Int,
         isVisible: Boolean
     ) {
         val rowView = viewOfLayout.findViewById<TableRow>(rowId)
         rowView.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
 
-        //val editText = viewOfLayout.findViewById<EditText>(editId)
-        //editText.text.clear()
+
+    private fun showBasePoint(
+        editId: Int,
+        isVisible: Boolean
+    ) {
+        val editText = viewOfLayout.findViewById<EditText>(editId)
+        editText.isEnabled = isVisible
+        if (! isVisible) {
+            editText.text.clear()
+        }
     }
 
     /*
