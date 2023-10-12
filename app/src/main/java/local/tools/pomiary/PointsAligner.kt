@@ -7,30 +7,30 @@ import kotlin.math.min
 
 class PointsAligner {
     companion object {
-        private const val roundFactor = 0.1F
+        private const val roundFactor = 0.1
         private const val errorEpsilon = roundFactor / 2
 
 
         private fun getPointsFromText(
             pointsData: Array<DataStorage.PointData>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
-        ): Array<Float> {
+        ): Array<Double> {
             val pointsRaw = Array(pointsData.size) { index ->
-                val floatValue = pointsData[index].rawInput.toFloatOrNull()
-                floatValue ?: if (index != 0) tolerancesRaw[index].origin else 0.0F
+                val floatValue = pointsData[index].rawInput.toDoubleOrNull()
+                floatValue ?: if (index != 0) tolerancesRaw[index].origin else 0.0
             }
             return pointsRaw
         }
 
 
-        fun roundPoint(value: Float): Float {
+        fun roundPoint(value: Double): Double {
             return kotlin.math.round(value / roundFactor) * roundFactor
         }
 
 
-        fun testPoint(value: Float, tolerance: DataStorage.PointTolerance): DataStorage.PointResult {
+        fun testPoint(value: Double, tolerance: DataStorage.PointTolerance): DataStorage.PointResult {
             val pointError = (value - tolerance.origin).absoluteValue - tolerance.offset
-            val toleranceNok = DataStorage.getToleranceNok()[0].offset
+            val toleranceNok = DataStorage.getToleranceNok()
             return when {
                 (pointError < errorEpsilon) -> DataStorage.PointResult.OK
                 (pointError < toleranceNok) -> DataStorage.PointResult.TOLERANCE
@@ -60,17 +60,17 @@ class PointsAligner {
 
         private fun shiftAndCheckPoints(
             pointsData: Array<DataStorage.PointData>,
-            pointsRaw: Array<Float>,
+            pointsRaw: Array<Double>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
         ): DataStorage.PointResult {
             val pointZero = pointsRaw[0]
             val points = List(pointsRaw.size) { index ->
-                roundPoint((pointsRaw[index] - pointZero).absoluteValue)
+                (pointsRaw[index] - pointZero).absoluteValue
             }
 
-            var shiftUpMin = 0.0F
+            var shiftUpMin = 0.0
             var shiftUpIndex = -1
-            var shiftDownMax = 0.0F
+            var shiftDownMax = 0.0
             var shiftDownIndex = -1
 
             points.forEachIndexed { index, pointValue ->
@@ -93,13 +93,14 @@ class PointsAligner {
                 (shiftUpMin > 0) and (shiftDownMax > 0) -> min(shiftUpMin, shiftDownMax)
                 (shiftUpMin < 0) and (shiftDownMax < 0) -> max(shiftUpMin, shiftDownMax)
                 //(shiftUpMin < 0) and (shiftDownMax > 0) -> (shiftUpMin + shiftDownMax) / 2
-                else -> 0.0F
+                else -> 0.0
             }
 
             var result = DataStorage.PointResult.OK
 
             points.forEachIndexed { index, _ ->
-                val pointValue = points[index] + totalShift
+                val shiftedValue = points[index] + totalShift
+                val pointValue =  if (index != 0) roundPoint(shiftedValue) else shiftedValue
                 val pointResult = testPoint(pointValue, tolerancesRaw[index])
 
                 //if ((pointResult == PointResult.CRITICAL) and ((index == shiftDownIndex) or (index == shiftUpIndex))) {

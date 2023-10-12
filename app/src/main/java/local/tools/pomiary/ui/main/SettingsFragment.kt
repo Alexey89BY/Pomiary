@@ -107,7 +107,7 @@ class SettingsFragment : Fragment() {
         )
 
         private val editsNok_zeros = listOf(
-            R.id.editNok_zero,
+            0,
         )
 
         private val editsNok_offsets = listOf(
@@ -148,7 +148,7 @@ class SettingsFragment : Fragment() {
             readTolerances(preferences, settingsStandardP7_prefix, DataStorage.getToleranceStandardP7())
             readTolerances(preferences, settingsMaxiP6_prefix, DataStorage.getToleranceMaxiP6())
             readTolerances(preferences, settingsMaxiP7_prefix, DataStorage.getToleranceMaxiP7())
-            readTolerances(preferences, settingsNok_prefix, DataStorage.getToleranceNok())
+            readTolerances(preferences, settingsNok_prefix, DataStorage.getTolerancesNok())
 
             isShowBasePoint = preferences.getBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
 
@@ -159,9 +159,9 @@ class SettingsFragment : Fragment() {
         private fun readTolerances(preferences: SharedPreferences, prefix: String, tolerances: Array<DataStorage.PointTolerance>) {
             tolerances.forEachIndexed { index, tolerance ->
                 val zeroPrefix = prefix.format(index, 0)
-                val origin = preferences.getFloat(zeroPrefix, tolerance.origin)
+                val origin = preferences.getFloat(zeroPrefix, tolerance.origin.toFloat()).toDouble()
                 val offsetPrefix = prefix.format(index, 1)
-                val offset = preferences.getFloat(offsetPrefix, tolerance.offset)
+                val offset = preferences.getFloat(offsetPrefix, tolerance.offset.toFloat()).toDouble()
                 tolerances[index] = DataStorage.PointTolerance(origin, offset)
             }
         }
@@ -170,9 +170,9 @@ class SettingsFragment : Fragment() {
         fun writeTolerances(editor: SharedPreferences.Editor, prefix: String, tolerances: Array<DataStorage.PointTolerance>) {
             tolerances.forEachIndexed { index, tolerance ->
                 val zeroPrefix = prefix.format(index, 0)
-                editor.putFloat(zeroPrefix, tolerance.origin)
+                editor.putFloat(zeroPrefix, tolerance.origin.toFloat())
                 val offsetPrefix = prefix.format(index, 1)
-                editor.putFloat(offsetPrefix, tolerance.offset)
+                editor.putFloat(offsetPrefix, tolerance.offset.toFloat())
             }
         }
     }
@@ -187,8 +187,10 @@ class SettingsFragment : Fragment() {
 
     private fun writeEdits(view: View, tolerances: Array<DataStorage.PointTolerance>, editsZeros: List<Int>, editsOffsets: List<Int>) {
         tolerances.forEachIndexed { index, tolerance ->
-            val editZero = view.findViewById<EditText>(editsZeros[index])
-            editZero.setText(tolerance.origin.toString())
+            if (editsZeros[index] != 0) {
+                val editZero = view.findViewById<EditText>(editsZeros[index])
+                editZero.setText(tolerance.origin.toString())
+            }
 
             val editOffset = view.findViewById<EditText>(editsOffsets[index])
             editOffset.setText(tolerance.offset.toString())
@@ -197,15 +199,17 @@ class SettingsFragment : Fragment() {
 
     private fun readEdits(view: View, tolerances: Array<DataStorage.PointTolerance>, editsZeros: List<Int>, editsOffsets: List<Int>) {
         tolerances.forEachIndexed { index, _ ->
-            val editZero = view.findViewById<EditText>(editsZeros[index])
-            val textZero = editZero.text.toString()
-            val zeroValue = textZero.toFloatOrNull()
+            val zeroValue = if (editsZeros[index] != 0) {
+                val editZero = view.findViewById<EditText>(editsZeros[index])
+                editZero.text.toString().toDoubleOrNull() ?: 0.0
+            } else {
+                0.0
+            }
 
             val editOffset = view.findViewById<EditText>(editsOffsets[index])
-            val textOffset = editOffset.text.toString()
-            val offsetValue = textOffset.toFloatOrNull()
+            val offsetValue = editOffset.text.toString().toDoubleOrNull() ?: 0.0
 
-            tolerances[index] = DataStorage.PointTolerance(zeroValue ?: 0.0F, offsetValue ?: 0.0F)
+            tolerances[index] = DataStorage.PointTolerance(zeroValue, offsetValue)
         }
     }
 
@@ -223,7 +227,7 @@ class SettingsFragment : Fragment() {
         writeEdits(viewOfLayout, DataStorage.getToleranceStandardP7(), editsStandardP7_zeros, editsStandardP7_offsets)
         writeEdits(viewOfLayout, DataStorage.getToleranceMaxiP6(), editsMaxiP6_zeros, editsMaxiP6_offsets)
         writeEdits(viewOfLayout, DataStorage.getToleranceMaxiP7(), editsMaxiP7_zeros, editsMaxiP7_offsets)
-        writeEdits(viewOfLayout, DataStorage.getToleranceNok(), editsNok_zeros, editsNok_offsets)
+        writeEdits(viewOfLayout, DataStorage.getTolerancesNok(), editsNok_zeros, editsNok_offsets)
 
         val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
         switchBasePoint.isChecked = isShowBasePoint
@@ -239,7 +243,7 @@ class SettingsFragment : Fragment() {
         readEdits(viewOfLayout, DataStorage.getToleranceStandardP7(), editsStandardP7_zeros, editsStandardP7_offsets)
         readEdits(viewOfLayout, DataStorage.getToleranceMaxiP6(), editsMaxiP6_zeros, editsMaxiP6_offsets)
         readEdits(viewOfLayout, DataStorage.getToleranceMaxiP7(), editsMaxiP7_zeros, editsMaxiP7_offsets)
-        readEdits(viewOfLayout, DataStorage.getToleranceNok(), editsNok_zeros, editsNok_offsets)
+        readEdits(viewOfLayout, DataStorage.getTolerancesNok(), editsNok_zeros, editsNok_offsets)
 
         val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
         isShowBasePoint = switchBasePoint.isChecked
@@ -250,7 +254,7 @@ class SettingsFragment : Fragment() {
         writeTolerances(editor, settingsStandardP7_prefix, DataStorage.getToleranceStandardP7())
         writeTolerances(editor, settingsMaxiP6_prefix, DataStorage.getToleranceMaxiP6())
         writeTolerances(editor, settingsMaxiP7_prefix, DataStorage.getToleranceMaxiP7())
-        writeTolerances(editor, settingsNok_prefix, DataStorage.getToleranceNok())
+        writeTolerances(editor, settingsNok_prefix, DataStorage.getTolerancesNok())
         editor.putBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
         editor.apply()
 

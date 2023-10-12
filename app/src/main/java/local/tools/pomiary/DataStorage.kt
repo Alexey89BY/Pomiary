@@ -32,7 +32,7 @@ class DataStorage {
 
     data class PointData (
         var rawInput: String = String(),
-        var value: Float = 0.0F,
+        var value: Double = 0.0,
         var result: PointResult = PointResult.TOLERANCE
     )
 
@@ -58,8 +58,8 @@ class DataStorage {
     )
 
     data class PointTolerance(
-        var origin: Float,
-        var offset: Float
+        var origin: Double,
+        var offset: Double
     )
 
 
@@ -87,47 +87,47 @@ class DataStorage {
         )
 
         private var toleranceStandardP6 = arrayOf(
-            PointTolerance(0.0F, 3.0F),
-            PointTolerance(21.0F, 1.5F),
-            PointTolerance(123.0F, 2.5F),
-            PointTolerance(225.0F, 2.5F),
-            PointTolerance(327.0F, 2.5F),
-            PointTolerance(429.0F, 2.5F),
-            PointTolerance(531.0F, 2.5F),
-            PointTolerance(633.0F, 2.5F),
-            PointTolerance(655.0F, 3.0F)
+            PointTolerance(0.0, 3.0),
+            PointTolerance(21.0, 1.5),
+            PointTolerance(123.0, 2.5),
+            PointTolerance(225.0, 2.5),
+            PointTolerance(327.0, 2.5),
+            PointTolerance(429.0, 2.5),
+            PointTolerance(531.0, 2.5),
+            PointTolerance(633.0, 2.5),
+            PointTolerance(655.0, 3.0)
         )
 
         private var toleranceStandardP7 = arrayOf(
-            PointTolerance(0.0F, 2.5F),
-            PointTolerance(29.0F, 2.5F),
-            PointTolerance(114.0F, 2.5F),
-            PointTolerance(149.0F, 2.5F)
+            PointTolerance(0.0, 2.5),
+            PointTolerance(29.0, 2.5),
+            PointTolerance(114.0, 2.5),
+            PointTolerance(149.0, 2.5)
         )
 
         private var toleranceMaxiP6 = arrayOf(
-            PointTolerance(0.0F, 3.0F),
-            PointTolerance(14.0F, 1.5F),
-            PointTolerance(116.0F, 2.5F),
-            PointTolerance(218.0F, 2.5F),
-            PointTolerance(320.0F, 2.5F),
-            PointTolerance(422.0F, 2.5F),
-            PointTolerance(524.0F, 2.5F),
-            PointTolerance(626.0F, 2.5F),
-            PointTolerance(728.0F, 2.5F),
-            PointTolerance(830.0F, 2.5F),
-            PointTolerance(839.5F, 3.0F)
+            PointTolerance(0.0, 3.0),
+            PointTolerance(14.0, 1.5),
+            PointTolerance(116.0, 2.5),
+            PointTolerance(218.0, 2.5),
+            PointTolerance(320.0, 2.5),
+            PointTolerance(422.0, 2.5),
+            PointTolerance(524.0, 2.5),
+            PointTolerance(626.0, 2.5),
+            PointTolerance(728.0, 2.5),
+            PointTolerance(830.0, 2.5),
+            PointTolerance(839.5, 3.0)
         )
 
         private var toleranceMaxiP7 = arrayOf(
-            PointTolerance(0.0F, 2.5F),
-            PointTolerance(22.5F, 1.5F),
-            PointTolerance(107.5F, 2.5F),
-            PointTolerance(130.5F, 2.5F)
+            PointTolerance(0.0, 2.5),
+            PointTolerance(22.5, 1.5),
+            PointTolerance(107.5, 2.5),
+            PointTolerance(130.5, 2.5)
         )
 
         private var toleranceNok = arrayOf(
-            PointTolerance(0.0F, 0.5F),
+            PointTolerance(0.0, 0.5),
         )
 
         private val storageStandard = Array(storageDataSize) { index ->
@@ -203,8 +203,13 @@ class DataStorage {
         }
 
 
-        fun getToleranceNok(): Array<PointTolerance> {
+        fun getTolerancesNok(): Array<PointTolerance> {
             return toleranceNok
+        }
+
+
+        fun getToleranceNok(): Double {
+            return toleranceNok[0].offset
         }
 
 
@@ -294,7 +299,7 @@ class DataStorage {
 
             section.points.forEach {
                 jsonPointsRaw.put(it.rawInput)
-                jsonPointsAligned.put(it.value.toDouble())
+                jsonPointsAligned.put(it.value)
                 jsonPointsResult.put(it.result.toInt())
             }
 
@@ -317,7 +322,7 @@ class DataStorage {
 
             section.points.forEachIndexed { index, _ ->
                 val pointRawInput = jsonPointsRaw.getString(index)
-                val pointValue = jsonPointsAligned.getDouble(index).toFloat()
+                val pointValue = jsonPointsAligned.getDouble(index)
                 val pointResult = PointResult.fromInt(jsonPointsResult.getInt(index))
 
                 section.points[index] = PointData(

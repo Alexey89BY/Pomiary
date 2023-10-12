@@ -14,7 +14,7 @@ class PointTextWatcher(
 ) : TextWatcher {
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        val pointValue = PointsAligner.roundPoint(s.toString().toFloatOrNull() ?: 0.0F)
+        val pointValue = PointsAligner.roundPoint(s.toString().toDoubleOrNull() ?: 0.0)
         val pointResult = PointsAligner.testPoint(pointValue, tolerance)
         textsResult.setTextColor(PointsAligner.colorByResult(pointResult))
         textsResult.text = buildString { append(" %.1f ") }.format(pointValue)
