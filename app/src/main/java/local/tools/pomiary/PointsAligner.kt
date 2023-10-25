@@ -29,12 +29,13 @@ class PointsAligner {
 
 
         fun testPoint(value: Double, tolerance: DataStorage.PointTolerance): DataStorage.PointResult {
-            val pointError = (value - tolerance.origin).absoluteValue - tolerance.offset
+            val pointOffset = value - tolerance.origin
+            val pointError = pointOffset.absoluteValue - tolerance.offset
             val toleranceNok = DataStorage.getToleranceNok()
             return when {
                 (pointError < errorEpsilon) -> DataStorage.PointResult.OK
-                (pointError < toleranceNok) -> DataStorage.PointResult.TOLERANCE
-                else -> DataStorage.PointResult.CRITICAL
+                (pointError < toleranceNok) -> if (pointOffset < 0) DataStorage.PointResult.WARNING_DOWN else DataStorage.PointResult.WARNING_UP
+                else -> if (pointOffset < 0) DataStorage.PointResult.CRITICAL_DOWN else DataStorage.PointResult.CRITICAL_UP
             }
         }
 
@@ -42,7 +43,8 @@ class PointsAligner {
         fun colorByResult(result: DataStorage.PointResult): Int {
             return when (result) {
                 DataStorage.PointResult.OK -> Color.GREEN
-                DataStorage.PointResult.TOLERANCE -> Color.YELLOW
+                DataStorage.PointResult.WARNING_DOWN -> Color.YELLOW
+                DataStorage.PointResult.WARNING_UP -> Color.YELLOW
                 else -> Color.RED
             }
         }
@@ -53,7 +55,12 @@ class PointsAligner {
         fun messageByResult(result: DataStorage.PointResult): String {
             return when (result) {
                 DataStorage.PointResult.OK -> "OK"
-                else -> "NOK"
+                DataStorage.PointResult.NOK -> "NOK"
+                DataStorage.PointResult.WARNING_DOWN,
+                DataStorage.PointResult.CRITICAL_DOWN -> "NOK\u2193"
+                DataStorage.PointResult.WARNING_UP,
+                DataStorage.PointResult.CRITICAL_UP -> "NOK\u2191"
+                else -> ""
             }
         }
 
@@ -108,7 +115,7 @@ class PointsAligner {
                 //}
                 if (pointResult != DataStorage.PointResult.OK)
                 {
-                    result = DataStorage.PointResult.CRITICAL
+                    result = DataStorage.PointResult.NOK
                 }
 
                 pointsData[index].value = pointValue

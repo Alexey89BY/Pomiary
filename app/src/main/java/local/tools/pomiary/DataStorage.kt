@@ -7,14 +7,23 @@ import java.io.File
 
 class DataStorage {
     enum class PointResult {
+        UNKNOWN,
         OK,
-        TOLERANCE,
-        CRITICAL, ;
+        NOK,
+        WARNING_DOWN,
+        WARNING_UP,
+        CRITICAL_DOWN,
+        CRITICAL_UP,
+        ;
 
         fun toInt(): Int {
             return when (this) {
                 OK -> 1
-                CRITICAL -> 2
+                NOK -> 2
+                WARNING_DOWN -> 3
+                WARNING_UP -> 4
+                CRITICAL_DOWN -> 5
+                CRITICAL_UP -> 6
                 else -> 0
             }
         }
@@ -23,8 +32,12 @@ class DataStorage {
             fun fromInt(result: Int): PointResult {
                 return when (result) {
                     1 -> OK
-                    2 -> CRITICAL
-                    else -> TOLERANCE
+                    2 -> NOK
+                    3 -> WARNING_DOWN
+                    4 -> WARNING_UP
+                    5 -> CRITICAL_DOWN
+                    6 -> CRITICAL_UP
+                    else -> UNKNOWN
                 }
             }
         }
@@ -33,7 +46,7 @@ class DataStorage {
     data class PointData (
         var rawInput: String = String(),
         var value: Double = 0.0,
-        var result: PointResult = PointResult.TOLERANCE
+        var result: PointResult = PointResult.UNKNOWN
     )
 
     @Suppress("ArrayInDataClass")
@@ -45,6 +58,7 @@ class DataStorage {
     data class SillSealData(
         var title: String,
         var timeStamp: String = String(),
+        var isModified: Boolean = false,
         var sectionP6: SectionData,
         var sectionP7: SectionData,
     )
@@ -88,6 +102,7 @@ class DataStorage {
 
         private var toleranceStandardP6 = arrayOf(
             PointTolerance(0.0, 3.0),
+            //PointTolerance(21.0, 1.5),
             PointTolerance(21.0, 1.5),
             PointTolerance(123.0, 2.5),
             PointTolerance(225.0, 2.5),
@@ -95,19 +110,23 @@ class DataStorage {
             PointTolerance(429.0, 2.5),
             PointTolerance(531.0, 2.5),
             PointTolerance(633.0, 2.5),
+            //PointTolerance(640.0, 2.5),
             PointTolerance(655.0, 3.0)
         )
 
         private var toleranceStandardP7 = arrayOf(
             PointTolerance(0.0, 2.5),
+            //PointTolerance(29.0, 2.5),
             PointTolerance(29.0, 2.5),
             PointTolerance(114.0, 2.5),
+            //PointTolerance(114.0, 2.5),
             PointTolerance(149.0, 2.5)
         )
 
         private var toleranceMaxiP6 = arrayOf(
             PointTolerance(0.0, 3.0),
             PointTolerance(14.0, 1.5),
+            //PointTolerance(14.0, 1.5),
             PointTolerance(116.0, 2.5),
             PointTolerance(218.0, 2.5),
             PointTolerance(320.0, 2.5),
@@ -116,13 +135,16 @@ class DataStorage {
             PointTolerance(626.0, 2.5),
             PointTolerance(728.0, 2.5),
             PointTolerance(830.0, 2.5),
+            //PointTolerance(830.0, 2.5),
             PointTolerance(839.5, 3.0)
         )
 
         private var toleranceMaxiP7 = arrayOf(
             PointTolerance(0.0, 2.5),
+            //PointTolerance(22.5, 1.5),
             PointTolerance(22.5, 1.5),
             PointTolerance(107.5, 2.5),
+            //PointTolerance(130.5, 1.5),
             PointTolerance(130.5, 2.5)
         )
 
