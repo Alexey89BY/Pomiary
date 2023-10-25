@@ -1,6 +1,7 @@
 package local.tools.pomiary.ui.main
 
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ class StandardFragment : Fragment() {
     private lateinit var spinnerItems: Array<String>
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private var storageCurrentIndex = -1
+    private var isInputsUpdate = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +75,7 @@ class StandardFragment : Fragment() {
             if (index != 0) {
                 val editText = viewOfLayout.findViewById<EditText>(editsStandardP6[index])
                 val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP6[index])
-                editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
+                editText.addTextChangedListener(PointTextWatcher(this, tolerance, textView))
             }
         }
 
@@ -82,7 +84,7 @@ class StandardFragment : Fragment() {
             if (index != 0) {
                 val editText = viewOfLayout.findViewById<EditText>(editsStandardP7[index])
                 val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP7[index])
-                editText.addTextChangedListener(PointTextWatcher(tolerance, textView))
+                editText.addTextChangedListener(PointTextWatcher(this, tolerance, textView))
             }
         }
 
@@ -216,10 +218,55 @@ class StandardFragment : Fragment() {
         setPointResultsToView(currentStorage.sectionP6.points, textsResultStandardP6)
         setPointResultsToView(currentStorage.sectionP7.points, textsResultStandardP7)
 
-        //setTimeStampToView(viewOfLayout, currentStorage.timeStamp, R.id.textTimeStampStandard)
+        currentStorage.timeStamp = "checked"
+        refreshSpinner()
+
+        currentStorage.isModified = false
+    }
+
+
+    private fun saveValues() {
+        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
+
+        if (currentStorage.isModified) {
+            val dialog = AlertDialog.Builder(context)
+                .setTitle("")
+                .setMessage("Measurements are not checked")
+                .setPositiveButton("OK") {_, _ ->
+                }
+                .create()
+            dialog.show()
+            return
+        }
+
+        val dialog = AlertDialog.Builder(context)
+            .setTitle("")
+            .setMessage("Save to history ?")
+            .setPositiveButton("Save") { _, _ ->
+                val message: String = requireContext().resources.getString(R.string.save_msg)
+                Snackbar.make(viewOfLayout, message, 250).show()
+
+                currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
+                HistoryFragment.savePoints(
+                    this, dataStorage.title, currentStorage.title, currentStorage.timeStamp,
+                    currentStorage.sectionP6.points, currentStorage.sectionP7.points
+                )
+                refreshSpinner()
+            }
+            .setNeutralButton("Cancel") {_, _ ->
+            }
+            .create()
+        dialog.show()
+    }
+
+
+    private fun refreshSpinner() {
+        val dataStorage = storageBySpinnerIndex(storageCurrentIndex)
+        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
         spinnerItems[storageCurrentIndex] = DataStorage.getStorageDataTitle(dataStorage, currentStorage)
         spinnerAdapter.notifyDataSetChanged()
     }
+
 
     fun attachToStorage(
         dataSubset: DataStorage.DataSubSet
@@ -236,10 +283,12 @@ class StandardFragment : Fragment() {
     }
 
     private fun setPointInputsToEdits(pointsArray: Array<DataStorage.PointData>, editsIds: List<Int>) {
+        isInputsUpdate = true
         pointsArray.forEachIndexed { index, point ->
             val editText = viewOfLayout.findViewById<EditText>(editsIds[index])
             editText.setText(point.rawInput)
         }
+        isInputsUpdate = false
     }
 
     private fun clearViews(textViewIds: List<Int>) {
@@ -341,6 +390,23 @@ class StandardFragment : Fragment() {
         if (! isVisible) {
             editText.text.clear()
         }
+    }
+
+
+    fun setModified(): Boolean {
+        if (isInputsUpdate)
+            return false
+
+        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
+        if (! currentStorage.isModified)
+        {
+            currentStorage.timeStamp = "modified"
+            refreshSpinner()
+
+            currentStorage.isModified = true
+        }
+
+        return true
     }
 
     /*
