@@ -35,14 +35,12 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> {
-                val fragment = StandardFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageStandard())
+                val fragment = StandardFragment.newInstance(DataStorage.getStorageStandard().title)
                 pageStandard = fragment
                 return fragment
             }
             1 -> {
-                val fragment = StandardFragment.newInstance()
-                fragment.attachToStorage(DataStorage.getStorageMaxi())
+                val fragment = StandardFragment.newInstance(DataStorage.getStorageMaxi().title)
                 pageMaxi = fragment
                 return fragment
             }

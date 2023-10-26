@@ -68,6 +68,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -105,6 +106,7 @@
                         android:ems="4"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -141,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -177,6 +180,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -213,6 +217,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -249,6 +254,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -285,6 +291,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -321,6 +328,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -357,6 +365,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -394,6 +403,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -431,6 +441,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -474,6 +485,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -510,6 +522,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -546,6 +559,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
@@ -582,6 +596,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
                         android:maxLength="@integer/maxPointDigits"
+                        android:saveEnabled="false"
                         android:selectAllOnFocus="true"
                         android:autofillHints="" />
 
