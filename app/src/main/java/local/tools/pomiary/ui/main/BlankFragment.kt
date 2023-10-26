@@ -209,7 +209,7 @@ class BlankFragment : Fragment() {
             graphData.pointsP6.forEachIndexed { index, point ->
                 val x = offsetX + pointWidth * index.mod(pointInRow)
                 val y = offsetYP6 + pointHeight * index.div(pointInRow)
-                drawDataPoint(canvas, x, y, titlesP6[index], point, graphData.tolerancesP6[index])
+                drawDataPoint(canvas, x, y, titlesP6[index], point, graphData.tolerancesP6[index], index == 0)
             }
 
             val offsetYP7 = offsetYP6 + pointHeight * (graphData.pointsP6.size.div(pointInRow) + if (graphData.pointsP6.size.mod(pointInRow) != 0) 1 else 0)
@@ -217,7 +217,7 @@ class BlankFragment : Fragment() {
             graphData.pointsP7.forEachIndexed {index, point ->
                 val x = offsetX + pointWidth * index.mod(pointInRow)
                 val y = offsetYP7 + pointHeight * index.div(pointInRow)
-                drawDataPoint(canvas, x, y, titlesP7[index], point, graphData.tolerancesP7[index])
+                drawDataPoint(canvas, x, y, titlesP7[index], point, graphData.tolerancesP7[index], index == 0)
             }
         }
 
@@ -228,7 +228,8 @@ class BlankFragment : Fragment() {
             offsetY: Float,
             title: String,
             point: DataStorage.PointData,
-            tolerance: DataStorage.PointTolerance
+            tolerance: DataStorage.PointTolerance,
+            isBasePoint: Boolean
         ) {
             val dyt = paint.textSize * 1.2F
             val hw = pointWidth * 0.5F
@@ -252,28 +253,37 @@ class BlankFragment : Fragment() {
             canvas.drawText(title, offsetX, offsetY + dyt, paint)
 
             // draw tolerance
-            val dxb = tolerance.offset * scale
+            val pointZero = if (isBasePoint) 0.0 else tolerance.origin
+            val ptl = tolerance.origin - tolerance.offset
+            val ptr = tolerance.origin + tolerance.offset
+            val dxl = x0 + (ptl - pointZero).toFloat() * scale
+            val dxr = x0 + (ptr - pointZero).toFloat() * scale
             val dyb = 35F
             paint.color = Color.WHITE
-            canvas.drawLine(x0 - dxb, y0, x0 - dxb, y0 + dyb, paint)
-            canvas.drawLine(x0 + dxb, y0, x0 + dxb, y0 + dyb, paint)
-            val toleranceString1  = buildString { append("%.1f\u2026%.1f") }.format(
-                tolerance.origin - tolerance.offset,
-                tolerance.origin + tolerance.offset
+
+            canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
+            canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
+
+            val toleranceString1  = String.format("%.1f\u2026%.1f",
+                ptl,
+                ptr
             )
             canvas.drawText(toleranceString1, offsetX, offsetY + 2F * dyt, paint)
-            val toleranceString2  = buildString { append("%.1f\u00B1%.1f") }.format(
-                tolerance.origin,
-                tolerance.offset,
-            )
-            canvas.drawText(toleranceString2, offsetX + hw, offsetY + 2F * dyt, paint)
+            
+            if (! isBasePoint) {
+                val toleranceString2 = String.format("%.1f\u00B1%.1f",
+                    tolerance.origin,
+                    tolerance.offset,
+                )
+                canvas.drawText(toleranceString2, offsetX + hw, offsetY + 2F * dyt, paint)
+            }
 
             // draw point
             val yp = y0 - paint.strokeWidth
-            val xp = x0 + (point.value - tolerance.origin) * scale
+            val xp = x0 + (point.value - pointZero).toFloat() * scale
             val dpy = 35F
             val dpx = 15F
-            paint.color = PointsAligner.colorByResult(point.result)
+            paint.color = if (isBasePoint) Color.WHITE else PointsAligner.colorByResult(point.result)
             val xpl = x0 - dxw
             val xpr = x0 + dxw
             val path = Path()
