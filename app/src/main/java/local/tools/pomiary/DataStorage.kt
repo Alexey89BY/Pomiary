@@ -205,6 +205,14 @@ class DataStorage {
         }
 
 
+        fun getStorageByName(name: String?): DataSubSet {
+            return when (name) {
+                subsetMaxi.title -> subsetMaxi
+                else -> subsetStandard
+            }
+        }
+
+
         fun getToleranceStandardP6(): Array<PointTolerance> {
             return toleranceStandardP6
         }

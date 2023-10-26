@@ -25,18 +25,23 @@ import local.tools.pomiary.R
  * Use the [StandardFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+private const val ARG_STORAGE_NAME = "storage_name"
+
+
 class StandardFragment : Fragment() {
+    private var storageName: String? = null
     private lateinit var viewOfLayout: View
     private lateinit var dataStorage: DataStorage.DataSubSet
     private lateinit var spinnerItems: Array<String>
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private var storageCurrentIndex = -1
-    private var isInputsUpdate = false
+    private var isInputsUpdate = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            storageName = it.getString(ARG_STORAGE_NAME)
         }
     }
 
@@ -50,6 +55,7 @@ class StandardFragment : Fragment() {
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshStandard)
         refreshButton.setOnClickListener { recalculateValues() }
 
+        dataStorage = DataStorage.getStorageByName(storageName)
         spinnerItems = buildStoragesSpinnerArray()
 
         val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerStandard)
@@ -422,12 +428,14 @@ class StandardFragment : Fragment() {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
+         * @param storageName Parameter 1.
          * @return A new instance of fragment StandardFragment.
          */
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(storageName: String) =
             StandardFragment().apply {
                 arguments = Bundle().apply {
+                    putString(ARG_STORAGE_NAME, storageName)
                 }
             }
     }
