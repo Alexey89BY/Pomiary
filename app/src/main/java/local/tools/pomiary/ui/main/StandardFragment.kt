@@ -310,22 +310,10 @@ class StandardFragment : Fragment() {
     ) {
         tolerances.forEachIndexed { index, tolerance ->
             val textView = viewOfLayout.findViewById<TextView>(textViewIds[index])
-            textView.text = when (index) {
-                /*
-                0 -> {
-                    buildString { append(" %.1f \u00B1 %.1f") }.format(
-                        tolerance.origin,
-                        tolerance.offset
-                    )
-                }
-                */
-                else -> {
-                    buildString { append(" %.1f \u2026 %.1f") }.format(
+            textView.text = String.format(" %.1f \u2026 %.1f",
                         tolerance.origin - tolerance.offset,
                         tolerance.origin + tolerance.offset
                     )
-                }
-            }
         }
     }
 
@@ -341,12 +329,12 @@ class StandardFragment : Fragment() {
             val textView = viewOfLayout.findViewById<TextView>(textsResultIds[index])
             //textView.setBackgroundColor(Color.BLACK)
             if (index == 0) {
-                textView.text = buildString { append(" %.1f ") }.format(
+                textView.text = String.format(" %.2f ",
                     point.value
                 )
             } else {
                 textView.setTextColor(pointsColors[index])
-                textView.text = buildString { append(" %s %.1f ") }.format(
+                textView.text = String.format(" %s %.1f ",
                     PointsAligner.messageByResult(point.result),
                     point.value
                 )

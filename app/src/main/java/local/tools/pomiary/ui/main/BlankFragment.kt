@@ -295,7 +295,7 @@ class BlankFragment : Fragment() {
                 }
             }
             canvas.drawPath(path, paint)
-            val valueString  = buildString { append("%.1f") }.format(
+            val valueString  = String.format("%.1f",
                 point.value
             )
             canvas.drawText(valueString, offsetX + hw, offsetY + 1F * dyt, paint)

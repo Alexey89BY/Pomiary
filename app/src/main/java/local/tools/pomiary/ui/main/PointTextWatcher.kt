@@ -19,7 +19,7 @@ class PointTextWatcher(
             val pointValue = PointsAligner.roundPoint(s.toString().toDoubleOrNull() ?: 0.0)
             val pointResult = PointsAligner.testPoint(pointValue, tolerance)
             textsResult.setTextColor(PointsAligner.colorByResult(pointResult))
-            textsResult.text = buildString { append(" %.1f ") }.format(pointValue)
+            textsResult.text = String.format(" %.1f ", pointValue)
         }
     }
 
