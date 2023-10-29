@@ -15,6 +15,7 @@ import local.tools.pomiary.R
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class HistoryFragment : Fragment() {
     private lateinit var viewOfLayout: View
@@ -94,40 +95,47 @@ class HistoryFragment : Fragment() {
         }
 
 
-        private const val delimiter = " "
+        private const val delimiter = ","
 
         fun savePoints(
             fragment: Fragment,
-            title: String,
+            subsetTitle: String,
+            dataTitle: String,
             timeStamp: String,
             points1: Array<DataStorage.PointData>,
-            points2: Array<DataStorage.PointData>
+            points2: Array<DataStorage.PointData>,
         ) {
             val context = fragment.requireContext()
             val file = getHistoryFile(context)
 
             if (file.exists()) {
-                file.appendText(timeStamp)
-                file.appendText(delimiter)
-                file.appendText(title)
-                writePointsToFile(file, points1)
-                writePointsToFile(file, points2)
-                file.appendText("\n")
+                val line = buildString {
+                    append(timeStamp)
+                    append(delimiter)
+                    append(subsetTitle)
+                    append(delimiter)
+                    append(dataTitle)
+                    writePointsToFile(this, points1)
+                    writePointsToFile(this, points2)
+                    appendLine()
+                }
+
+                file.appendText(line)
             }
         }
 
-        private fun writePointsToFile(file: File, pointsArray: Array<DataStorage.PointData>) {
-            pointsArray.forEachIndexed {index, it ->
-                val nokText = "*"
-                val baseText = "!"
-                file.appendText(delimiter)
-                file.appendText(it.value.toString())
-                if (index == 0) {
-                    file.appendText(baseText)
-                } else
-                if (it.result != DataStorage.PointResult.OK) {
-                    file.appendText(nokText)
-                }
+        private fun writePointsToFile(builder: StringBuilder, pointsArray: Array<DataStorage.PointData>) {
+            pointsArray.forEachIndexed {_, it ->
+                //val nokText = "*"
+                //val baseText = "!"
+                builder.append(delimiter)
+                builder.append(String.format(Locale.US, "%.2f", it.value))
+                //if (index == 0) {
+                //    builder.append(baseText)
+                //} else
+                //if (it.result != DataStorage.PointResult.OK) {
+                //    builder.append(nokText)
+                // }
             }
         }
     }
