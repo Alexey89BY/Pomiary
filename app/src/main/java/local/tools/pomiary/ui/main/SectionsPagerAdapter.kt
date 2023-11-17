@@ -19,7 +19,6 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
     private val pagesList = listOf(
         R.string.tab_std,
         R.string.tab_max,
-        R.string.tab_graph,
         R.string.tab_history,
         R.string.tab_settings
     )
@@ -33,20 +32,17 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
     }
 
     override fun createFragment(position: Int): Fragment {
-        when (position) {
+        return when (position) {
             0 -> {
-                val fragment = StandardFragment.newInstance(DataStorage.getStorageStandard().title)
-                pageStandard = fragment
-                return fragment
+                pageStandard = StandardFragment.newInstance(DataStorage.getStorageStandard().title)
+                pageStandard as Fragment
             }
             1 -> {
-                val fragment = StandardFragment.newInstance(DataStorage.getStorageMaxi().title)
-                pageMaxi = fragment
-                return fragment
+                pageMaxi = StandardFragment.newInstance(DataStorage.getStorageMaxi().title)
+                pageMaxi as Fragment
             }
-            2 -> return BlankFragment.newInstance()
-            3 -> return HistoryFragment.newInstance()
-            else -> return SettingsFragment.newInstance()
+            2 -> HistoryFragment.newInstance()
+            else -> SettingsFragment.newInstance()
         }
     }
 
