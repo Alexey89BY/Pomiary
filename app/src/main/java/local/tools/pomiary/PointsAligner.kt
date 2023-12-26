@@ -9,17 +9,27 @@ class PointsAligner {
     companion object {
         private const val roundFactor = 0.1
         private const val errorEpsilon = roundFactor / 2
+        private const val scaleFactor = 100.0
+        private const val decimalSeparator = '.' // DecimalFormatSymbols.getInstance().decimalSeparator
 
 
         private fun getPointsFromText(
             pointsData: Array<DataStorage.PointData>,
-            tolerancesRaw: Array<DataStorage.PointTolerance>,
         ): Array<Double> {
             val pointsRaw = Array(pointsData.size) { index ->
-                val floatValue = pointsData[index].rawInput.toDoubleOrNull()
-                floatValue ?: if (index != 0) tolerancesRaw[index].origin else 0.0
+                pointFromString(pointsData[index].rawInput)
             }
-            return pointsRaw
+            val pointZero = pointsRaw[0]
+            val points = Array(pointsRaw.size) { index ->
+                (pointsRaw[index] - pointZero).absoluteValue
+            }
+            return points
+        }
+
+
+        fun pointFromString(string: String): Double {
+            val value = string.toDoubleOrNull() ?: 0.0
+            return if (string.contains(decimalSeparator)) value else (value / scaleFactor)
         }
 
 
@@ -60,21 +70,16 @@ class PointsAligner {
                 DataStorage.PointResult.CRITICAL_DOWN -> "NOK\u2193"
                 DataStorage.PointResult.WARNING_UP,
                 DataStorage.PointResult.CRITICAL_UP -> "NOK\u2191"
-                else -> ""
+                else -> "?"
             }
         }
 
 
         private fun shiftAndCheckPoints(
             pointsData: Array<DataStorage.PointData>,
-            pointsRaw: Array<Double>,
+            points: Array<Double>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
         ): DataStorage.PointResult {
-            val pointZero = pointsRaw[0]
-            val points = List(pointsRaw.size) { index ->
-                (pointsRaw[index] - pointZero).absoluteValue
-            }
-
             var shiftUpMin = 0.0
             var shiftUpIndex = -1
             var shiftDownMax = 0.0
@@ -130,7 +135,7 @@ class PointsAligner {
             tolerancesRaw: Array<DataStorage.PointTolerance>,
             pointsData: Array<DataStorage.PointData>,
         ): DataStorage.PointResult {
-            val pointsRaw = getPointsFromText(pointsData, tolerancesRaw)
+            val pointsRaw = getPointsFromText(pointsData)
             return shiftAndCheckPoints(pointsData, pointsRaw, tolerancesRaw)
         }
     }
