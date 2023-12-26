@@ -184,7 +184,7 @@ class StandardFragment : Fragment() {
             //getStringsFromEdits(viewOfLayout, editsStandardP7, oldStorage.sectionP7.pointsRaw)
 
             storageCurrentIndex = newIndex
-            val newStorage = storageDataBySpinnerIndex(storageCurrentIndex)
+            val newStorage = dataStorage.getData(storageCurrentIndex)
 
             setPointInputsToEdits(newStorage.sectionP6.points, editsStandardP6)
             setPointInputsToEdits(newStorage.sectionP7.points, editsStandardP7)
@@ -204,8 +204,7 @@ class StandardFragment : Fragment() {
         val message: String = requireContext().resources.getString(R.string.check_msg)
         Snackbar.make(viewOfLayout, message, 250).show()
 
-        val dataStorage = storageBySpinnerIndex(storageCurrentIndex)
-        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
+        val currentStorage = dataStorage.getData(storageCurrentIndex)
 
         currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
 
@@ -218,7 +217,7 @@ class StandardFragment : Fragment() {
             dataStorage.tolerancesP7, currentStorage.sectionP7.points)
 
         HistoryFragment.savePoints(
-            this, dataStorage.title, currentStorage.timeStamp,
+            this, dataStorage.title, currentStorage.title.first, currentStorage.timeStamp,
             currentStorage.sectionP6.points, currentStorage.sectionP7.points)
 
         setPointResultsToView(currentStorage.sectionP6.points, textsResultStandardP6)
@@ -232,7 +231,7 @@ class StandardFragment : Fragment() {
 
 
     private fun saveValues() {
-        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
+        val currentStorage = dataStorage.getData(storageCurrentIndex)
 
         if (currentStorage.isModified) {
             val dialog = AlertDialog.Builder(context)
@@ -254,7 +253,7 @@ class StandardFragment : Fragment() {
 
                 currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
                 HistoryFragment.savePoints(
-                    this, dataStorage.title, currentStorage.title, currentStorage.timeStamp,
+                    this, dataStorage.title, currentStorage.title.first, currentStorage.timeStamp,
                     currentStorage.sectionP6.points, currentStorage.sectionP7.points
                 )
                 refreshSpinner()
@@ -267,17 +266,9 @@ class StandardFragment : Fragment() {
 
 
     private fun refreshSpinner() {
-        val dataStorage = storageBySpinnerIndex(storageCurrentIndex)
-        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
-        spinnerItems[storageCurrentIndex] = DataStorage.getStorageDataTitle(dataStorage, currentStorage)
+        val currentStorage = dataStorage.getData(storageCurrentIndex)
+        spinnerItems[storageCurrentIndex] = currentStorage.dataTitle()
         spinnerAdapter.notifyDataSetChanged()
-    }
-
-
-    fun attachToStorage(
-        dataSubset: DataStorage.DataSubSet
-    ) {
-        dataStorage = dataSubset
     }
 
 
@@ -344,25 +335,8 @@ class StandardFragment : Fragment() {
 
     private fun buildStoragesSpinnerArray(): Array<String> {
         return Array(dataStorage.data.size) { index ->
-            DataStorage.getStorageDataTitle(
-                storageBySpinnerIndex(index),
-                storageDataBySpinnerIndex(index)
-            )
+            dataStorage.getData(index).dataTitle()
         }
-    }
-
-
-    private fun storageBySpinnerIndex(
-        spinnerIndex: Int
-    ): DataStorage.DataSubSet {
-        return dataStorage
-    }
-
-
-    private fun storageDataBySpinnerIndex(
-        spinnerIndex: Int
-    ): DataStorage.SillSealData {
-        return dataStorage.data[spinnerIndex]
     }
 
 
@@ -391,7 +365,7 @@ class StandardFragment : Fragment() {
         if (isInputsUpdate)
             return false
 
-        val currentStorage = storageDataBySpinnerIndex(storageCurrentIndex)
+        val currentStorage = dataStorage.getData(storageCurrentIndex)
         if (! currentStorage.isModified)
         {
             currentStorage.timeStamp = "modified"

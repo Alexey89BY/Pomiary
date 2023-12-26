@@ -56,12 +56,18 @@ class DataStorage {
     )
 
     data class SillSealData(
-        var title: String,
-        var timeStamp: String = String(),
+        var title: Pair<String, String>,
+        var timeStamp: String,
         var isModified: Boolean = false,
         var sectionP6: SectionData,
         var sectionP7: SectionData,
-    )
+    ) {
+        fun dataTitle(): String {
+            val resultP6 = PointsAligner.messageByResult(sectionP6.result)
+            val resultP7 = PointsAligner.messageByResult(sectionP7.result)
+            return "${title.first} ${title.second}: $timeStamp, $resultP6/$resultP7"
+        }
+    }
 
     @Suppress("ArrayInDataClass")
     data class DataSubSet(
@@ -69,7 +75,16 @@ class DataStorage {
         var data: Array<SillSealData>,
         var tolerancesP6: Array<PointTolerance>,
         var tolerancesP7: Array<PointTolerance>,
-    )
+    ) {
+        fun storageTitle(data: SillSealData): String {
+            return title +
+                    " " + data.dataTitle()
+        }
+
+        fun getData(index: Int): SillSealData {
+            return data[index]
+        }
+    }
 
     data class PointTolerance(
         var origin: Double,
@@ -79,27 +94,17 @@ class DataStorage {
 
     companion object {
 
-        private const val storageDataSize = 12
-        private const val standardSectionP6Size = 9
-        private const val standardSectionP7Size = 4
-        private const val maxiSectionP6Size = 11
-        private const val maxiSectionP7Size = 4
-
+        private const val storageDataSize = 6
         private val storageDataSteps = listOf(
-            "LH 1.1",
-            "LH 1.2",
-            "LH 1.3",
-            "LH 2.1",
-            "LH 2.2",
-            "LH 2.3",
-            "RH 1.1",
-            "RH 1.2",
-            "RH 1.3",
-            "RH 2.1",
-            "RH 2.2",
-            "RH 2.3",
+            Pair("LH","#1"),
+            Pair("LH","#2"),
+            Pair("LH","#3"),
+            Pair("RH","#1"),
+            Pair("RH","#2"),
+            Pair("RH","#3"),
         )
 
+        private const val standardSectionP6Size = 9
         private var toleranceStandardP6 = arrayOf(
             PointTolerance(0.0, 3.0),
             //PointTolerance(21.0, 1.5),
@@ -114,6 +119,7 @@ class DataStorage {
             PointTolerance(655.0, 3.0)
         )
 
+        private const val standardSectionP7Size = 4
         private var toleranceStandardP7 = arrayOf(
             PointTolerance(0.0, 2.5),
             //PointTolerance(29.0, 2.5),
@@ -123,6 +129,7 @@ class DataStorage {
             PointTolerance(149.0, 2.5)
         )
 
+        private const val maxiSectionP6Size = 11
         private var toleranceMaxiP6 = arrayOf(
             PointTolerance(0.0, 3.0),
             PointTolerance(14.0, 1.5),
@@ -139,6 +146,7 @@ class DataStorage {
             PointTolerance(839.5, 3.0)
         )
 
+        private const val maxiSectionP7Size = 4
         private var toleranceMaxiP7 = arrayOf(
             PointTolerance(0.0, 2.5),
             //PointTolerance(22.5, 1.5),
@@ -155,6 +163,7 @@ class DataStorage {
         private val storageStandard = Array(storageDataSize) { index ->
             SillSealData(
                 title = storageDataSteps[index],
+                timeStamp = "",
                 sectionP6 = SectionData(
                     points = Array(standardSectionP6Size) { PointData() },
                     result = PointResult.OK
@@ -169,6 +178,7 @@ class DataStorage {
         private val storageMaxi = Array(storageDataSize) { index ->
             SillSealData(
                 title = storageDataSteps[index],
+                timeStamp = "",
                 sectionP6 = SectionData(
                     points = Array(maxiSectionP6Size) { PointData() },
                     result = PointResult.OK
@@ -242,17 +252,6 @@ class DataStorage {
             return toleranceNok[0].offset
         }
 
-
-        fun getStorageDataTitle(
-            subset: DataSubSet,
-            data: SillSealData
-        ): String {
-            return subset.title +
-                    " " + data.title +
-                    " - " + data.timeStamp +
-                    " - " + PointsAligner.messageByResult(data.sectionP6.result) +
-                    " / " + PointsAligner.messageByResult(data.sectionP7.result)
-        }
 
         fun broadcastSettingsChange() {
             subsetStandard.tolerancesP6 = getToleranceStandardP6()
