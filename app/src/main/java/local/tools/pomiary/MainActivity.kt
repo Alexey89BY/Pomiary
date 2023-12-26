@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         val viewPager = binding.viewPager
         viewPager.adapter = pageAdapter
         viewPager.offscreenPageLimit = pageAdapter.itemCount
+        viewPager.isUserInputEnabled = false
+
         val tabs: TabLayout = binding.tabs
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = pageAdapter.getTabTitle(position)
