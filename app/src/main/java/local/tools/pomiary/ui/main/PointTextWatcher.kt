@@ -74,8 +74,9 @@ class PointTextWatcher(
         }
     }
 
-    fun clearResult() {
+    fun clear() {
         viewResult.text = String()
+        setRawInput(String())
     }
 
     fun getRawInput(): String {

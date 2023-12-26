@@ -11,11 +11,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.DataStorage
 import local.tools.pomiary.PointsAligner
@@ -39,6 +39,8 @@ class StandardFragment : Fragment() {
     private lateinit var watchersPointsP6: Array<PointTextWatcher>
     private lateinit var watchersPointsP7: Array<PointTextWatcher>
     private var storageCurrentIndex = -1
+    private var isModified = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +56,11 @@ class StandardFragment : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_standard, container, false)
 
-        val refreshButton =
-            viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshStandard)
+        val refreshButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonRefreshStandard)
         refreshButton.setOnClickListener { recalculateValues() }
+
+        val saveButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonSaveStandard)
+        saveButton.setOnClickListener { saveValues() }
 
         dataStorage = DataStorage.getStorageByName(storageName)
         spinnerItems = buildStoragesSpinnerArray()
@@ -67,21 +71,10 @@ class StandardFragment : Fragment() {
             android.R.layout.simple_spinner_dropdown_item,
             spinnerItems
         )
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                switchStorage(position)
-            }
 
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                switchStorage(-1)
-            }
-        }
+        spinner.onItemSelectedListener = spinnerListener
 
         watchersPointsP6 = setupWatchers(dataStorage.tolerancesP6, editsStandardP6, textsResultStandardP6)
         watchersPointsP7 = setupWatchers(dataStorage.tolerancesP7, editsStandardP7, textsResultStandardP7)
@@ -94,6 +87,23 @@ class StandardFragment : Fragment() {
 
         return viewOfLayout
     }
+
+
+    private val spinnerListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parentView: AdapterView<*>?,
+            selectedItemView: View?,
+            position: Int,
+            id: Long
+        ) {
+            switchStorage(position)
+        }
+
+        override fun onNothingSelected(parentView: AdapterView<*>?) {
+            switchStorage(-1)
+        }
+    }
+
 
 
     fun onSettingsChange() {
@@ -197,19 +207,21 @@ class StandardFragment : Fragment() {
             //getStringsFromEdits(viewOfLayout, editsStandardP7, oldStorage.sectionP7.pointsRaw)
 
             storageCurrentIndex = newIndex
-            val newStorage = dataStorage.getData(storageCurrentIndex)
 
-            setPointInputsToEdits(newStorage.sectionP6.points, watchersPointsP6)
-            setPointInputsToEdits(newStorage.sectionP7.points, watchersPointsP7)
+            if (storageCurrentIndex < 0) {
+                clearPoints(watchersPointsP6)
+                clearPoints(watchersPointsP7)
+            } else {
+                val newStorage = dataStorage.getData(storageCurrentIndex)
 
-            if (newStorage.timeStamp.isNotBlank()) {
+                setPointInputsToEdits(newStorage.sectionP6.points, watchersPointsP6)
+                setPointInputsToEdits(newStorage.sectionP7.points, watchersPointsP7)
+
                 setPointResultsToView(newStorage.sectionP6.points, watchersPointsP6)
                 setPointResultsToView(newStorage.sectionP7.points, watchersPointsP7)
-            } else {
-                // clear views
-                clearViews(watchersPointsP6)
-                clearViews(watchersPointsP7)
             }
+
+            isModified = false
         }
     }
 
@@ -221,37 +233,32 @@ class StandardFragment : Fragment() {
 
         val currentStorage = dataStorage.getData(storageCurrentIndex)
 
-        currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
-
         getPointInputsFromEdits(watchersPointsP6, currentStorage.sectionP6.points)
-        currentStorage.sectionP6.result = PointsAligner.alignPoints(
-            dataStorage.tolerancesP6, currentStorage.sectionP6.points)
-
         getPointInputsFromEdits(watchersPointsP7, currentStorage.sectionP7.points)
-        currentStorage.sectionP7.result = PointsAligner.alignPoints(
-            dataStorage.tolerancesP7, currentStorage.sectionP7.points)
 
-        HistoryFragment.savePoints(
-            this, dataStorage.title, currentStorage.title.first, currentStorage.timeStamp,
-            currentStorage.sectionP6.points, currentStorage.sectionP7.points)
+        currentStorage.sectionP6.result = PointsAligner.alignPoints(
+            dataStorage.tolerancesP6, currentStorage.sectionP6.points
+        )
+        currentStorage.sectionP7.result = PointsAligner.alignPoints(
+            dataStorage.tolerancesP7, currentStorage.sectionP7.points
+        )
 
         setPointResultsToView(currentStorage.sectionP6.points, watchersPointsP6)
         setPointResultsToView(currentStorage.sectionP7.points, watchersPointsP7)
 
-        currentStorage.timeStamp = "checked"
+        currentStorage.timeStamp = ""
         refreshSpinner()
 
-        currentStorage.isModified = false
+        isModified = false
     }
 
 
     private fun saveValues() {
         val currentStorage = dataStorage.getData(storageCurrentIndex)
 
-        if (currentStorage.isModified) {
+        if (isModified) {
             val dialog = AlertDialog.Builder(context)
-                .setTitle("")
-                .setMessage("Measurements are not checked")
+                .setTitle("Measurements are not checked")
                 .setPositiveButton("OK") {_, _ ->
                 }
                 .create()
@@ -260,8 +267,7 @@ class StandardFragment : Fragment() {
         }
 
         val dialog = AlertDialog.Builder(context)
-            .setTitle("")
-            .setMessage("Save to history ?")
+            .setTitle("Save to history ?")
             .setPositiveButton("Save") { _, _ ->
                 val message: String = requireContext().resources.getString(R.string.save_msg)
                 Snackbar.make(viewOfLayout, message, 250).show()
@@ -299,9 +305,9 @@ class StandardFragment : Fragment() {
         }
     }
 
-    private fun clearViews(pointsWatchers: Array<PointTextWatcher>) {
+    private fun clearPoints(pointsWatchers: Array<PointTextWatcher>) {
         pointsWatchers.forEach {
-            it.clearResult()
+            it.clear()
         }
     }
 
@@ -325,7 +331,7 @@ class StandardFragment : Fragment() {
         points: Array<DataStorage.PointData>,
         watchers: Array<PointTextWatcher>
     ) {
-        points.forEachIndexed() { index, point ->
+        points.forEachIndexed { index, point ->
             watchers[index].updateResult(point.value, point.result, point.result)
         }
     }
@@ -359,13 +365,14 @@ class StandardFragment : Fragment() {
 
 
     fun setModified() {
-        val currentStorage = dataStorage.getData(storageCurrentIndex)
-        if (! currentStorage.isModified)
-        {
-            currentStorage.timeStamp = "modified"
+        if (! isModified) {
+            val currentStorage = dataStorage.getData(storageCurrentIndex)
+            currentStorage.timeStamp = ""
+            currentStorage.sectionP6.result = DataStorage.PointResult.UNKNOWN
+            currentStorage.sectionP7.result = DataStorage.PointResult.UNKNOWN
             refreshSpinner()
 
-            currentStorage.isModified = true
+            isModified = true
         }
     }
 

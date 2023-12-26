@@ -58,7 +58,6 @@ class DataStorage {
     data class SillSealData(
         var title: Pair<String, String>,
         var timeStamp: String,
-        var isModified: Boolean = false,
         var sectionP6: SectionData,
         var sectionP7: SectionData,
     ) {
