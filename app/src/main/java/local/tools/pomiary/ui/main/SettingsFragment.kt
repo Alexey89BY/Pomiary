@@ -213,6 +213,16 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun writeSwitch(id: Int, isChecked: Boolean) {
+        val switch = viewOfLayout.findViewById<SwitchMaterial>(id)
+        switch.isChecked = isChecked
+    }
+
+    private fun readSwitch(id: Int): Boolean {
+        val switch = viewOfLayout.findViewById<SwitchMaterial>(id)
+        return switch.isChecked
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -229,8 +239,7 @@ class SettingsFragment : Fragment() {
         writeEdits(viewOfLayout, DataStorage.getToleranceMaxiP7(), editsMaxiP7_zeros, editsMaxiP7_offsets)
         writeEdits(viewOfLayout, DataStorage.getTolerancesNok(), editsNok_zeros, editsNok_offsets)
 
-        val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
-        switchBasePoint.isChecked = isShowBasePoint
+        writeSwitch(R.id.switchShowBasePoint, isShowBasePoint)
 
         return viewOfLayout
     }
@@ -245,8 +254,7 @@ class SettingsFragment : Fragment() {
         readEdits(viewOfLayout, DataStorage.getToleranceMaxiP7(), editsMaxiP7_zeros, editsMaxiP7_offsets)
         readEdits(viewOfLayout, DataStorage.getTolerancesNok(), editsNok_zeros, editsNok_offsets)
 
-        val switchBasePoint = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowBasePoint)
-        isShowBasePoint = switchBasePoint.isChecked
+        isShowBasePoint = readSwitch(R.id.switchShowBasePoint)
 
         val preferences = viewOfLayout.context.getSharedPreferences(settingsFileName, 0)
         val editor = preferences.edit()
