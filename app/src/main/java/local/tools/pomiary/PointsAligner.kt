@@ -21,7 +21,7 @@ class PointsAligner {
             }
             val pointZero = pointsRaw[0]
             val points = Array(pointsRaw.size) { index ->
-                (pointsRaw[index] - pointZero).absoluteValue
+                pointDistance(pointsRaw[index], pointZero)
             }
             return points
         }
@@ -33,7 +33,8 @@ class PointsAligner {
         }
 
 
-        fun roundPoint(value: Double): Double {
+        fun pointDistance(pointRaw: Double, pointZero: Double): Double {
+            val value = (pointRaw - pointZero).absoluteValue
             return kotlin.math.round(value / roundFactor) * roundFactor
         }
 
@@ -112,7 +113,7 @@ class PointsAligner {
 
             points.forEachIndexed { index, _ ->
                 val shiftedValue = points[index] + totalShift
-                val pointValue =  if (index != 0) roundPoint(shiftedValue) else shiftedValue
+                val pointValue = if (index != 0) pointDistance(shiftedValue, 0.0) else shiftedValue
                 val pointResult = testPoint(pointValue, tolerancesRaw[index])
 
                 //if ((pointResult == PointResult.CRITICAL) and ((index == shiftDownIndex) or (index == shiftUpIndex))) {

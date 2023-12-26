@@ -36,9 +36,9 @@ class StandardFragment : Fragment() {
     private lateinit var dataStorage: DataStorage.DataSubSet
     private lateinit var spinnerItems: Array<String>
     private lateinit var spinnerAdapter: ArrayAdapter<String>
+    private lateinit var watchersPointsP6: Array<PointTextWatcher>
+    private lateinit var watchersPointsP7: Array<PointTextWatcher>
     private var storageCurrentIndex = -1
-    private var isInputsUpdate = true
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,14 +54,19 @@ class StandardFragment : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater.inflate(R.layout.fragment_standard, container, false)
 
-        val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshStandard)
+        val refreshButton =
+            viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshStandard)
         refreshButton.setOnClickListener { recalculateValues() }
 
         dataStorage = DataStorage.getStorageByName(storageName)
         spinnerItems = buildStoragesSpinnerArray()
 
         val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerStandard)
-        spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerItems)
+        spinnerAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            spinnerItems
+        )
         spinner.adapter = spinnerAdapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -78,25 +83,10 @@ class StandardFragment : Fragment() {
             }
         }
 
-        val tolerancesP6 = dataStorage.tolerancesP6
-        tolerancesP6.forEachIndexed { index, tolerance ->
-            if (index != 0) {
-                val editText = viewOfLayout.findViewById<EditText>(editsStandardP6[index])
-                val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP6[index])
-                editText.addTextChangedListener(PointTextWatcher(this, tolerance, textView))
-            }
-        }
+        watchersPointsP6 = setupWatchers(dataStorage.tolerancesP6, editsStandardP6, textsResultStandardP6)
+        watchersPointsP7 = setupWatchers(dataStorage.tolerancesP7, editsStandardP7, textsResultStandardP7)
 
-        val tolerancesP7 = dataStorage.tolerancesP7
-        tolerancesP7.forEachIndexed { index, tolerance ->
-            if (index != 0) {
-                val editText = viewOfLayout.findViewById<EditText>(editsStandardP7[index])
-                val textView = viewOfLayout.findViewById<TextView>(textsResultStandardP7[index])
-                editText.addTextChangedListener(PointTextWatcher(this, tolerance, textView))
-            }
-        }
-
-        val isMaxi = editsStandardP6.size <= tolerancesP6.size
+        val isMaxi = editsStandardP6.size <= dataStorage.tolerancesP6.size
         showRow(R.id.rowStandardP6_9, isMaxi)
         showRow(R.id.rowStandardP6_10, isMaxi)
 
@@ -107,8 +97,8 @@ class StandardFragment : Fragment() {
 
 
     fun onSettingsChange() {
-        setRangesToViews(dataStorage.tolerancesP6, textsRangeStandardP6)
-        setRangesToViews(dataStorage.tolerancesP7, textsRangeStandardP7)
+        setRangesToViews(dataStorage.tolerancesP6, textsRangeStandardP6, watchersPointsP6)
+        setRangesToViews(dataStorage.tolerancesP7, textsRangeStandardP7, watchersPointsP7)
         showBasePoint(R.id.editStandardP6_0, SettingsFragment.getShowBasePoint())
         showBasePoint(R.id.editStandardP7_0, SettingsFragment.getShowBasePoint())
     }
@@ -178,6 +168,27 @@ class StandardFragment : Fragment() {
     )
 
 
+    private fun setupWatchers(
+        tolerances: Array<DataStorage.PointTolerance>,
+        editsList: List<Int>,
+        textsResultList: List<Int>
+    ): Array<PointTextWatcher> {
+        val watchers = Array(tolerances.size) {
+            val editText = viewOfLayout.findViewById<EditText>(editsList[it])
+            val textView = viewOfLayout.findViewById<TextView>(textsResultList[it])
+            val watcher = PointTextWatcher(this, editText, textView)
+            editText.addTextChangedListener(watcher)
+            watcher
+        }
+
+        val watchersChildren = Array(tolerances.size - 1) { watchers[it + 1] }
+        watchers[0].setChildrenPoints(watchersChildren)
+        watchersChildren.forEach { it.setParent(watchers[0]) }
+
+        return watchers
+    }
+
+
     private fun switchStorage(newIndex: Int) {
         // save edits
         if (newIndex != storageCurrentIndex) {
@@ -188,16 +199,16 @@ class StandardFragment : Fragment() {
             storageCurrentIndex = newIndex
             val newStorage = dataStorage.getData(storageCurrentIndex)
 
-            setPointInputsToEdits(newStorage.sectionP6.points, editsStandardP6)
-            setPointInputsToEdits(newStorage.sectionP7.points, editsStandardP7)
+            setPointInputsToEdits(newStorage.sectionP6.points, watchersPointsP6)
+            setPointInputsToEdits(newStorage.sectionP7.points, watchersPointsP7)
 
             if (newStorage.timeStamp.isNotBlank()) {
-                setPointResultsToView(newStorage.sectionP6.points, textsResultStandardP6)
-                setPointResultsToView(newStorage.sectionP7.points, textsResultStandardP7)
+                setPointResultsToView(newStorage.sectionP6.points, watchersPointsP6)
+                setPointResultsToView(newStorage.sectionP7.points, watchersPointsP7)
             } else {
                 // clear views
-                clearViews(textsResultStandardP6)
-                clearViews(textsResultStandardP7)
+                clearViews(watchersPointsP6)
+                clearViews(watchersPointsP7)
             }
         }
     }
@@ -212,11 +223,11 @@ class StandardFragment : Fragment() {
 
         currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
 
-        getPointInputsFromEdits(editsStandardP6, currentStorage.sectionP6.points)
+        getPointInputsFromEdits(watchersPointsP6, currentStorage.sectionP6.points)
         currentStorage.sectionP6.result = PointsAligner.alignPoints(
             dataStorage.tolerancesP6, currentStorage.sectionP6.points)
 
-        getPointInputsFromEdits(editsStandardP7, currentStorage.sectionP7.points)
+        getPointInputsFromEdits(watchersPointsP7, currentStorage.sectionP7.points)
         currentStorage.sectionP7.result = PointsAligner.alignPoints(
             dataStorage.tolerancesP7, currentStorage.sectionP7.points)
 
@@ -224,8 +235,8 @@ class StandardFragment : Fragment() {
             this, dataStorage.title, currentStorage.title.first, currentStorage.timeStamp,
             currentStorage.sectionP6.points, currentStorage.sectionP7.points)
 
-        setPointResultsToView(currentStorage.sectionP6.points, textsResultStandardP6)
-        setPointResultsToView(currentStorage.sectionP7.points, textsResultStandardP7)
+        setPointResultsToView(currentStorage.sectionP6.points, watchersPointsP6)
+        setPointResultsToView(currentStorage.sectionP7.points, watchersPointsP7)
 
         currentStorage.timeStamp = "checked"
         refreshSpinner()
@@ -276,64 +287,46 @@ class StandardFragment : Fragment() {
     }
 
 
-    private fun getPointInputsFromEdits(editsIds: List<Int>, pointsArray: Array<DataStorage.PointData>) {
+    private fun getPointInputsFromEdits(edits: Array<PointTextWatcher>, pointsArray: Array<DataStorage.PointData>) {
         pointsArray.forEachIndexed { index, _ ->
-            val editText = viewOfLayout.findViewById<EditText>(editsIds[index])
-            pointsArray[index].rawInput = editText.text.toString()
+            pointsArray[index].rawInput = edits[index].getRawInput()
         }
     }
 
-    private fun setPointInputsToEdits(pointsArray: Array<DataStorage.PointData>, editsIds: List<Int>) {
-        isInputsUpdate = true
+    private fun setPointInputsToEdits(pointsArray: Array<DataStorage.PointData>, edits: Array<PointTextWatcher>) {
         pointsArray.forEachIndexed { index, point ->
-            val editText = viewOfLayout.findViewById<EditText>(editsIds[index])
-            editText.setText(point.rawInput)
+            edits[index].setRawInput(point.rawInput)
         }
-        isInputsUpdate = false
     }
 
-    private fun clearViews(textViewIds: List<Int>) {
-        textViewIds.forEach { id ->
-            val textView = viewOfLayout.findViewById<TextView>(id)
-            textView.text = String()
+    private fun clearViews(pointsWatchers: Array<PointTextWatcher>) {
+        pointsWatchers.forEach {
+            it.clearResult()
         }
     }
 
     private fun setRangesToViews(
         tolerances: Array<DataStorage.PointTolerance>,
-        textViewIds: List<Int>
+        rangeViewIds: List<Int>,
+        pointsWatchers: Array<PointTextWatcher>
     ) {
         tolerances.forEachIndexed { index, tolerance ->
-            val textView = viewOfLayout.findViewById<TextView>(textViewIds[index])
+            val textView = viewOfLayout.findViewById<TextView>(rangeViewIds[index])
             textView.text = String.format(" %.1f \u2026 %.1f",
                         tolerance.origin - tolerance.offset,
                         tolerance.origin + tolerance.offset
                     )
+
+            pointsWatchers[index].setTolerance(tolerance)
         }
     }
 
     private fun setPointResultsToView (
         points: Array<DataStorage.PointData>,
-        textsResultIds: List<Int>
+        watchers: Array<PointTextWatcher>
     ) {
-        val pointsColors = List(points.size) { index ->
-            PointsAligner.colorByResult(points[index].result)
-        }
-
-        points.forEachIndexed { index, point ->
-            val textView = viewOfLayout.findViewById<TextView>(textsResultIds[index])
-            //textView.setBackgroundColor(Color.BLACK)
-            if (index == 0) {
-                textView.text = String.format(" %.2f ",
-                    point.value
-                )
-            } else {
-                textView.setTextColor(pointsColors[index])
-                textView.text = String.format(" %s %.1f ",
-                    PointsAligner.messageByResult(point.result),
-                    point.value
-                )
-            }
+        points.forEachIndexed() { index, point ->
+            watchers[index].updateResult(point.value, point.result, point.result)
         }
     }
 
@@ -365,10 +358,7 @@ class StandardFragment : Fragment() {
     }
 
 
-    fun setModified(): Boolean {
-        if (isInputsUpdate)
-            return false
-
+    fun setModified() {
         val currentStorage = dataStorage.getData(storageCurrentIndex)
         if (! currentStorage.isModified)
         {
@@ -377,8 +367,6 @@ class StandardFragment : Fragment() {
 
             currentStorage.isModified = true
         }
-
-        return true
     }
 
     private fun hideKeyboard() {
