@@ -2,10 +2,12 @@ package local.tools.pomiary.ui.main
 
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -201,6 +203,8 @@ class StandardFragment : Fragment() {
     }
 
     private fun recalculateValues() {
+        hideKeyboard()
+
         val message: String = requireContext().resources.getString(R.string.check_msg)
         Snackbar.make(viewOfLayout, message, 250).show()
 
@@ -376,6 +380,15 @@ class StandardFragment : Fragment() {
 
         return true
     }
+
+    private fun hideKeyboard() {
+        val view = activity?.findViewById<View>(android.R.id.content)
+        if (view != null) {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
 
     /*
     fun sendToGraph(fragmentTitle: String, currentStorage: DataStorage.SillSealData) {
