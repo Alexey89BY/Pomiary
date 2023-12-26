@@ -7,6 +7,7 @@
     <string name="check_msg">Checking&#8230;</string>
     <string name="save_msg">Saving&#8230;</string>
     <string name="load_msg">Loading&#8230;</string>
+    <string name="copy_msg">Copying&#8230;</string>
     <string name="text_P6_0">P6 (*), mm</string>
     <string name="text_P6_1">P6 (1), mm</string>
     <string name="text_P6_2">P6 (2), mm</string>

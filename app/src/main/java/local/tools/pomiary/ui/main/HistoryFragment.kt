@@ -1,19 +1,25 @@
 package local.tools.pomiary.ui.main
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +35,7 @@ import java.util.Locale
 class HistoryFragment : Fragment() {
     private lateinit var viewOfLayout: View
     private var historyData = emptyArray<List<String>>()
+    private var currentData: List<String>? = null
 
     @Suppress("ArrayInDataClass")
     data class GraphData (
@@ -59,44 +66,51 @@ class HistoryFragment : Fragment() {
         val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshHistory)
         refreshButton.setOnClickListener { refreshHistory() }
 
+        val copyButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonCopy)
+        copyButton.setOnClickListener { copyToClipboard() }
+
         viewGraph = ViewCanvas(activity)
         viewOfLayout.findViewById<LinearLayout>(R.id.containerGraph).addView(viewGraph)
 
         val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerGraph)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                val itemData = historyData[position]
-
-                val graphData = GraphData()
-                when (itemData.size) {
-                    16 -> {
-                        graphData.tolerancesP6 = DataStorage.getToleranceStandardP6()
-                        graphData.tolerancesP7 = DataStorage.getToleranceStandardP7()
-                        graphData.pointsP6 = decodePoints(itemData.slice(3..11), graphData.tolerancesP6)
-                        graphData.pointsP7 = decodePoints(itemData.slice(12..15), graphData.tolerancesP7)
-                    }
-                    18 -> {
-                        graphData.tolerancesP6 = DataStorage.getToleranceMaxiP6()
-                        graphData.tolerancesP7 = DataStorage.getToleranceMaxiP7()
-                        graphData.pointsP6 = decodePoints(itemData.slice(3..13), graphData.tolerancesP6)
-                        graphData.pointsP7 = decodePoints(itemData.slice(14..17), graphData.tolerancesP7)
-                    }
-                }
-
-                viewGraph.setData(graphData)
-                viewGraph.invalidate()
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                viewGraph.setData(GraphData())
-                viewGraph.invalidate()
-            }
-        }
-
+        spinner.onItemSelectedListener = spinnerListener
 
         return viewOfLayout
+    }
+
+
+    private val spinnerListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?, view: View?, position: Int, id: Long
+        ) {
+            val itemData = historyData[position]
+
+            val graphData = GraphData()
+            when (itemData.size) {
+                16 -> {
+                    graphData.tolerancesP6 = DataStorage.getToleranceStandardP6()
+                    graphData.tolerancesP7 = DataStorage.getToleranceStandardP7()
+                    graphData.pointsP6 = decodePoints(itemData.slice(3..11), graphData.tolerancesP6)
+                    graphData.pointsP7 = decodePoints(itemData.slice(12..15), graphData.tolerancesP7)
+                }
+                18 -> {
+                    graphData.tolerancesP6 = DataStorage.getToleranceMaxiP6()
+                    graphData.tolerancesP7 = DataStorage.getToleranceMaxiP7()
+                    graphData.pointsP6 = decodePoints(itemData.slice(3..13), graphData.tolerancesP6)
+                    graphData.pointsP7 = decodePoints(itemData.slice(14..17), graphData.tolerancesP7)
+                }
+            }
+
+            viewGraph.setData(graphData)
+            currentData = itemData
+            viewGraph.invalidate()
+        }
+
+        override fun onNothingSelected(parentView: AdapterView<*>?) {
+            viewGraph.setData(GraphData())
+            currentData = null
+            viewGraph.invalidate()
+        }
     }
 
 
@@ -106,24 +120,25 @@ class HistoryFragment : Fragment() {
         val message: String = context.resources.getString(R.string.load_msg)
         Snackbar.make(viewOfLayout, message, 500).show()
 
+        //val historyLimit = 100
         var historyLines: List<String> = emptyList()
 
         val file = getHistoryFile(context)
         if (file.exists()) {
-            historyLines = file.readLines()
+            val fileLines = file.readLines()
+            historyLines = fileLines.asReversed()
+            //historyLines = fileLines.asReversed().take(historyLimit)
         }
 
-        val historyLimit = minOf(100, historyLines.size)
+        historyData = Array(historyLines.size) {
+            historyLines[it].split(delimiter)
+        }
+
         val prefixSize = 3
         val separator = " "
-
-        val historyTitles = Array(historyLimit) { String() }
-        historyData = Array(historyLimit) { emptyList() }
-
-        historyLines.asReversed().take(historyLimit).forEachIndexed { index, line ->
-            val lineList = line.split(delimiter)
-            historyData[index] = lineList
-            historyTitles[index] = lineList.take(prefixSize).joinToString(separator)
+        val historyTitles = Array(historyData.size) {
+            val number = it+1
+            "$number) " + historyData[it].take(prefixSize).joinToString(separator)
         }
 
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, historyTitles)
@@ -147,6 +162,20 @@ class HistoryFragment : Fragment() {
     }
 
 
+    private fun copyToClipboard() {
+        if (currentData == null)
+            return
+
+        val clipboardManager = requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+
+        val clipData = ClipData.newPlainText("", currentData!!.joinToString("\t"))
+        clipboardManager.setPrimaryClip(clipData)
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) // Only show a toast for Android 12 and lower.
+            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+    }
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -160,9 +189,14 @@ class HistoryFragment : Fragment() {
                 }
             }
 
+
+        private const val fileName = "history.csv"
+        private const val delimiter = '.'
+
+
         private fun getHistoryFile(context: Context): File {
             val filesDir = context.getExternalFilesDir(null)
-            return File(filesDir, "history.csv")
+            return File(filesDir, fileName)
         }
 
 
@@ -180,8 +214,6 @@ class HistoryFragment : Fragment() {
             return DateTimeFormatter.ofPattern("dd.MM.yy HH:mm").format(LocalDateTime.now())
         }
 
-
-        private const val delimiter = ","
 
         fun savePoints(
             fragment: Fragment,
