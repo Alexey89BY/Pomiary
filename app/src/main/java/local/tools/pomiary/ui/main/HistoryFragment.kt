@@ -131,7 +131,7 @@ class HistoryFragment : Fragment() {
         }
 
         historyData = Array(historyLines.size) {
-            historyLines[it].split(delimiter)
+            historyLines[it].split(historyDelimiter)
         }
 
         val prefixSize = 3
@@ -190,13 +190,13 @@ class HistoryFragment : Fragment() {
             }
 
 
-        private const val fileName = "history.csv"
-        private const val delimiter = '.'
+        private const val historyFileName = "history.tsv"
+        private const val historyDelimiter = '\t'
 
 
         private fun getHistoryFile(context: Context): File {
             val filesDir = context.getExternalFilesDir(null)
-            return File(filesDir, fileName)
+            return File(filesDir, historyFileName)
         }
 
 
@@ -229,9 +229,9 @@ class HistoryFragment : Fragment() {
             if (file.exists()) {
                 val line = buildString {
                     append(timeStamp)
-                    append(delimiter)
+                    append(historyDelimiter)
                     append(subsetTitle)
-                    append(delimiter)
+                    append(historyDelimiter)
                     append(dataTitle)
                     writePointsToFile(this, points1)
                     writePointsToFile(this, points2)
@@ -246,7 +246,7 @@ class HistoryFragment : Fragment() {
             pointsArray.forEachIndexed {_, it ->
                 //val nokText = "*"
                 //val baseText = "!"
-                builder.append(delimiter)
+                builder.append(historyDelimiter)
                 builder.append(String.format(Locale.US, "%.2f", it.value))
                 //if (index == 0) {
                 //    builder.append(baseText)
