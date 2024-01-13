@@ -4,6 +4,7 @@ import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import kotlin.math.roundToInt
 
 class DataStorage {
     enum class PointResult {
@@ -47,7 +48,19 @@ class DataStorage {
         var rawInput: String = String(),
         var value: Double = 0.0,
         var result: PointResult = PointResult.UNKNOWN
-    )
+    ) {
+        companion object {
+            private const val valueScale = 1000.0
+
+            fun valueFromInt(value: Int): Double {
+                return value / valueScale
+            }
+
+            fun valueToInt(value: Double): Int {
+                return (value * valueScale).roundToInt()
+            }
+        }
+    }
 
     @Suppress("ArrayInDataClass")
     data class SectionData(
@@ -327,7 +340,7 @@ class DataStorage {
 
             section.points.forEach {
                 jsonPointsRaw.put(it.rawInput)
-                jsonPointsAligned.put(it.value)
+                jsonPointsAligned.put(PointData.valueToInt(it.value))
                 jsonPointsResult.put(it.result.toInt())
             }
 
@@ -349,14 +362,10 @@ class DataStorage {
             section.result = sectionResult
 
             section.points.forEachIndexed { index, _ ->
-                val pointRawInput = jsonPointsRaw.getString(index)
-                val pointValue = jsonPointsAligned.getDouble(index)
-                val pointResult = PointResult.fromInt(jsonPointsResult.getInt(index))
-
                 section.points[index] = PointData(
-                    rawInput = pointRawInput,
-                    value = pointValue,
-                    result = pointResult
+                    rawInput = jsonPointsRaw.getString(index),
+                    value = PointData.valueFromInt(jsonPointsAligned.getInt(index)),
+                    result = PointResult.fromInt(jsonPointsResult.getInt(index))
                 )
             }
         }
