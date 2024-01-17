@@ -31,11 +31,15 @@ class DataStorage {
         var data: Array<SillSealData>,
         var tolerancesP6: Array<PointTolerance>,
         var tolerancesP7: Array<PointTolerance>,
+        var toleranceMapP6: List<Int>,
+        var toleranceMapP7: List<Int>,
     ) {
+        /*
         fun storageTitle(data: SillSealData): String {
             return title +
                     " " + data.dataTitle()
         }
+        */
 
         fun getData(index: Int): SillSealData {
             return data[index]
@@ -60,10 +64,10 @@ class DataStorage {
             Pair("RH","#3"),
         )
 
-        private const val standardSectionP6Size = 9
+        private const val standardSectionP6Size = 10
+        private val toleranceMapStandardP6 = listOf(0, 1, 2, 3, 4, 5, 6, 7, 9)
         private var toleranceStandardP6 = arrayOf(
-            PointTolerance(0.0, 3.0),
-            //PointTolerance(21.0, 1.5),
+            PointTolerance(0.0, 0.5),
             PointTolerance(21.0, 1.5),
             PointTolerance(123.0, 2.5),
             PointTolerance(225.0, 2.5),
@@ -71,25 +75,26 @@ class DataStorage {
             PointTolerance(429.0, 2.5),
             PointTolerance(531.0, 2.5),
             PointTolerance(633.0, 2.5),
-            //PointTolerance(640.0, 2.5),
+            //PointTolerance(0.0, -1.0),
             PointTolerance(655.0, 3.0)
         )
 
-        private const val standardSectionP7Size = 4
+        private const val standardSectionP7Size = 6
+        private val toleranceMapStandardP7 = listOf(0, 2, 3, 5)
         private var toleranceStandardP7 = arrayOf(
-            PointTolerance(0.0, 2.5),
-            //PointTolerance(29.0, 2.5),
+            PointTolerance(0.0, 0.2),
+            //PointTolerance(0.0, -1.0),
             PointTolerance(29.0, 2.5),
             PointTolerance(114.0, 2.5),
-            //PointTolerance(114.0, 2.5),
+            //PointTolerance(0.0, -1.0),
             PointTolerance(149.0, 2.5)
         )
 
-        private const val maxiSectionP6Size = 11
+        private const val maxiSectionP6Size = 12
+        private val toleranceMapMaxiP6 = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11)
         private var toleranceMaxiP6 = arrayOf(
-            PointTolerance(0.0, 3.0),
+            PointTolerance(0.0, 0.5),
             PointTolerance(14.0, 1.5),
-            //PointTolerance(14.0, 1.5),
             PointTolerance(116.0, 2.5),
             PointTolerance(218.0, 2.5),
             PointTolerance(320.0, 2.5),
@@ -98,17 +103,18 @@ class DataStorage {
             PointTolerance(626.0, 2.5),
             PointTolerance(728.0, 2.5),
             PointTolerance(830.0, 2.5),
-            //PointTolerance(830.0, 2.5),
+            //PointTolerance(0.0, -1.0),
             PointTolerance(839.5, 3.0)
         )
 
-        private const val maxiSectionP7Size = 4
+        private const val maxiSectionP7Size = 6
+        private val toleranceMapMaxiP7 = listOf(0, 2, 3, 5)
         private var toleranceMaxiP7 = arrayOf(
-            PointTolerance(0.0, 2.5),
-            //PointTolerance(22.5, 1.5),
+            PointTolerance(0.0, 0.2),
+            //PointTolerance(0.0, -1.0),
             PointTolerance(22.5, 1.5),
             PointTolerance(107.5, 2.5),
-            //PointTolerance(130.5, 1.5),
+            //PointTolerance(0.0, -1.0),
             PointTolerance(130.5, 2.5)
         )
 
@@ -151,6 +157,8 @@ class DataStorage {
             data = storageStandard,
             tolerancesP6 = toleranceStandardP6,
             tolerancesP7 = toleranceStandardP7,
+            toleranceMapP6 = toleranceMapStandardP6,
+            toleranceMapP7 = toleranceMapStandardP7,
         )
 
         private val subsetMaxi = DataSubSet(
@@ -158,6 +166,8 @@ class DataStorage {
             data = storageMaxi,
             tolerancesP6 = toleranceMaxiP6,
             tolerancesP7 = toleranceMaxiP7,
+            toleranceMapP6 = toleranceMapMaxiP6,
+            toleranceMapP7 = toleranceMapMaxiP7,
         )
 
 
@@ -272,24 +282,28 @@ class DataStorage {
         }
 
 
-        private const val jsonSectionPointsRawName = "ri"
+        private const val jsonSectionPointsInputName = "ri"
+        private const val jsonSectionPointsRawName = "rv"
         private const val jsonSectionPointsAlignedName = "pa"
         private const val jsonSectionPointsResultName = "pr"
         private const val jsonSectionResultName = "sr"
 
         private fun storageSectionToJson(section: SectionData): JSONObject {
+            val jsonPointsInput = JSONArray()
             val jsonPointsRaw = JSONArray()
             val jsonPointsAligned = JSONArray()
             val jsonPointsResult = JSONArray()
 
             section.points.forEach {
-                jsonPointsRaw.put(it.rawInput)
+                jsonPointsInput.put(it.rawInput)
+                jsonPointsRaw.put(PointData.valueToInt(it.rawValue))
                 jsonPointsAligned.put(PointData.valueToInt(it.value))
                 jsonPointsResult.put(it.result.toInt())
             }
 
             val jsonSection = JSONObject()
             jsonSection.put(jsonSectionResultName, section.result.toInt())
+            jsonSection.put(jsonSectionPointsInputName, jsonPointsInput)
             jsonSection.put(jsonSectionPointsRawName, jsonPointsRaw)
             jsonSection.put(jsonSectionPointsAlignedName, jsonPointsAligned)
             jsonSection.put(jsonSectionPointsResultName, jsonPointsResult)
@@ -298,6 +312,7 @@ class DataStorage {
         }
 
         private fun storageSectionFromJson(jsonObject: JSONObject, section: SectionData) {
+            val jsonPointsInput = jsonObject.getJSONArray(jsonSectionPointsInputName)
             val jsonPointsRaw = jsonObject.getJSONArray(jsonSectionPointsRawName)
             val jsonPointsAligned = jsonObject.getJSONArray(jsonSectionPointsAlignedName)
             val jsonPointsResult = jsonObject.getJSONArray(jsonSectionPointsResultName)
@@ -307,7 +322,8 @@ class DataStorage {
 
             section.points.forEachIndexed { index, _ ->
                 section.points[index] = PointData(
-                    rawInput = jsonPointsRaw.getString(index),
+                    rawInput = jsonPointsInput.getString(index),
+                    rawValue = PointData.valueFromInt(jsonPointsRaw.getInt(index)),
                     value = PointData.valueFromInt(jsonPointsAligned.getInt(index)),
                     result = PointResult.fromInt(jsonPointsResult.getInt(index))
                 )

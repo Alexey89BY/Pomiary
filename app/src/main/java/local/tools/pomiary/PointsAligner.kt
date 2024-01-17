@@ -13,12 +13,12 @@ class PointsAligner {
         private fun getPointsFromText(
             pointsData: Array<PointData>,
         ): Array<Double> {
-            val pointsRaw = Array(pointsData.size) { index ->
-                PointData.valueFromString(pointsData[index].rawInput)
+            pointsData.forEachIndexed { index, point ->
+                pointsData[index].rawValue = PointData.valueFromString(point.rawInput)
             }
-            val pointZero = pointsRaw[0]
-            val points = Array(pointsRaw.size) { index ->
-                pointDistance(pointsRaw[index], pointZero)
+            val pointZero = pointsData[0].rawValue
+            val points = Array(pointsData.size) { index ->
+                pointDistance(pointsData[index].rawValue, pointZero)
             }
             return points
         }
@@ -44,27 +44,28 @@ class PointsAligner {
 
         private fun shiftAndCheckPoints(
             pointsData: Array<PointData>,
-            points: Array<Double>,
+            pointsRaw: Array<Double>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
+            toleranceMap: List<Int>,
         ): PointResult {
             var shiftUpMin = 0.0
             var shiftUpIndex = -1
             var shiftDownMax = 0.0
             var shiftDownIndex = -1
 
-            points.forEachIndexed { index, pointValue ->
-                val shiftDown =
-                    (tolerancesRaw[index].origin - tolerancesRaw[index].offset) - pointValue
+            tolerancesRaw.forEachIndexed { index, tolerance ->
+                val pointIndex = toleranceMap[index]
+
+                val shiftDown = (tolerance.origin - tolerance.offset) - pointsRaw[pointIndex]
                 if ((shiftDown > shiftDownMax) or (shiftDownIndex < 0)) {
                     shiftDownMax = shiftDown
-                    shiftDownIndex = index
+                    shiftDownIndex = pointIndex
                 }
 
-                val shiftUp =
-                    (tolerancesRaw[index].origin + tolerancesRaw[index].offset) - pointValue
+                val shiftUp = (tolerance.origin + tolerance.offset) - pointsRaw[pointIndex]
                 if ((shiftUp < shiftUpMin) or (shiftUpIndex < 0)) {
                     shiftUpMin = shiftUp
-                    shiftUpIndex = index
+                    shiftUpIndex = pointIndex
                 }
             }
 
@@ -75,12 +76,19 @@ class PointsAligner {
                 else -> 0.0
             }
 
-            var result = PointResult.OK
+            pointsData.forEachIndexed { index, _ ->
+                val shiftedValue = pointsRaw[index] + totalShift
+                val pointValue =
+                    if (index != 0) pointDistance(shiftedValue, 0.0)
+                    else shiftedValue
+                pointsData[index].value = pointValue
+                pointsData[index].result = PointResult.UNKNOWN
+            }
 
-            points.forEachIndexed { index, _ ->
-                val shiftedValue = points[index] + totalShift
-                val pointValue = if (index != 0) pointDistance(shiftedValue, 0.0) else shiftedValue
-                val pointResult = testPoint(pointValue, tolerancesRaw[index])
+            var result = PointResult.OK
+            tolerancesRaw.forEachIndexed { index, tolerance ->
+                val pointIndex = toleranceMap[index]
+                val pointResult = testPoint(pointsData[pointIndex].value, tolerance)
 
                 //if ((pointResult == PointResult.CRITICAL) and ((index == shiftDownIndex) or (index == shiftUpIndex))) {
                 //    pointResult = PointResult.CRITICAL_LIMITED
@@ -90,8 +98,7 @@ class PointsAligner {
                     result = PointResult.NOK
                 }
 
-                pointsData[index].value = pointValue
-                pointsData[index].result = pointResult
+                pointsData[pointIndex].result = pointResult
             }
 
             return result
@@ -99,11 +106,12 @@ class PointsAligner {
 
 
         fun alignPoints(
-            tolerancesRaw: Array<DataStorage.PointTolerance>,
+            tolerances: Array<DataStorage.PointTolerance>,
+            toleranceMap: List<Int>,
             pointsData: Array<PointData>,
         ): PointResult {
             val pointsRaw = getPointsFromText(pointsData)
-            return shiftAndCheckPoints(pointsData, pointsRaw, tolerancesRaw)
+            return shiftAndCheckPoints(pointsData, pointsRaw, tolerances, toleranceMap)
         }
     }
 }

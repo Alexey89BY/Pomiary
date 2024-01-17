@@ -18,9 +18,9 @@ class PointTextWatcher(
 ) : TextWatcher {
 
     private var isSelfModify = false
-    private var pointTolerance = DataStorage.PointTolerance(0.0, 0.0)
     private var parentPoint: PointTextWatcher? = null
     private var childrenPoints: Array<PointTextWatcher>? = null
+    private var pointTolerance: DataStorage.PointTolerance? = null
     private val pointData = PointData()
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
@@ -32,9 +32,7 @@ class PointTextWatcher(
             return
 
         pointData.rawInput = s.toString()
-
         updateFromParent()
-
         childrenPoints?.forEach {
             it.updateFromParent()
         }
@@ -43,56 +41,61 @@ class PointTextWatcher(
     }
 
     private fun updateFromParent() {
-        val rawValue = PointData.valueFromString(pointData.rawInput)
+        pointData.rawValue = PointData.valueFromString(pointData.rawInput)
 
         if (parentPoint == null) {
-            pointData.value = rawValue
+            pointData.value = 0.0
             pointData.result = PointResult.UNKNOWN
         } else {
-            val parentValue = parentPoint!!.pointData.value
-            pointData.value = PointsAligner.pointDistance(rawValue, parentValue)
-            pointData.result = PointsAligner.testPoint(pointData.value, pointTolerance)
+            val parentValue = parentPoint!!.pointData.rawValue
+            pointData.value = PointsAligner.pointDistance(pointData.rawValue, parentValue)
+            pointData.result =
+                if (pointTolerance == null) PointResult.UNKNOWN
+                else PointsAligner.testPoint(pointData.value, pointTolerance!!)
         }
 
-        updateResult(pointData.value, pointData.result, PointResult.UNKNOWN)
+        updateResult(pointData.rawValue, pointData.value, pointData.result, PointResult.UNKNOWN)
     }
 
     fun updateResult(
-        value: Double,
-        resultColor: PointResult,
-        resultMessage: PointResult
+        rawValue: Double,
+        alignedValue: Double,
+        resultForColor: PointResult,
+        resultForMessage: PointResult
     ) {
         if (parentPoint == null) {
-            // viewResult.setTextColor()
-            viewResult.text = String.format(" %.2f ",
-                value
+            viewResult.setTextColor(PointResult.UNKNOWN.toColor())
+            viewResult.text = String.format(" %.2f %+.2f ",
+                rawValue,
+                alignedValue
             )
         } else {
-            viewResult.setTextColor(resultColor.toColor())
+            viewResult.setTextColor(resultForColor.toColor())
             viewResult.text = String.format(" %s %.1f ",
-                resultMessage.toMessage(),
-                value
+                resultForMessage.toMessage(),
+                alignedValue
             )
         }
     }
 
     fun clear() {
         viewResult.text = String()
-        setRawInput(String())
+        setRawInput(String(), 0.0)
     }
 
     fun getRawInput(): String {
         return pointData.rawInput
     }
 
-    fun setRawInput(input: String) {
+    fun setRawInput(input: String, value: Double) {
         isSelfModify = true
         pointData.rawInput = input
+        pointData.rawValue = value
         viewEdit.setText(input)
         isSelfModify = false
     }
 
-    fun setTolerance(tolerance: DataStorage.PointTolerance) {
+    fun setTolerance(tolerance: DataStorage.PointTolerance?) {
         pointTolerance = tolerance
     }
 
