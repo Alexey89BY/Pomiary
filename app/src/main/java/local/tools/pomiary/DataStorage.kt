@@ -7,43 +7,6 @@ import java.io.File
 import kotlin.math.roundToInt
 
 class DataStorage {
-    enum class PointResult {
-        UNKNOWN,
-        OK,
-        NOK,
-        WARNING_DOWN,
-        WARNING_UP,
-        CRITICAL_DOWN,
-        CRITICAL_UP,
-        ;
-
-        fun toInt(): Int {
-            return when (this) {
-                OK -> 1
-                NOK -> 2
-                WARNING_DOWN -> 3
-                WARNING_UP -> 4
-                CRITICAL_DOWN -> 5
-                CRITICAL_UP -> 6
-                else -> 0
-            }
-        }
-
-        companion object {
-            fun fromInt(result: Int): PointResult {
-                return when (result) {
-                    1 -> OK
-                    2 -> NOK
-                    3 -> WARNING_DOWN
-                    4 -> WARNING_UP
-                    5 -> CRITICAL_DOWN
-                    6 -> CRITICAL_UP
-                    else -> UNKNOWN
-                }
-            }
-        }
-    }
-
     data class PointData (
         var rawInput: String = String(),
         var value: Double = 0.0,
@@ -75,8 +38,8 @@ class DataStorage {
         var sectionP7: SectionData,
     ) {
         fun dataTitle(): String {
-            val resultP6 = PointsAligner.messageByResult(sectionP6.result)
-            val resultP7 = PointsAligner.messageByResult(sectionP7.result)
+            val resultP6 = sectionP6.result.toMessage()
+            val resultP7 = sectionP7.result.toMessage()
             return "${title.first} ${title.second}: $timeStamp, $resultP6/$resultP7"
         }
     }
