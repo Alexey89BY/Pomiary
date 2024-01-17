@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.DataStorage
+import local.tools.pomiary.PointData
 import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
 import local.tools.pomiary.R
@@ -294,13 +295,13 @@ class StandardFragment : Fragment() {
     }
 
 
-    private fun getPointInputsFromEdits(edits: Array<PointTextWatcher>, pointsArray: Array<DataStorage.PointData>) {
+    private fun getPointInputsFromEdits(edits: Array<PointTextWatcher>, pointsArray: Array<PointData>) {
         pointsArray.forEachIndexed { index, _ ->
             pointsArray[index].rawInput = edits[index].getRawInput()
         }
     }
 
-    private fun setPointInputsToEdits(pointsArray: Array<DataStorage.PointData>, edits: Array<PointTextWatcher>) {
+    private fun setPointInputsToEdits(pointsArray: Array<PointData>, edits: Array<PointTextWatcher>) {
         pointsArray.forEachIndexed { index, point ->
             edits[index].setRawInput(point.rawInput)
         }
@@ -329,7 +330,7 @@ class StandardFragment : Fragment() {
     }
 
     private fun setPointResultsToView (
-        points: Array<DataStorage.PointData>,
+        points: Array<PointData>,
         watchers: Array<PointTextWatcher>
     ) {
         points.forEachIndexed { index, point ->
