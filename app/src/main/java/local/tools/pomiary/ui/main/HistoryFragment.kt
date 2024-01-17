@@ -86,14 +86,14 @@ class HistoryFragment : Fragment() {
             val itemData = historyData[position]
 
             val graphData = GraphData()
-            when (itemData.size) {
-                16 -> {
+            when (itemData[1]) {
+                DataStorage.getStorageStandard().title -> {
                     graphData.tolerancesP6 = DataStorage.getToleranceStandardP6()
                     graphData.tolerancesP7 = DataStorage.getToleranceStandardP7()
                     graphData.pointsP6 = decodePoints(itemData.slice(3..11), graphData.tolerancesP6)
                     graphData.pointsP7 = decodePoints(itemData.slice(12..15), graphData.tolerancesP7)
                 }
-                18 -> {
+                DataStorage.getStorageMaxi().title -> {
                     graphData.tolerancesP6 = DataStorage.getToleranceMaxiP6()
                     graphData.tolerancesP7 = DataStorage.getToleranceMaxiP7()
                     graphData.pointsP6 = decodePoints(itemData.slice(3..13), graphData.tolerancesP6)
@@ -217,24 +217,24 @@ class HistoryFragment : Fragment() {
 
         fun savePoints(
             fragment: Fragment,
-            subsetTitle: String,
-            dataTitle: String,
-            timeStamp: String,
-            points1: Array<PointData>,
-            points2: Array<PointData>,
+            dataStorage: DataStorage.DataSubSet,
+            currentStorage: DataStorage.SillSealData
         ) {
             val context = fragment.requireContext()
             val file = getHistoryFile(context)
 
             if (file.exists()) {
                 val line = buildString {
-                    append(timeStamp)
+                    append(currentStorage.timeStamp)
                     append(historyDelimiter)
-                    append(subsetTitle)
+                    append(dataStorage.title)
                     append(historyDelimiter)
-                    append(dataTitle)
-                    writePointsToFile(this, points1)
-                    writePointsToFile(this, points2)
+                    append(currentStorage.title.first)
+                    writePointsToFile(this, currentStorage.sectionP6.points, dataStorage.toleranceMapP6)
+                    writePointsToFile(this, currentStorage.sectionP7.points, dataStorage.toleranceMapP7)
+                    append(historyDelimiter)
+                    writePointsRawToFile(this, currentStorage.sectionP6.points)
+                    writePointsRawToFile(this, currentStorage.sectionP7.points)
                     appendLine()
                 }
 
@@ -242,18 +242,30 @@ class HistoryFragment : Fragment() {
             }
         }
 
-        private fun writePointsToFile(builder: StringBuilder, pointsArray: Array<PointData>) {
-            pointsArray.forEachIndexed {_, it ->
-                //val nokText = "*"
-                //val baseText = "!"
+        private fun writePointsToFile(
+            builder: StringBuilder,
+            pointsData: Array<PointData>,
+            toleranceMap: List<Int>,
+        ) {
+            toleranceMap.forEach { pointIndex ->
+                val point = pointsData[pointIndex]
                 builder.append(historyDelimiter)
-                builder.append(PointData.valueToString(it.value))
-                //if (index == 0) {
-                //    builder.append(baseText)
-                //} else
-                //if (it.result != DataStorage.PointResult.OK) {
-                //    builder.append(nokText)
+                builder.append(PointData.valueToString(point.value))
+                //if (it == 0) {
+                //    builder.append("!")
+                //} else if (point.result != DataStorage.PointResult.OK) {
+                //    builder.append("*")
                 // }
+            }
+        }
+
+        private fun writePointsRawToFile(
+            builder: StringBuilder,
+            pointsData: Array<PointData>
+        ) {
+            pointsData.forEach { point ->
+                builder.append(historyDelimiter)
+                builder.append(PointData.valueToString(point.rawValue))
             }
         }
     }

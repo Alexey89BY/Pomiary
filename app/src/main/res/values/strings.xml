@@ -9,6 +9,7 @@
     <string name="load_msg">Loading&#8230;</string>
     <string name="copy_msg">Copying&#8230;</string>
     <string name="text_P6_0">P6 (*), mm</string>
+    <string name="text_P6_P">P6 (|), mm</string>
     <string name="text_P6_1">P6 (1), mm</string>
     <string name="text_P6_2">P6 (2), mm</string>
     <string name="text_P6_3">P6 (3), mm</string>
@@ -20,6 +21,7 @@
     <string name="text_P6_9">P6 (9), mm</string>
     <string name="text_P6_10">P6 (10), mm</string>
     <string name="text_P7_0">P7 (*), mm</string>
+    <string name="text_P7_P">P7 (|), mm</string>
     <string name="text_P7_1">P7 (1), mm</string>
     <string name="text_P7_2">P7 (2), mm</string>
     <string name="text_P7_3">P7 (3), mm</string>
