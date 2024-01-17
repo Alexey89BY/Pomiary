@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.DataStorage
+import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
 import local.tools.pomiary.R
 
@@ -368,8 +369,8 @@ class StandardFragment : Fragment() {
         if (! isModified) {
             val currentStorage = dataStorage.getData(storageCurrentIndex)
             currentStorage.timeStamp = ""
-            currentStorage.sectionP6.result = DataStorage.PointResult.UNKNOWN
-            currentStorage.sectionP7.result = DataStorage.PointResult.UNKNOWN
+            currentStorage.sectionP6.result = PointResult.UNKNOWN
+            currentStorage.sectionP7.result = PointResult.UNKNOWN
             refreshSpinner()
 
             isModified = true

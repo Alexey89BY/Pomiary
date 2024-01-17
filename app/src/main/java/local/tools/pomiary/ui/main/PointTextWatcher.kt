@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
 import local.tools.pomiary.DataStorage
+import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
 
 
@@ -45,20 +46,20 @@ class PointTextWatcher(
 
         if (parentPoint == null) {
             pointData.value = rawValue
-            pointData.result = DataStorage.PointResult.UNKNOWN
+            pointData.result = PointResult.UNKNOWN
         } else {
             val parentValue = parentPoint!!.pointData.value
             pointData.value = PointsAligner.pointDistance(rawValue, parentValue)
             pointData.result = PointsAligner.testPoint(pointData.value, pointTolerance)
         }
 
-        updateResult(pointData.value, pointData.result, DataStorage.PointResult.UNKNOWN)
+        updateResult(pointData.value, pointData.result, PointResult.UNKNOWN)
     }
 
     fun updateResult(
         value: Double,
-        resultColor: DataStorage.PointResult,
-        resultMessage: DataStorage.PointResult
+        resultColor: PointResult,
+        resultMessage: PointResult
     ) {
         if (parentPoint == null) {
             // viewResult.setTextColor()
@@ -66,9 +67,9 @@ class PointTextWatcher(
                 value
             )
         } else {
-            viewResult.setTextColor(PointsAligner.colorByResult(resultColor))
+            viewResult.setTextColor(resultColor.toColor())
             viewResult.text = String.format(" %s %.1f ",
-                PointsAligner.messageByResult(resultMessage),
+                resultMessage.toMessage(),
                 value
             )
         }

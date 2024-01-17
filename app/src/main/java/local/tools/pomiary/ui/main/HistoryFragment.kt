@@ -406,7 +406,9 @@ class HistoryFragment : Fragment() {
             val xp = x0 + (point.value - pointZero).toFloat() * scale
             val dpy = 35F
             val dpx = 15F
-            paint.color = if (isBasePoint) Color.WHITE else PointsAligner.colorByResult(point.result)
+            paint.color =
+                if (isBasePoint) Color.WHITE
+                else point.result.toColor()
             val xpl = x0 - dxw
             val xpr = x0 + dxw
             val path = Path()
