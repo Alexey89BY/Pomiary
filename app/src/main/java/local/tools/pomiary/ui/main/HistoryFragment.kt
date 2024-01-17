@@ -355,6 +355,9 @@ class HistoryFragment : Fragment() {
             isBasePoint: Boolean
         ) {
             val dyt = paint.textSize * 1.2F
+            paint.color = Color.WHITE
+            canvas.drawText(title, offsetX, offsetY + dyt, paint)
+
             val hw = pointWidth * 0.5F
             val scale = pointWidth / (10F) // in point +-5 mm
             val dxw = hw - 15F
@@ -373,7 +376,6 @@ class HistoryFragment : Fragment() {
                 canvas.drawLine(x0 - xu, y0, x0 - xu, y0 + dyu, paint)
                 xu += scale
             }
-            canvas.drawText(title, offsetX, offsetY + dyt, paint)
 
             // draw tolerance
             val pointZero = if (isBasePoint) 0.0 else tolerance.origin
@@ -382,7 +384,6 @@ class HistoryFragment : Fragment() {
             val dxl = x0 + (ptl - pointZero).toFloat() * scale
             val dxr = x0 + (ptr - pointZero).toFloat() * scale
             val dyb = 35F
-            paint.color = Color.WHITE
 
             canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
             canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
@@ -407,7 +408,7 @@ class HistoryFragment : Fragment() {
             val dpy = 35F
             val dpx = 15F
             paint.color =
-                if (isBasePoint) Color.WHITE
+                if (isBasePoint) Color.LTGRAY
                 else point.result.toColor()
             val xpl = x0 - dxw
             val xpr = x0 + dxw
