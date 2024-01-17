@@ -4,27 +4,8 @@ import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
-import kotlin.math.roundToInt
 
 class DataStorage {
-    data class PointData (
-        var rawInput: String = String(),
-        var value: Double = 0.0,
-        var result: PointResult = PointResult.UNKNOWN
-    ) {
-        companion object {
-            private const val valueScale = 1000.0
-
-            fun valueFromInt(value: Int): Double {
-                return value / valueScale
-            }
-
-            fun valueToInt(value: Double): Int {
-                return (value * valueScale).roundToInt()
-            }
-        }
-    }
-
     @Suppress("ArrayInDataClass")
     data class SectionData(
         var points: Array<PointData>,

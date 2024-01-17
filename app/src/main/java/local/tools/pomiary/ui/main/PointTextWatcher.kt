@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
 import local.tools.pomiary.DataStorage
+import local.tools.pomiary.PointData
 import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
 
@@ -20,7 +21,7 @@ class PointTextWatcher(
     private var pointTolerance = DataStorage.PointTolerance(0.0, 0.0)
     private var parentPoint: PointTextWatcher? = null
     private var childrenPoints: Array<PointTextWatcher>? = null
-    private val pointData = DataStorage.PointData()
+    private val pointData = PointData()
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
 
@@ -42,7 +43,7 @@ class PointTextWatcher(
     }
 
     private fun updateFromParent() {
-        val rawValue = PointsAligner.pointFromString(pointData.rawInput)
+        val rawValue = PointData.valueFromString(pointData.rawInput)
 
         if (parentPoint == null) {
             pointData.value = rawValue

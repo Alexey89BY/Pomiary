@@ -24,12 +24,12 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.DataStorage
+import local.tools.pomiary.PointData
 import local.tools.pomiary.PointsAligner
 import local.tools.pomiary.R
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
 class HistoryFragment : Fragment() {
@@ -41,9 +41,9 @@ class HistoryFragment : Fragment() {
     data class GraphData (
         //var title: String = String(),
         //var timeStamp: String = String(),
-        var pointsP6: Array<DataStorage.PointData> = emptyArray(),
+        var pointsP6: Array<PointData> = emptyArray(),
         var tolerancesP6: Array<DataStorage.PointTolerance> = emptyArray(),
-        var pointsP7: Array<DataStorage.PointData> = emptyArray(),
+        var pointsP7: Array<PointData> = emptyArray(),
         var tolerancesP7: Array<DataStorage.PointTolerance> = emptyArray(),
     )
 
@@ -152,12 +152,12 @@ class HistoryFragment : Fragment() {
     private fun decodePoints(
         pointsText: List<String>,
         tolerances: Array<DataStorage.PointTolerance>
-    ): Array<DataStorage.PointData> {
+    ): Array<PointData> {
         return Array(tolerances.size) { index ->
             val rawInput = pointsText[index]
             val value = rawInput.toDoubleOrNull() ?: 0.0
             val result = PointsAligner.testPoint(value, tolerances[index])
-            DataStorage.PointData(rawInput, value, result)
+            PointData(rawInput, value, value, result)
         }
     }
 
@@ -220,8 +220,8 @@ class HistoryFragment : Fragment() {
             subsetTitle: String,
             dataTitle: String,
             timeStamp: String,
-            points1: Array<DataStorage.PointData>,
-            points2: Array<DataStorage.PointData>,
+            points1: Array<PointData>,
+            points2: Array<PointData>,
         ) {
             val context = fragment.requireContext()
             val file = getHistoryFile(context)
@@ -242,12 +242,12 @@ class HistoryFragment : Fragment() {
             }
         }
 
-        private fun writePointsToFile(builder: StringBuilder, pointsArray: Array<DataStorage.PointData>) {
+        private fun writePointsToFile(builder: StringBuilder, pointsArray: Array<PointData>) {
             pointsArray.forEachIndexed {_, it ->
                 //val nokText = "*"
                 //val baseText = "!"
                 builder.append(historyDelimiter)
-                builder.append(String.format(Locale.US, "%.2f", it.value))
+                builder.append(PointData.valueToString(it.value))
                 //if (index == 0) {
                 //    builder.append(baseText)
                 //} else
@@ -350,7 +350,7 @@ class HistoryFragment : Fragment() {
             offsetX: Float,
             offsetY: Float,
             title: String,
-            point: DataStorage.PointData,
+            point: PointData,
             tolerance: DataStorage.PointTolerance,
             isBasePoint: Boolean
         ) {

@@ -8,27 +8,19 @@ class PointsAligner {
     companion object {
         private const val roundFactor = 0.1
         private const val errorEpsilon = roundFactor / 2
-        private const val scaleFactor = 100.0
-        private const val decimalSeparator = '.' // DecimalFormatSymbols.getInstance().decimalSeparator
 
 
         private fun getPointsFromText(
-            pointsData: Array<DataStorage.PointData>,
+            pointsData: Array<PointData>,
         ): Array<Double> {
             val pointsRaw = Array(pointsData.size) { index ->
-                pointFromString(pointsData[index].rawInput)
+                PointData.valueFromString(pointsData[index].rawInput)
             }
             val pointZero = pointsRaw[0]
             val points = Array(pointsRaw.size) { index ->
                 pointDistance(pointsRaw[index], pointZero)
             }
             return points
-        }
-
-
-        fun pointFromString(string: String): Double {
-            val value = string.toDoubleOrNull() ?: 0.0
-            return if (string.contains(decimalSeparator)) value else (value / scaleFactor)
         }
 
 
@@ -51,7 +43,7 @@ class PointsAligner {
 
 
         private fun shiftAndCheckPoints(
-            pointsData: Array<DataStorage.PointData>,
+            pointsData: Array<PointData>,
             points: Array<Double>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
         ): PointResult {
@@ -108,7 +100,7 @@ class PointsAligner {
 
         fun alignPoints(
             tolerancesRaw: Array<DataStorage.PointTolerance>,
-            pointsData: Array<DataStorage.PointData>,
+            pointsData: Array<PointData>,
         ): PointResult {
             val pointsRaw = getPointsFromText(pointsData)
             return shiftAndCheckPoints(pointsData, pointsRaw, tolerancesRaw)
