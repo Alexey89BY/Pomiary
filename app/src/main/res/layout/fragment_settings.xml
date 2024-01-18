@@ -69,21 +69,36 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textToleranceStandard"
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:id="@+id/radioTolerances"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tolerance_standard" />
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioTolerancesStandard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tolerance_standard" />
+
+                    <RadioButton
+                        android:id="@+id/radioTolerancesMaxi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tolerance_maxi" />
+                </RadioGroup>
 
                 <TableLayout
+                    android:id="@+id/tableTolerancesStandard"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:visibility="gone">
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -100,19 +115,19 @@
                             android:id="@+id/editStandardP6_0_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_0_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -130,19 +145,19 @@
                             android:id="@+id/editStandardP6_1_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_1_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -160,19 +175,19 @@
                             android:id="@+id/editStandardP6_2_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_2_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -190,19 +205,19 @@
                             android:id="@+id/editStandardP6_3_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_3_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -220,19 +235,19 @@
                             android:id="@+id/editStandardP6_4_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_4_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -250,19 +265,19 @@
                             android:id="@+id/editStandardP6_5_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_5_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -280,19 +295,19 @@
                             android:id="@+id/editStandardP6_6_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_6_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -310,19 +325,19 @@
                             android:id="@+id/editStandardP6_7_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_7_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -340,19 +355,19 @@
                             android:id="@+id/editStandardP6_8_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP6_8_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -370,19 +385,19 @@
                             android:id="@+id/editStandardP7_0_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP7_0_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -400,19 +415,19 @@
                             android:id="@+id/editStandardP7_1_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP7_1_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -430,19 +445,19 @@
                             android:id="@+id/editStandardP7_2_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP7_2_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -460,41 +475,30 @@
                             android:id="@+id/editStandardP7_3_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editStandardP7_3_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                 </TableLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textToleranceMaxi"
+                <TableLayout
+                    android:id="@+id/tableTolerancesMaxi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tolerance_maxi" />
-
-                <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:paddingRight="10dp"
+                    android:visibility="gone">
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -511,19 +515,19 @@
                             android:id="@+id/editMaxiP6_0_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_0_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -541,19 +545,19 @@
                             android:id="@+id/editMaxiP6_1_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_1_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -571,19 +575,19 @@
                             android:id="@+id/editMaxiP6_2_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_2_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -601,19 +605,19 @@
                             android:id="@+id/editMaxiP6_3_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_3_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -631,19 +635,19 @@
                             android:id="@+id/editMaxiP6_4_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_4_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -661,19 +665,19 @@
                             android:id="@+id/editMaxiP6_5_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_5_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -691,19 +695,19 @@
                             android:id="@+id/editMaxiP6_6_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_6_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -721,19 +725,19 @@
                             android:id="@+id/editMaxiP6_7_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_7_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -752,19 +756,19 @@
                             android:id="@+id/editMaxiP6_8_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_8_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -782,19 +786,19 @@
                             android:id="@+id/editMaxiP6_9_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_9_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -812,19 +816,19 @@
                             android:id="@+id/editMaxiP6_10_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP6_10_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -842,19 +846,19 @@
                             android:id="@+id/editMaxiP7_0_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP7_0_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -872,19 +876,19 @@
                             android:id="@+id/editMaxiP7_1_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP7_1_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -902,19 +906,19 @@
                             android:id="@+id/editMaxiP7_2_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP7_2_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                     <TableRow
@@ -932,22 +936,23 @@
                             android:id="@+id/editMaxiP7_3_zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
 
                         <EditText
                             android:id="@+id/editMaxiP7_3_offset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autofillHints=""
                             android:ems="3"
                             android:inputType="numberSigned|numberDecimal"
-                            android:selectAllOnFocus="true"
-                            android:autofillHints="" />
+                            android:selectAllOnFocus="true" />
                     </TableRow>
 
                 </TableLayout>
+
             </LinearLayout>
 
         </LinearLayout>
