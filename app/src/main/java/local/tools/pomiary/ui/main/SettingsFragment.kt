@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TableLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -241,8 +244,26 @@ class SettingsFragment : Fragment() {
 
         writeSwitch(R.id.switchShowBasePoint, isShowBasePoint)
 
+        viewOfLayout.findViewById<RadioGroup>(R.id.radioTolerances).setOnCheckedChangeListener(radioTolerancesListener)
+        viewOfLayout.findViewById<RadioButton>(R.id.radioTolerancesStandard).isChecked = true
+
         return viewOfLayout
     }
+
+
+    private val radioTolerancesListener =
+        RadioGroup.OnCheckedChangeListener { _, checkedId ->
+            val tableStandard = viewOfLayout.findViewById<TableLayout>(R.id.tableTolerancesStandard)
+            val tableMaxi = viewOfLayout.findViewById<TableLayout>(R.id.tableTolerancesMaxi)
+            tableStandard.visibility = View.GONE
+            tableMaxi.visibility = View.GONE
+
+            when (checkedId) {
+                R.id.radioTolerancesStandard -> tableStandard.visibility = View.VISIBLE
+                R.id.radioTolerancesMaxi -> tableMaxi.visibility = View.VISIBLE
+            }
+        }
+
 
     private fun saveSettings() {
         val message: String = requireContext().resources.getString(R.string.save_msg)
