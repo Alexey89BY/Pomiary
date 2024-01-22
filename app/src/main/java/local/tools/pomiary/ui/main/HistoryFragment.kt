@@ -23,6 +23,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import local.tools.pomiary.DataStorage
 import local.tools.pomiary.PointData
 import local.tools.pomiary.PointsAligner
@@ -69,7 +70,14 @@ class HistoryFragment : Fragment() {
         val copyButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonCopy)
         copyButton.setOnClickListener { copyToClipboard() }
 
+        val switchRaw = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowRaw)
+        switchRaw.setOnCheckedChangeListener { _, checked ->
+            viewGraph.setDrawRaw(checked)
+            viewGraph.invalidate()
+        }
+
         viewGraph = ViewCanvas(activity)
+        viewGraph.setDrawRaw(switchRaw.isChecked)
         viewOfLayout.findViewById<LinearLayout>(R.id.containerGraph).addView(viewGraph)
 
         val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerGraph)
@@ -90,14 +98,26 @@ class HistoryFragment : Fragment() {
                 DataStorage.getStorageStandard().title -> {
                     graphData.tolerancesP6 = DataStorage.getToleranceStandardP6()
                     graphData.tolerancesP7 = DataStorage.getToleranceStandardP7()
-                    graphData.pointsP6 = decodePoints(itemData.slice(3..11), graphData.tolerancesP6)
-                    graphData.pointsP7 = decodePoints(itemData.slice(12..15), graphData.tolerancesP7)
+
+                    val mapAlignedP6 = listOf(3, 4, 5, 6, 7, 8, 9, 10, 11)
+                    val mapRawP6 = listOf(17, 18, 19, 20, 21, 22, 23, 24, 26)
+                    graphData.pointsP6 = decodePoints(itemData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
+
+                    val mapAlignedP7 = listOf(12, 13, 14, 15)
+                    val mapRawP7 = listOf(27, 29, 30, 32)
+                    graphData.pointsP7 = decodePoints(itemData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
                 }
                 DataStorage.getStorageMaxi().title -> {
                     graphData.tolerancesP6 = DataStorage.getToleranceMaxiP6()
                     graphData.tolerancesP7 = DataStorage.getToleranceMaxiP7()
-                    graphData.pointsP6 = decodePoints(itemData.slice(3..13), graphData.tolerancesP6)
-                    graphData.pointsP7 = decodePoints(itemData.slice(14..17), graphData.tolerancesP7)
+
+                    val mapAlignedP6 = listOf(3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
+                    val mapRawP6 = listOf(19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30)
+                    graphData.pointsP6 = decodePoints(itemData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
+
+                    val mapAlignedP7 = listOf(14, 15, 16, 17)
+                    val mapRawP7 = listOf(31, 33, 34, 36)
+                    graphData.pointsP7 = decodePoints(itemData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
                 }
             }
 
@@ -151,13 +171,32 @@ class HistoryFragment : Fragment() {
 
     private fun decodePoints(
         pointsText: List<String>,
+        indexesAligned: List<Int>,
+        indexesRaw: List<Int>,
         tolerances: Array<DataStorage.PointTolerance>
     ): Array<PointData> {
         return Array(tolerances.size) { index ->
-            val rawInput = pointsText[index]
-            val value = rawInput.toDoubleOrNull() ?: 0.0
-            val result = PointsAligner.testPoint(value, tolerances[index])
-            PointData(rawInput, value, value, result)
+            val valueRaw = decodeValue(index, indexesRaw, pointsText)
+            val valueAligned = decodeValue(index, indexesAligned, pointsText)
+            val pointResult = PointsAligner.testPoint(valueAligned, tolerances[index])
+            PointData(
+                rawValue = valueRaw,
+                value = valueAligned,
+                result = pointResult
+            )
+        }
+    }
+
+    private fun decodeValue(
+        index: Int,
+        indexesRemap: List<Int>,
+        pointsText: List<String>
+    ): Double {
+        val textIndex = indexesRemap[index]
+        return if (textIndex < pointsText.size) {
+            pointsText[textIndex].toDoubleOrNull() ?: 0.0
+        } else {
+            0.0
         }
     }
 
@@ -211,7 +250,7 @@ class HistoryFragment : Fragment() {
 
 
         fun generateTimeStamp(): String {
-            return DateTimeFormatter.ofPattern("dd.MM.yy HH:mm").format(LocalDateTime.now())
+            return DateTimeFormatter.ofPattern("dd-MM-yy HH:mm").format(LocalDateTime.now())
         }
 
 
@@ -298,12 +337,17 @@ class HistoryFragment : Fragment() {
         var pointInRow = 1
         var pointWidth = 0
         val pointHeight = 210
-
+        var isPointsRaw = false
         var graphData: GraphData = GraphData()
 
         fun setData(data: GraphData)
         {
             graphData = data
+        }
+
+
+        fun setDrawRaw(isRaw: Boolean) {
+            isPointsRaw = isRaw
         }
 
 
@@ -416,14 +460,19 @@ class HistoryFragment : Fragment() {
 
             // draw point
             val yp = y0 - paint.strokeWidth
-            val xp = x0 + (point.value - pointZero).toFloat() * scale
+            val pointValue =
+                if (isPointsRaw) point.rawValue
+                else point.value
+            val xp = x0 + (pointValue - pointZero).toFloat() * scale
             val dpy = 35F
             val dpx = 15F
             paint.color =
                 if (isBasePoint) Color.LTGRAY
+                else if (isPointsRaw) Color.WHITE
                 else point.result.toColor()
             val xpl = x0 - dxw
             val xpr = x0 + dxw
+
             val path = Path()
             when {
                 xp < xpl -> {
@@ -443,9 +492,10 @@ class HistoryFragment : Fragment() {
                 }
             }
             canvas.drawPath(path, paint)
-            val valueString  = String.format("%.1f",
-                point.value
-            )
+
+            val valueString  =
+                if (isPointsRaw) String.format("%.2f", pointValue)
+                else String.format("%.1f", pointValue)
             canvas.drawText(valueString, offsetX + hw, offsetY + 1F * dyt, paint)
         }
     }

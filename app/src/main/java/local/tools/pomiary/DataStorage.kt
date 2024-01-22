@@ -21,7 +21,7 @@ class DataStorage {
         fun dataTitle(): String {
             val resultP6 = sectionP6.result.toMessage()
             val resultP7 = sectionP7.result.toMessage()
-            return "${title.first} ${title.second}: $timeStamp, $resultP6/$resultP7"
+            return "${title.first} ${title.second}: $timeStamp $resultP6/$resultP7"
         }
     }
 
@@ -34,12 +34,10 @@ class DataStorage {
         var toleranceMapP6: List<Int>,
         var toleranceMapP7: List<Int>,
     ) {
-        /*
         fun storageTitle(data: SillSealData): String {
             return title +
                     " " + data.dataTitle()
         }
-        */
 
         fun getData(index: Int): SillSealData {
             return data[index]

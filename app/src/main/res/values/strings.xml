@@ -32,4 +32,5 @@
     <string name="tolerance_nok">Tolerance NOK</string>
     <string name="tolerance_nok_value">NOK, mm</string>
     <string name="show_base_point">Show base point (*)</string>
+    <string name="raw">RAW</string>
 </resources>
