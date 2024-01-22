@@ -17,6 +17,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import local.tools.pomiary.DataStorage
 import local.tools.pomiary.MainActivity
 import local.tools.pomiary.R
+import java.util.Locale
 
 
 /**
@@ -192,11 +193,11 @@ class SettingsFragment : Fragment() {
         tolerances.forEachIndexed { index, tolerance ->
             if (editsZeros[index] != 0) {
                 val editZero = view.findViewById<EditText>(editsZeros[index])
-                editZero.setText(tolerance.origin.toString())
+                editZero.setText(String.format(Locale.US, "%.1f", tolerance.origin))
             }
 
             val editOffset = view.findViewById<EditText>(editsOffsets[index])
-            editOffset.setText(tolerance.offset.toString())
+            editOffset.setText(String.format(Locale.US, "%.1f", tolerance.offset))
         }
     }
 
