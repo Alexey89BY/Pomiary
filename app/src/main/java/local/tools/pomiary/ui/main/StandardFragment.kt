@@ -81,7 +81,6 @@ class StandardFragment : Fragment() {
         )
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-
         spinner.onItemSelectedListener = spinnerListener
 
         val isMaxi = dataStorage.title == DataStorage.getStorageMaxi().title
@@ -335,6 +334,7 @@ class StandardFragment : Fragment() {
 
         val dialog = AlertDialog.Builder(context)
             .setTitle("Save to history ?")
+            .setMessage(dataStorage.storageTitle(currentStorage))
             .setPositiveButton("Save") { _, _ ->
                 val message: String = requireContext().resources.getString(R.string.save_msg)
                 Snackbar.make(viewOfLayout, message, 250).show()

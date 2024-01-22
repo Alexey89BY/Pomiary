@@ -48,7 +48,7 @@ class PointTextWatcher(
             pointData.result = PointResult.UNKNOWN
         } else {
             val parentValue = parentPoint!!.pointData.rawValue
-            pointData.value = PointsAligner.pointDistance(pointData.rawValue, parentValue)
+            pointData.value = PointsAligner.pointsDistance(pointData.rawValue, parentValue)
             pointData.result =
                 if (pointTolerance == null) PointResult.UNKNOWN
                 else PointsAligner.testPoint(pointData.value, pointTolerance!!)
@@ -67,6 +67,11 @@ class PointTextWatcher(
             viewResult.setTextColor(PointResult.UNKNOWN.toColor())
             viewResult.text = String.format(" %.2f %+.2f ",
                 rawValue,
+                alignedValue
+            )
+        } else if (pointTolerance == null) {
+            viewResult.setTextColor(PointResult.UNKNOWN.toColor())
+            viewResult.text = String.format(" %.1f ",
                 alignedValue
             )
         } else {

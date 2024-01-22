@@ -10,22 +10,30 @@ class PointsAligner {
         private const val errorEpsilon = roundFactor / 2
 
 
-        private fun getPointsFromText(
+        private fun updatePointsFromText(
             pointsData: Array<PointData>,
-        ): Array<Double> {
-            pointsData.forEachIndexed { index, point ->
-                pointsData[index].rawValue = PointData.valueFromString(point.rawInput)
+        ) {
+            pointsData.forEachIndexed{ index, point ->
+                val rawValue = PointData.valueFromString(point.rawInput)
+                if (index == 0) {
+                    pointsData[index].rawValue = rawValue
+                    pointsData[index].value = 0.0
+                } else {
+                    val pointValue = pointsDistance(rawValue, pointsData[0].rawValue)
+                    pointsData[index].rawValue = pointValue
+                    pointsData[index].value = pointValueRound(pointValue)
+                }
+                pointsData[index].result = PointResult.UNKNOWN
             }
-            val pointZero = pointsData[0].rawValue
-            val points = Array(pointsData.size) { index ->
-                pointDistance(pointsData[index].rawValue, pointZero)
-            }
-            return points
         }
 
 
-        fun pointDistance(pointRaw: Double, pointZero: Double): Double {
-            val value = (pointRaw - pointZero).absoluteValue
+        fun pointsDistance(point: Double, pointZero: Double): Double {
+            return (point - pointZero).absoluteValue
+        }
+
+
+        private fun pointValueRound(value: Double): Double {
             return kotlin.math.round(value / roundFactor) * roundFactor
         }
 
@@ -44,7 +52,6 @@ class PointsAligner {
 
         private fun shiftAndCheckPoints(
             pointsData: Array<PointData>,
-            pointsRaw: Array<Double>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
             toleranceMap: List<Int>,
         ): PointResult {
@@ -56,13 +63,13 @@ class PointsAligner {
             tolerancesRaw.forEachIndexed { index, tolerance ->
                 val pointIndex = toleranceMap[index]
 
-                val shiftDown = (tolerance.origin - tolerance.offset) - pointsRaw[pointIndex]
+                val shiftDown = (tolerance.origin - tolerance.offset) - pointsData[pointIndex].value
                 if ((shiftDown > shiftDownMax) or (shiftDownIndex < 0)) {
                     shiftDownMax = shiftDown
                     shiftDownIndex = pointIndex
                 }
 
-                val shiftUp = (tolerance.origin + tolerance.offset) - pointsRaw[pointIndex]
+                val shiftUp = (tolerance.origin + tolerance.offset) - pointsData[pointIndex].value
                 if ((shiftUp < shiftUpMin) or (shiftUpIndex < 0)) {
                     shiftUpMin = shiftUp
                     shiftUpIndex = pointIndex
@@ -76,13 +83,11 @@ class PointsAligner {
                 else -> 0.0
             }
 
-            pointsData.forEachIndexed { index, _ ->
-                val shiftedValue = pointsRaw[index] + totalShift
-                val pointValue =
-                    if (index != 0) pointDistance(shiftedValue, 0.0)
+            pointsData.forEachIndexed { index, point ->
+                val shiftedValue = point.value + totalShift
+                pointsData[index].value =
+                    if (index != 0) pointValueRound(shiftedValue)
                     else shiftedValue
-                pointsData[index].value = pointValue
-                pointsData[index].result = PointResult.UNKNOWN
             }
 
             var result = PointResult.OK
@@ -110,8 +115,8 @@ class PointsAligner {
             toleranceMap: List<Int>,
             pointsData: Array<PointData>,
         ): PointResult {
-            val pointsRaw = getPointsFromText(pointsData)
-            return shiftAndCheckPoints(pointsData, pointsRaw, tolerances, toleranceMap)
+            updatePointsFromText(pointsData)
+            return shiftAndCheckPoints(pointsData, tolerances, toleranceMap)
         }
     }
 }
