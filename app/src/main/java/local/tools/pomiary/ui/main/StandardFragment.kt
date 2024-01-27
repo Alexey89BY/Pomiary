@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -89,20 +90,21 @@ class StandardFragment : Fragment() {
             editsP6 = editsMaxiP6
             textsResultP6 = textsResultMaxiP6
             textsRangeP6 = textsRangeMaxiP6
+
+            removeRow(R.id.tableStandard, R.id.rowStandardP6_P1)
         } else {
             editsP6 = editsStandardP6
             textsResultP6 = textsResultStandardP6
             textsRangeP6 = textsRangeStandardP6
+
+            removeRow(R.id.tableStandard, R.id.rowStandardP6_9)
+            removeRow(R.id.tableStandard, R.id.rowStandardP6_P2)
+            removeRow(R.id.tableStandard, R.id.rowStandardP6_10)
         }
 
         editsP7 = editsStandardP7
         textsResultP7 = textsResultStandardP7
         textsRangeP7 = textsRangeStandardP7
-
-        showRow(R.id.rowStandardP6_P1, ! isMaxi)
-        showRow(R.id.rowStandardP6_9, isMaxi)
-        showRow(R.id.rowStandardP6_P2, isMaxi)
-        showRow(R.id.rowStandardP6_10, isMaxi)
 
         watchersPointsP6 = setupWatchers(editsP6, textsResultP6)
         watchersPointsP7 = setupWatchers(editsP7, textsResultP7)
@@ -410,13 +412,23 @@ class StandardFragment : Fragment() {
         }
     }
 
-
+/*
     private fun showRow(
         rowId: Int,
         isVisible: Boolean
     ) {
         val rowView = viewOfLayout.findViewById<TableRow>(rowId)
         rowView.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+*/
+
+    private fun removeRow(
+        tableId: Int,
+        rowId: Int
+    ) {
+        val table = viewOfLayout.findViewById<TableLayout>(tableId)
+        val row = viewOfLayout.findViewById<TableRow>(rowId)
+        table.removeView(row)
     }
 
 
