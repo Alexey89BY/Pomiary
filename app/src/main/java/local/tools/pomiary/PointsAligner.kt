@@ -41,11 +41,11 @@ class PointsAligner {
         fun testPoint(value: Double, tolerance: DataStorage.PointTolerance): PointResult {
             val pointOffset = value - tolerance.origin
             val pointError = pointOffset.absoluteValue - tolerance.offset
-            val toleranceNok = DataStorage.getToleranceNok()
             return when {
                 (pointError < errorEpsilon) -> PointResult.OK
-                (pointError < toleranceNok) -> if (pointOffset < 0) PointResult.WARNING_DOWN else PointResult.WARNING_UP
-                else -> if (pointOffset < 0) PointResult.CRITICAL_DOWN else PointResult.CRITICAL_UP
+                (pointError < DataStorage.getToleranceNok()) -> if (pointOffset < 0) PointResult.WARNING_DOWN else PointResult.WARNING_UP
+                (pointError < DataStorage.getToleranceInvalid()) -> if (pointOffset < 0) PointResult.CRITICAL_DOWN else PointResult.CRITICAL_UP
+                else -> PointResult.INVALID
             }
         }
 
@@ -98,9 +98,14 @@ class PointsAligner {
                 //if ((pointResult == PointResult.CRITICAL) and ((index == shiftDownIndex) or (index == shiftUpIndex))) {
                 //    pointResult = PointResult.CRITICAL_LIMITED
                 //}
-                if (pointResult != PointResult.OK)
-                {
-                    result = PointResult.NOK
+
+                if (result != PointResult.INVALID) {
+                    if (pointResult == PointResult.INVALID) {
+                        result = PointResult.INVALID
+                    } else
+                    if (pointResult != PointResult.OK) {
+                        result = PointResult.NOK
+                    }
                 }
 
                 pointsData[pointIndex].result = pointResult

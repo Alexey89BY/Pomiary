@@ -217,6 +217,11 @@ class DataStorage {
         }
 
 
+        fun getToleranceInvalid(): Double {
+            return 5.0
+        }
+
+
         fun broadcastSettingsChange() {
             subsetStandard.tolerancesP6 = getToleranceStandardP6()
             subsetStandard.tolerancesP7 = getToleranceStandardP7()

@@ -54,7 +54,8 @@ class PointTextWatcher(
                 else PointsAligner.testPoint(pointData.value, pointTolerance!!)
         }
 
-        updateResult(pointData.rawValue, pointData.value, pointData.result, PointResult.UNKNOWN)
+        val resultForMessage = if (pointData.result == PointResult.INVALID) PointResult.INVALID else PointResult.UNKNOWN
+        updateResult(pointData.rawValue, pointData.value, pointData.result, resultForMessage)
     }
 
     fun updateResult(
