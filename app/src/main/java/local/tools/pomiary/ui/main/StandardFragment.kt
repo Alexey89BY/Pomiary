@@ -324,9 +324,25 @@ class StandardFragment : Fragment() {
     private fun saveValues() {
         val currentStorage = dataStorage.getData(storageCurrentIndex)
 
-        if (isModified) {
+        if (
+            (currentStorage.sectionP6.result == PointResult.UNKNOWN)
+            || (currentStorage.sectionP7.result == PointResult.UNKNOWN)
+        ) {
             val dialog = AlertDialog.Builder(context)
                 .setTitle("Measurements are not checked")
+                .setPositiveButton("OK") {_, _ ->
+                }
+                .create()
+            dialog.show()
+            return
+        }
+
+        if (
+            (currentStorage.sectionP6.result == PointResult.INVALID)
+            || (currentStorage.sectionP7.result == PointResult.INVALID)
+        ) {
+            val dialog = AlertDialog.Builder(context)
+                .setTitle("Measurements are invalid")
                 .setPositiveButton("OK") {_, _ ->
                 }
                 .create()

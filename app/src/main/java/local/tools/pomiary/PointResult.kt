@@ -10,6 +10,7 @@ enum class PointResult {
     WARNING_UP,
     CRITICAL_DOWN,
     CRITICAL_UP,
+    INVALID
     ;
 
     fun toInt(): Int {
@@ -20,6 +21,7 @@ enum class PointResult {
             WARNING_UP -> 4
             CRITICAL_DOWN -> 5
             CRITICAL_UP -> 6
+            INVALID -> 7
             else -> 0
         }
     }
@@ -33,6 +35,7 @@ enum class PointResult {
                 4 -> WARNING_UP
                 5 -> CRITICAL_DOWN
                 6 -> CRITICAL_UP
+                7 -> INVALID
                 else -> UNKNOWN
             }
         }
@@ -45,6 +48,7 @@ enum class PointResult {
             WARNING_UP -> Color.YELLOW
             CRITICAL_DOWN,
             CRITICAL_UP -> Color.RED
+            INVALID -> Color.RED
             else -> Color.LTGRAY
         }
     }
@@ -60,6 +64,7 @@ enum class PointResult {
             CRITICAL_DOWN -> "NOK\u2193"
             WARNING_UP,
             CRITICAL_UP -> "NOK\u2191"
+            INVALID -> "!"
             else -> "?"
         }
     }

@@ -415,7 +415,7 @@ class HistoryFragment : Fragment() {
             canvas.drawText(title, offsetX, offsetY + dyt, paint)
 
             val hw = pointWidth * 0.5F
-            val scale = pointWidth / (10F) // in point +-5 mm
+            val scale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
             val dxw = hw - 15F
             val x0 = offsetX + hw
             val y0 = offsetY + 3.5F * dyt
