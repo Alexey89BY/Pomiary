@@ -296,7 +296,7 @@ class SettingsFragment : Fragment() {
         writeTolerances(editor, settingsMaxiP7_prefix, DataStorage.getToleranceMaxiP7())
         writeTolerances(editor, settingsNok_prefix, DataStorage.getTolerancesNok())
         editor.putBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
-        editor.putBoolean(settingsShowBasePoint_prefix, isShowProfilePoint)
+        editor.putBoolean(settingsShowProfilePoint_prefix, isShowProfilePoint)
         editor.apply()
 
         MainActivity.broadcastSettingsChange()
