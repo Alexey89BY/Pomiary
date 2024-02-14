@@ -94,10 +94,16 @@ class PointTextWatcher(
     }
 
     fun setRawInput(input: String, value: Double) {
+        if (viewEdit.isEnabled) {
+            pointData.rawInput = input
+            pointData.rawValue = value
+        } else {
+            pointData.rawInput = String()
+            pointData.rawValue = 0.0
+        }
+
         isSelfModify = true
-        pointData.rawInput = input
-        pointData.rawValue = value
-        viewEdit.setText(input)
+        viewEdit.setText(pointData.rawInput)
         isSelfModify = false
     }
 

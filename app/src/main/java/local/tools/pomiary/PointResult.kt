@@ -64,7 +64,7 @@ enum class PointResult {
             CRITICAL_DOWN -> "NOK\u2193"
             WARNING_UP,
             CRITICAL_UP -> "NOK\u2191"
-            INVALID -> "!"
+            INVALID -> "\u2048"
             else -> "?"
         }
     }
