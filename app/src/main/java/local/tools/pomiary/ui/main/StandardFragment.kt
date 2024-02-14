@@ -134,8 +134,14 @@ class StandardFragment : Fragment() {
     fun onSettingsChange() {
         setRangesToViews(dataStorage.tolerancesP6, dataStorage.toleranceMapP6, textsRangeP6, watchersPointsP6)
         setRangesToViews(dataStorage.tolerancesP7, dataStorage.toleranceMapP7, textsRangeP7, watchersPointsP7)
-        showBasePoint(R.id.editStandardP6_0, SettingsFragment.getShowBasePoint())
-        showBasePoint(R.id.editStandardP7_0, SettingsFragment.getShowBasePoint())
+
+        enableRow(R.id.rowStandardP6_0, R.id.editStandardP6_0, SettingsFragment.getShowBasePoint(), true)
+        enableRow(R.id.rowStandardP7_0, R.id.editStandardP7_0, SettingsFragment.getShowBasePoint(), true)
+
+        enableRow(R.id.rowStandardP6_P1, R.id.editStandardP6_P1, SettingsFragment.getShowProfilePoint(), false)
+        enableRow(R.id.rowStandardP6_P2, R.id.editStandardP6_P2, SettingsFragment.getShowProfilePoint(), false)
+        enableRow(R.id.rowStandardP7_P1, R.id.editStandardP7_P1, SettingsFragment.getShowProfilePoint(), false)
+        enableRow(R.id.rowStandardP7_P2, R.id.editStandardP7_P2, SettingsFragment.getShowProfilePoint(), false)
     }
 
 
@@ -448,13 +454,18 @@ class StandardFragment : Fragment() {
     }
 
 
-    private fun showBasePoint(
+    private fun enableRow(
+        rowId: Int,
         editId: Int,
-        isVisible: Boolean
+        isEnabled: Boolean,
+        isKeepVisible: Boolean
     ) {
-        val editText = viewOfLayout.findViewById<EditText>(editId)
-        editText.isEnabled = isVisible
-        if (! isVisible) {
+        val rowView = viewOfLayout.findViewById<TableRow>(rowId)
+        if (rowView != null) {
+            rowView.visibility = if (isEnabled || isKeepVisible) View.VISIBLE else View.GONE
+
+            val editText = viewOfLayout.findViewById<EditText>(editId)
+            editText.isEnabled = isEnabled
             editText.text.clear()
         }
     }

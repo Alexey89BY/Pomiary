@@ -29,6 +29,7 @@ class SettingsFragment : Fragment() {
 
     companion object {
         private var isShowBasePoint = true
+        private var isShowProfilePoint = true
 
         private val editsStandardP6_zeros = listOf(
             R.id.editStandardP6_0_zero,
@@ -125,6 +126,7 @@ class SettingsFragment : Fragment() {
         private const val settingsMaxiP7_prefix = "maxiP7_%d_%d"
         private const val settingsNok_prefix = "nok_%d_%d"
         private const val settingsShowBasePoint_prefix = "show_bp"
+        private const val settingsShowProfilePoint_prefix = "show_pp"
 
         /**
          * Use this factory method to create a new instance of
@@ -145,6 +147,11 @@ class SettingsFragment : Fragment() {
         }
 
 
+        fun getShowProfilePoint(): Boolean {
+            return isShowProfilePoint
+        }
+
+
         fun loadSettings(context: Context) {
             val preferences = context.getSharedPreferences(settingsFileName, 0)
 
@@ -155,6 +162,7 @@ class SettingsFragment : Fragment() {
             readTolerances(preferences, settingsNok_prefix, DataStorage.getTolerancesNok())
 
             isShowBasePoint = preferences.getBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
+            isShowProfilePoint = preferences.getBoolean(settingsShowProfilePoint_prefix, isShowProfilePoint)
 
             //MainActivity.broadcastSettingsChange()
         }
@@ -244,6 +252,7 @@ class SettingsFragment : Fragment() {
         writeEdits(viewOfLayout, DataStorage.getTolerancesNok(), editsNok_zeros, editsNok_offsets)
 
         writeSwitch(R.id.switchShowBasePoint, isShowBasePoint)
+        writeSwitch(R.id.switchShowProfilePoint, isShowProfilePoint)
 
         viewOfLayout.findViewById<RadioGroup>(R.id.radioTolerances).setOnCheckedChangeListener(radioTolerancesListener)
         viewOfLayout.findViewById<RadioButton>(R.id.radioTolerancesStandard).isChecked = true
@@ -277,6 +286,7 @@ class SettingsFragment : Fragment() {
         readEdits(viewOfLayout, DataStorage.getTolerancesNok(), editsNok_zeros, editsNok_offsets)
 
         isShowBasePoint = readSwitch(R.id.switchShowBasePoint)
+        isShowProfilePoint = readSwitch(R.id.switchShowProfilePoint)
 
         val preferences = viewOfLayout.context.getSharedPreferences(settingsFileName, 0)
         val editor = preferences.edit()
@@ -286,6 +296,7 @@ class SettingsFragment : Fragment() {
         writeTolerances(editor, settingsMaxiP7_prefix, DataStorage.getToleranceMaxiP7())
         writeTolerances(editor, settingsNok_prefix, DataStorage.getTolerancesNok())
         editor.putBoolean(settingsShowBasePoint_prefix, isShowBasePoint)
+        editor.putBoolean(settingsShowBasePoint_prefix, isShowProfilePoint)
         editor.apply()
 
         MainActivity.broadcastSettingsChange()
