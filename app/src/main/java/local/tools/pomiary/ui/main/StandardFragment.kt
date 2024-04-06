@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -41,12 +42,8 @@ class StandardFragment : Fragment() {
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private lateinit var watchersPointsP6: Array<PointTextWatcher>
     private lateinit var watchersPointsP7: Array<PointTextWatcher>
-    private lateinit var editsP6: List<Int>
-    private lateinit var textsResultP6: List<Int>
-    private lateinit var textsRangeP6: List<Int>
-    private lateinit var editsP7: List<Int>
-    private lateinit var textsResultP7: List<Int>
-    private lateinit var textsRangeP7: List<Int>
+    private lateinit var graphsPointsP6: Array<PointRangeGraph>
+    private lateinit var graphsPointsP7: Array<PointRangeGraph>
     private var storageCurrentIndex = -1
     private var isModified = true
 
@@ -85,29 +82,35 @@ class StandardFragment : Fragment() {
         spinner.onItemSelectedListener = spinnerListener
 
         val isMaxi = dataStorage.title == DataStorage.getStorageMaxi().title
+        val editsP6: List<Int>
+        val textsResultP6: List<Int>
+        val graphsRangeP6: List<Int>
 
         if (isMaxi) {
             editsP6 = editsMaxiP6
             textsResultP6 = textsResultMaxiP6
-            textsRangeP6 = textsRangeMaxiP6
+            graphsRangeP6 = graphsRangeMaxiP6
 
             removeRow(R.id.tableStandard, R.id.rowStandardP6_P1)
         } else {
             editsP6 = editsStandardP6
             textsResultP6 = textsResultStandardP6
-            textsRangeP6 = textsRangeStandardP6
+            graphsRangeP6 = graphsRangeStandardP6
 
             removeRow(R.id.tableStandard, R.id.rowStandardP6_9)
             removeRow(R.id.tableStandard, R.id.rowStandardP6_P2)
             removeRow(R.id.tableStandard, R.id.rowStandardP6_10)
         }
 
-        editsP7 = editsStandardP7
-        textsResultP7 = textsResultStandardP7
-        textsRangeP7 = textsRangeStandardP7
+        val editsP7 = editsStandardP7
+        val textsResultP7 = textsResultStandardP7
+        val graphsRangeP7 = graphsRangeStandardP7
 
         watchersPointsP6 = setupWatchers(editsP6, textsResultP6)
         watchersPointsP7 = setupWatchers(editsP7, textsResultP7)
+
+        graphsPointsP6 = setupResultGraphs(graphsRangeP6, dataStorage.toleranceMapP6, watchersPointsP6)
+        graphsPointsP7 = setupResultGraphs(graphsRangeP7, dataStorage.toleranceMapP7, watchersPointsP7)
 
         onSettingsChange()
 
@@ -132,8 +135,8 @@ class StandardFragment : Fragment() {
 
 
     fun onSettingsChange() {
-        setRangesToViews(dataStorage.tolerancesP6, dataStorage.toleranceMapP6, textsRangeP6, watchersPointsP6)
-        setRangesToViews(dataStorage.tolerancesP7, dataStorage.toleranceMapP7, textsRangeP7, watchersPointsP7)
+        setRangesToViews(dataStorage.tolerancesP6, graphsPointsP6)
+        setRangesToViews(dataStorage.tolerancesP7, graphsPointsP7)
 
         enableRow(R.id.rowStandardP6_0, R.id.editStandardP6_0, SettingsFragment.getShowBasePoint(), true)
         enableRow(R.id.rowStandardP7_0, R.id.editStandardP7_0, SettingsFragment.getShowBasePoint(), true)
@@ -171,16 +174,16 @@ class StandardFragment : Fragment() {
         R.id.textResultStandardP6_8,
     )
 
-    private val textsRangeStandardP6 = listOf(
-        R.id.textRangeStandardP6_0,
-        R.id.textRangeStandardP6_1,
-        R.id.textRangeStandardP6_2,
-        R.id.textRangeStandardP6_3,
-        R.id.textRangeStandardP6_4,
-        R.id.textRangeStandardP6_5,
-        R.id.textRangeStandardP6_6,
-        R.id.textRangeStandardP6_7,
-        R.id.textRangeStandardP6_8,
+    private val graphsRangeStandardP6 = listOf(
+        R.id.graphRangeP6_0,
+        R.id.graphRangeP6_1,
+        R.id.graphRangeP6_2,
+        R.id.graphRangeP6_3,
+        R.id.graphRangeP6_4,
+        R.id.graphRangeP6_5,
+        R.id.graphRangeP6_6,
+        R.id.graphRangeP6_7,
+        R.id.graphRangeP6_8,
     )
 
     private val editsMaxiP6 = listOf(
@@ -213,18 +216,18 @@ class StandardFragment : Fragment() {
         R.id.textResultStandardP6_10,
     )
 
-    private val textsRangeMaxiP6 = listOf(
-        R.id.textRangeStandardP6_0,
-        R.id.textRangeStandardP6_1,
-        R.id.textRangeStandardP6_2,
-        R.id.textRangeStandardP6_3,
-        R.id.textRangeStandardP6_4,
-        R.id.textRangeStandardP6_5,
-        R.id.textRangeStandardP6_6,
-        R.id.textRangeStandardP6_7,
-        R.id.textRangeStandardP6_8,
-        R.id.textRangeStandardP6_9,
-        R.id.textRangeStandardP6_10,
+    private val graphsRangeMaxiP6 = listOf(
+        R.id.graphRangeP6_0,
+        R.id.graphRangeP6_1,
+        R.id.graphRangeP6_2,
+        R.id.graphRangeP6_3,
+        R.id.graphRangeP6_4,
+        R.id.graphRangeP6_5,
+        R.id.graphRangeP6_6,
+        R.id.graphRangeP6_7,
+        R.id.graphRangeP6_8,
+        R.id.graphRangeP6_9,
+        R.id.graphRangeP6_10,
     )
 
     private val editsStandardP7 = listOf(
@@ -245,11 +248,11 @@ class StandardFragment : Fragment() {
         R.id.textResultStandardP7_3,
     )
 
-    private val textsRangeStandardP7 = listOf(
-        R.id.textRangeStandardP7_0,
-        R.id.textRangeStandardP7_1,
-        R.id.textRangeStandardP7_2,
-        R.id.textRangeStandardP7_3,
+    private val graphsRangeStandardP7 = listOf(
+        R.id.graphRangeP7_0,
+        R.id.graphRangeP7_1,
+        R.id.graphRangeP7_2,
+        R.id.graphRangeP7_3,
     )
 
 
@@ -270,6 +273,32 @@ class StandardFragment : Fragment() {
         watchersChildren.forEach { it.setParent(watchers[0]) }
 
         return watchers
+    }
+
+
+    private fun setupResultGraphs(
+        graphsRange: List<Int>,
+        toleranceMap: List<Int>,
+        pointsWatchers: Array<PointTextWatcher>
+    ): Array<PointRangeGraph> {
+        val graphs = Array(graphsRange.size) {
+            PointRangeGraph(activity)
+        }
+
+        graphs.forEachIndexed { index, graph ->
+            val containerId = graphsRange[index]
+            val container = viewOfLayout.findViewById<LinearLayout>(containerId)
+            container.addView(graph)
+        }
+
+        graphs.forEachIndexed { index, graph ->
+            val pointIndex = toleranceMap[index]
+            val pointWatcher = pointsWatchers[pointIndex]
+            pointWatcher.setRangeGraph(graph)
+            graph.setPointWatcher(pointWatcher)
+        }
+
+        return graphs
     }
 
 
@@ -403,19 +432,10 @@ class StandardFragment : Fragment() {
 
     private fun setRangesToViews(
         tolerances: Array<DataStorage.PointTolerance>,
-        toleranceMap: List<Int>,
-        rangeViewIds: List<Int>,
-        pointsWatchers: Array<PointTextWatcher>
+        rangeGraphs: Array<PointRangeGraph>
     ) {
         tolerances.forEachIndexed { index, tolerance ->
-            val textView = viewOfLayout.findViewById<TextView>(rangeViewIds[index])
-            textView.text = String.format(" %.1f \u2026 %.1f",
-                        tolerance.origin - tolerance.offset,
-                        tolerance.origin + tolerance.offset
-                    )
-
-            val pointIndex = toleranceMap[index]
-            pointsWatchers[pointIndex].setTolerance(tolerance)
+            rangeGraphs[index].setTolerance(tolerance)
         }
     }
 

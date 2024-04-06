@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
-import local.tools.pomiary.DataStorage
 import local.tools.pomiary.PointData
 import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
@@ -20,7 +19,7 @@ class PointTextWatcher(
     private var isSelfModify = false
     private var parentPoint: PointTextWatcher? = null
     private var childrenPoints: Array<PointTextWatcher>? = null
-    private var pointTolerance: DataStorage.PointTolerance? = null
+    private var graphRange: PointRangeGraph? = null
     private val pointData = PointData()
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
@@ -32,26 +31,31 @@ class PointTextWatcher(
             return
 
         pointData.rawInput = s.toString()
-        updateFromParent()
+        updateData()
+
         childrenPoints?.forEach {
-            it.updateFromParent()
+            it.updateData()
         }
 
         fragment.setModified()
     }
 
-    private fun updateFromParent() {
-        pointData.rawValue = PointData.valueFromString(pointData.rawInput)
+    private fun updateData() {
+        if (! viewEdit.isEnabled)
+            return
 
-        if (parentPoint == null) {
-            pointData.value = 0.0
-            pointData.result = PointResult.UNKNOWN
-        } else {
+        pointData.rawValue = PointData.valueFromString(pointData.rawInput)
+        pointData.value = 0.0
+        pointData.result = PointResult.UNKNOWN
+
+        if (parentPoint != null) {
             val parentValue = parentPoint!!.pointData.rawValue
             pointData.value = PointsAligner.pointsDistance(pointData.rawValue, parentValue)
-            pointData.result =
-                if (pointTolerance == null) PointResult.UNKNOWN
-                else PointsAligner.testPoint(pointData.value, pointTolerance!!)
+
+            if (graphRange != null) {
+                val tolerance = graphRange!!.getTolerance()
+                pointData.result = PointsAligner.testPoint(pointData.value, tolerance)
+            }
         }
 
         val resultForMessage = if (pointData.result == PointResult.INVALID) PointResult.INVALID else PointResult.UNKNOWN
@@ -70,7 +74,7 @@ class PointTextWatcher(
                 rawValue,
                 alignedValue
             )
-        } else if (pointTolerance == null) {
+        } else if (graphRange == null) {
             viewResult.setTextColor(PointResult.UNKNOWN.toColor())
             viewResult.text = String.format(" %.1f ",
                 alignedValue
@@ -82,6 +86,8 @@ class PointTextWatcher(
                 alignedValue
             )
         }
+
+        graphRange?.setPoint(alignedValue, viewResult.currentTextColor)
     }
 
     fun clear() {
@@ -107,8 +113,8 @@ class PointTextWatcher(
         isSelfModify = false
     }
 
-    fun setTolerance(tolerance: DataStorage.PointTolerance?) {
-        pointTolerance = tolerance
+    fun setRangeGraph(graph: PointRangeGraph?) {
+        graphRange = graph
     }
 
     fun setChildrenPoints(children: Array<PointTextWatcher>) {
