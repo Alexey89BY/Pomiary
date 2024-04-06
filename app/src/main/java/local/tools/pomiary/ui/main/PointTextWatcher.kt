@@ -48,12 +48,10 @@ class PointTextWatcher(
         pointData.value = 0.0
         pointData.result = PointResult.UNKNOWN
 
-        if (parentPoint != null) {
-            val parentValue = parentPoint!!.pointData.rawValue
-            pointData.value = PointsAligner.pointsDistance(pointData.rawValue, parentValue)
+        parentPoint?.let { parent ->
+            pointData.value = PointsAligner.pointsDistance(pointData.rawValue, parent.pointData.rawValue)
 
-            if (graphRange != null) {
-                val tolerance = graphRange!!.getTolerance()
+            graphRange?.getTolerance()?.let { tolerance ->
                 pointData.result = PointsAligner.testPoint(pointData.value, tolerance)
             }
         }

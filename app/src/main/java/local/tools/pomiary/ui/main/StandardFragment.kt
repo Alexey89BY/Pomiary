@@ -82,35 +82,27 @@ class StandardFragment : Fragment() {
         spinner.onItemSelectedListener = spinnerListener
 
         val isMaxi = dataStorage.title == DataStorage.getStorageMaxi().title
-        val editsP6: List<Int>
-        val textsResultP6: List<Int>
-        val graphsRangeP6: List<Int>
+        val viewsP6: List<PointViewsLink>
 
         if (isMaxi) {
-            editsP6 = editsMaxiP6
-            textsResultP6 = textsResultMaxiP6
-            graphsRangeP6 = graphsRangeMaxiP6
+            viewsP6 = viewsMaxiP6
 
             removeRow(R.id.tableStandard, R.id.rowStandardP6_P1)
         } else {
-            editsP6 = editsStandardP6
-            textsResultP6 = textsResultStandardP6
-            graphsRangeP6 = graphsRangeStandardP6
+            viewsP6 = viewsStandardP6
 
             removeRow(R.id.tableStandard, R.id.rowStandardP6_9)
             removeRow(R.id.tableStandard, R.id.rowStandardP6_P2)
             removeRow(R.id.tableStandard, R.id.rowStandardP6_10)
         }
 
-        val editsP7 = editsStandardP7
-        val textsResultP7 = textsResultStandardP7
-        val graphsRangeP7 = graphsRangeStandardP7
+        val viewsP7 = viewsStandardP7
 
-        watchersPointsP6 = setupWatchers(editsP6, textsResultP6)
-        watchersPointsP7 = setupWatchers(editsP7, textsResultP7)
+        watchersPointsP6 = setupWatchers(viewsP6)
+        watchersPointsP7 = setupWatchers(viewsP7)
 
-        graphsPointsP6 = setupResultGraphs(graphsRangeP6, dataStorage.toleranceMapP6, watchersPointsP6)
-        graphsPointsP7 = setupResultGraphs(graphsRangeP7, dataStorage.toleranceMapP7, watchersPointsP7)
+        graphsPointsP6 = setupResultGraphs(viewsP6, watchersPointsP6)
+        graphsPointsP7 = setupResultGraphs(viewsP7, watchersPointsP7)
 
         onSettingsChange()
 
@@ -135,8 +127,8 @@ class StandardFragment : Fragment() {
 
 
     fun onSettingsChange() {
-        setRangesToViews(dataStorage.tolerancesP6, graphsPointsP6)
-        setRangesToViews(dataStorage.tolerancesP7, graphsPointsP7)
+        setRangesToViews(dataStorage.tolerancesP6, dataStorage.toleranceMapP6, graphsPointsP6)
+        setRangesToViews(dataStorage.tolerancesP7, dataStorage.toleranceMapP7, graphsPointsP7)
 
         enableRow(R.id.rowStandardP6_0, R.id.editStandardP6_0, SettingsFragment.getShowBasePoint(), true)
         enableRow(R.id.rowStandardP7_0, R.id.editStandardP7_0, SettingsFragment.getShowBasePoint(), true)
@@ -148,121 +140,57 @@ class StandardFragment : Fragment() {
     }
 
 
-    private val editsStandardP6 = listOf(
-        R.id.editStandardP6_0,
-        R.id.editStandardP6_1,
-        R.id.editStandardP6_2,
-        R.id.editStandardP6_3,
-        R.id.editStandardP6_4,
-        R.id.editStandardP6_5,
-        R.id.editStandardP6_6,
-        R.id.editStandardP6_7,
-        R.id.editStandardP6_P1,
-        R.id.editStandardP6_8,
+    data class PointViewsLink(
+        val editId: Int,
+        val textResultId: Int,
+        val graphId: Int,
     )
 
-    private val textsResultStandardP6 = listOf(
-        R.id.textResultStandardP6_0,
-        R.id.textResultStandardP6_1,
-        R.id.textResultStandardP6_2,
-        R.id.textResultStandardP6_3,
-        R.id.textResultStandardP6_4,
-        R.id.textResultStandardP6_5,
-        R.id.textResultStandardP6_6,
-        R.id.textResultStandardP6_7,
-        R.id.textResultStandardP6_P1,
-        R.id.textResultStandardP6_8,
+    private val viewsStandardP6 = listOf(
+        PointViewsLink( R.id.editStandardP6_0, R.id.textResultStandardP6_0, R.id.graphRangeP6_0 ),
+        PointViewsLink( R.id.editStandardP6_1, R.id.textResultStandardP6_1, R.id.graphRangeP6_1 ),
+        PointViewsLink( R.id.editStandardP6_2, R.id.textResultStandardP6_2, R.id.graphRangeP6_2 ),
+        PointViewsLink( R.id.editStandardP6_3, R.id.textResultStandardP6_3, R.id.graphRangeP6_3 ),
+        PointViewsLink( R.id.editStandardP6_4, R.id.textResultStandardP6_4, R.id.graphRangeP6_4 ),
+        PointViewsLink( R.id.editStandardP6_5, R.id.textResultStandardP6_5, R.id.graphRangeP6_5 ),
+        PointViewsLink( R.id.editStandardP6_6, R.id.textResultStandardP6_6, R.id.graphRangeP6_6 ),
+        PointViewsLink( R.id.editStandardP6_7, R.id.textResultStandardP6_7, R.id.graphRangeP6_7 ),
+        PointViewsLink( R.id.editStandardP6_P1, R.id.textResultStandardP6_P1, R.id.graphRangeP6_P1 ),
+        PointViewsLink( R.id.editStandardP6_8, R.id.textResultStandardP6_8, R.id.graphRangeP6_8 ),
     )
 
-    private val graphsRangeStandardP6 = listOf(
-        R.id.graphRangeP6_0,
-        R.id.graphRangeP6_1,
-        R.id.graphRangeP6_2,
-        R.id.graphRangeP6_3,
-        R.id.graphRangeP6_4,
-        R.id.graphRangeP6_5,
-        R.id.graphRangeP6_6,
-        R.id.graphRangeP6_7,
-        R.id.graphRangeP6_8,
+    private val viewsMaxiP6 = listOf(
+        PointViewsLink( R.id.editStandardP6_0, R.id.textResultStandardP6_0, R.id.graphRangeP6_0 ),
+        PointViewsLink( R.id.editStandardP6_1, R.id.textResultStandardP6_1, R.id.graphRangeP6_1 ),
+        PointViewsLink( R.id.editStandardP6_2, R.id.textResultStandardP6_2, R.id.graphRangeP6_2 ),
+        PointViewsLink( R.id.editStandardP6_3, R.id.textResultStandardP6_3, R.id.graphRangeP6_3 ),
+        PointViewsLink( R.id.editStandardP6_4, R.id.textResultStandardP6_4, R.id.graphRangeP6_4 ),
+        PointViewsLink( R.id.editStandardP6_5, R.id.textResultStandardP6_5, R.id.graphRangeP6_5 ),
+        PointViewsLink( R.id.editStandardP6_6, R.id.textResultStandardP6_6, R.id.graphRangeP6_6 ),
+        PointViewsLink( R.id.editStandardP6_7, R.id.textResultStandardP6_7, R.id.graphRangeP6_7 ),
+        PointViewsLink( R.id.editStandardP6_8, R.id.textResultStandardP6_8, R.id.graphRangeP6_8 ),
+        PointViewsLink( R.id.editStandardP6_9, R.id.textResultStandardP6_9, R.id.graphRangeP6_9 ),
+        PointViewsLink( R.id.editStandardP6_P2, R.id.textResultStandardP6_P2, R.id.graphRangeP6_P2 ),
+        PointViewsLink( R.id.editStandardP6_10, R.id.textResultStandardP6_10, R.id.graphRangeP6_10 ),
     )
 
-    private val editsMaxiP6 = listOf(
-        R.id.editStandardP6_0,
-        R.id.editStandardP6_1,
-        R.id.editStandardP6_2,
-        R.id.editStandardP6_3,
-        R.id.editStandardP6_4,
-        R.id.editStandardP6_5,
-        R.id.editStandardP6_6,
-        R.id.editStandardP6_7,
-        R.id.editStandardP6_8,
-        R.id.editStandardP6_9,
-        R.id.editStandardP6_P2,
-        R.id.editStandardP6_10,
-    )
-
-    private val textsResultMaxiP6 = listOf(
-        R.id.textResultStandardP6_0,
-        R.id.textResultStandardP6_1,
-        R.id.textResultStandardP6_2,
-        R.id.textResultStandardP6_3,
-        R.id.textResultStandardP6_4,
-        R.id.textResultStandardP6_5,
-        R.id.textResultStandardP6_6,
-        R.id.textResultStandardP6_7,
-        R.id.textResultStandardP6_8,
-        R.id.textResultStandardP6_9,
-        R.id.textResultStandardP6_P2,
-        R.id.textResultStandardP6_10,
-    )
-
-    private val graphsRangeMaxiP6 = listOf(
-        R.id.graphRangeP6_0,
-        R.id.graphRangeP6_1,
-        R.id.graphRangeP6_2,
-        R.id.graphRangeP6_3,
-        R.id.graphRangeP6_4,
-        R.id.graphRangeP6_5,
-        R.id.graphRangeP6_6,
-        R.id.graphRangeP6_7,
-        R.id.graphRangeP6_8,
-        R.id.graphRangeP6_9,
-        R.id.graphRangeP6_10,
-    )
-
-    private val editsStandardP7 = listOf(
-        R.id.editStandardP7_0,
-        R.id.editStandardP7_P1,
-        R.id.editStandardP7_1,
-        R.id.editStandardP7_2,
-        R.id.editStandardP7_P2,
-        R.id.editStandardP7_3,
-    )
-
-    private val textsResultStandardP7 = listOf(
-        R.id.textResultStandardP7_0,
-        R.id.textResultStandardP7_P1,
-        R.id.textResultStandardP7_1,
-        R.id.textResultStandardP7_2,
-        R.id.textResultStandardP7_P2,
-        R.id.textResultStandardP7_3,
-    )
-
-    private val graphsRangeStandardP7 = listOf(
-        R.id.graphRangeP7_0,
-        R.id.graphRangeP7_1,
-        R.id.graphRangeP7_2,
-        R.id.graphRangeP7_3,
+    private val viewsStandardP7 = listOf(
+        PointViewsLink( R.id.editStandardP7_0, R.id.textResultStandardP7_0, R.id.graphRangeP7_0 ),
+        PointViewsLink( R.id.editStandardP7_P1, R.id.textResultStandardP7_P1, R.id.graphRangeP7_P1 ),
+        PointViewsLink( R.id.editStandardP7_1, R.id.textResultStandardP7_1, R.id.graphRangeP7_1 ),
+        PointViewsLink( R.id.editStandardP7_2, R.id.textResultStandardP7_2, R.id.graphRangeP7_2 ),
+        PointViewsLink( R.id.editStandardP7_P2,R.id.textResultStandardP7_P2, R.id.graphRangeP7_3 ),
+        PointViewsLink( R.id.editStandardP7_3, R.id.textResultStandardP7_3, R.id.graphRangeP7_P2 ),
     )
 
 
     private fun setupWatchers(
-        editsList: List<Int>,
-        textsResultList: List<Int>
+        viewsLinksList: List<PointViewsLink>
     ): Array<PointTextWatcher> {
-        val watchers = Array(editsList.size) {
-            val editText = viewOfLayout.findViewById<EditText>(editsList[it])
-            val textView = viewOfLayout.findViewById<TextView>(textsResultList[it])
+        val watchers = Array(viewsLinksList.size) {
+            val viewsLink = viewsLinksList[it]
+            val editText = viewOfLayout.findViewById<EditText>(viewsLink.editId)
+            val textView = viewOfLayout.findViewById<TextView>(viewsLink.textResultId)
             val watcher = PointTextWatcher(this, editText, textView)
             editText.addTextChangedListener(watcher)
             watcher
@@ -277,23 +205,21 @@ class StandardFragment : Fragment() {
 
 
     private fun setupResultGraphs(
-        graphsRange: List<Int>,
-        toleranceMap: List<Int>,
-        pointsWatchers: Array<PointTextWatcher>
+        viewsLinksList: List<PointViewsLink>,
+        pointsWatchers: Array<PointTextWatcher>,
     ): Array<PointRangeGraph> {
-        val graphs = Array(graphsRange.size) {
+        val graphs = Array(viewsLinksList.size) {
             PointRangeGraph(activity)
         }
 
         graphs.forEachIndexed { index, graph ->
-            val containerId = graphsRange[index]
+            val containerId = viewsLinksList[index].graphId
             val container = viewOfLayout.findViewById<LinearLayout>(containerId)
             container.addView(graph)
         }
 
         graphs.forEachIndexed { index, graph ->
-            val pointIndex = toleranceMap[index]
-            val pointWatcher = pointsWatchers[pointIndex]
+            val pointWatcher = pointsWatchers[index]
             pointWatcher.setRangeGraph(graph)
             graph.setPointWatcher(pointWatcher)
         }
@@ -432,10 +358,12 @@ class StandardFragment : Fragment() {
 
     private fun setRangesToViews(
         tolerances: Array<DataStorage.PointTolerance>,
+        tolerancesMap: List<Int>,
         rangeGraphs: Array<PointRangeGraph>
     ) {
         tolerances.forEachIndexed { index, tolerance ->
-            rangeGraphs[index].setTolerance(tolerance)
+            val rangeIndex = tolerancesMap[index]
+            rangeGraphs[rangeIndex].setTolerance(tolerance)
         }
     }
 
