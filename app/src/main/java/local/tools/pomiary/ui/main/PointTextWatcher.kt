@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
+import local.tools.pomiary.DataStorage
 import local.tools.pomiary.PointData
 import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
@@ -40,6 +41,10 @@ class PointTextWatcher(
         fragment.setModified()
     }
 
+    private fun getTolerance(): DataStorage.PointTolerance? {
+        return graphRange?.getTolerance()
+    }
+
     private fun updateData() {
         if (! viewEdit.isEnabled)
             return
@@ -51,7 +56,7 @@ class PointTextWatcher(
         parentPoint?.let { parent ->
             pointData.value = PointsAligner.pointsDistance(pointData.rawValue, parent.pointData.rawValue)
 
-            graphRange?.getTolerance()?.let { tolerance ->
+            getTolerance()?.let { tolerance ->
                 pointData.result = PointsAligner.testPoint(pointData.value, tolerance)
             }
         }
@@ -72,7 +77,7 @@ class PointTextWatcher(
                 rawValue,
                 alignedValue
             )
-        } else if (graphRange == null) {
+        } else if (getTolerance() == null) {
             viewResult.setTextColor(PointResult.UNKNOWN.toColor())
             viewResult.text = String.format(" %.1f ",
                 alignedValue
