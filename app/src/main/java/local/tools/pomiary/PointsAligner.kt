@@ -43,8 +43,8 @@ class PointsAligner {
             val pointError = pointOffset.absoluteValue - tolerance.offset
             return when {
                 (pointError < errorEpsilon) -> PointResult.OK
-                (pointError < DataStorage.getToleranceNok()) -> if (pointOffset < 0) PointResult.WARNING_DOWN else PointResult.WARNING_UP
-                (pointError < DataStorage.getToleranceInvalid()) -> if (pointOffset < 0) PointResult.CRITICAL_DOWN else PointResult.CRITICAL_UP
+                (pointError < DataStorage.getToleranceNok()) -> PointResult.WARNING
+                (pointError < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
                 else -> PointResult.INVALID
             }
         }
