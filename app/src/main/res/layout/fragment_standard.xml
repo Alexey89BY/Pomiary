@@ -396,6 +396,13 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_P1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+
                 </TableRow>
 
                 <TableRow
@@ -504,6 +511,13 @@
                         android:text=""
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_P2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -621,6 +635,13 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <LinearLayout
+                        android:id="@+id/graphRangeP7_P1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+
                 </TableRow>
 
                 <TableRow
@@ -728,6 +749,13 @@
                         android:text=""
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/graphRangeP7_P2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
