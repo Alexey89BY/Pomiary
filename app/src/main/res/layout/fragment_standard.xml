@@ -90,11 +90,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_0"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_0"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -128,11 +129,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_1"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -165,11 +167,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_2"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -202,11 +205,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_3"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -239,11 +243,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_4"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -276,11 +281,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_5"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_5"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -313,11 +319,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_6"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_6"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -350,11 +357,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_7"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_7"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -419,11 +427,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_8"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_8"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -457,11 +466,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_9"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_9"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -527,11 +537,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP6_10"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP6_10"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -571,11 +582,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP7_0"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP7_0"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -640,11 +652,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP7_1"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP7_1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -677,11 +690,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP7_2"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP7_2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
@@ -746,11 +760,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/textRangeStandardP7_3"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/graphRangeP7_3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </TableRow>
 
