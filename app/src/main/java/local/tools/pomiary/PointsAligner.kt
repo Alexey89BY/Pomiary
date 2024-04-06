@@ -50,11 +50,15 @@ class PointsAligner {
         }
 
 
-        private fun shiftAndCheckPoints(
+        private fun shiftPoints(
             pointsData: Array<PointData>,
             tolerancesRaw: Array<DataStorage.PointTolerance>,
             toleranceMap: List<Int>,
-        ): PointResult {
+        ) {
+            val baseIndex = toleranceMap[0]
+            if (testPoint(0.0, tolerancesRaw[baseIndex]) != PointResult.OK)
+                return
+
             var shiftUpMin = 0.0
             var shiftUpIndex = -1
             var shiftDownMax = 0.0
@@ -89,15 +93,20 @@ class PointsAligner {
                     if (index != 0) pointValueRound(shiftedValue)
                     else shiftedValue
             }
+        }
 
+
+        private fun checkPoints(
+            pointsData: Array<PointData>,
+            tolerancesRaw: Array<DataStorage.PointTolerance>,
+            toleranceMap: List<Int>,
+        ): PointResult {
             var result = PointResult.OK
             tolerancesRaw.forEachIndexed { index, tolerance ->
                 val pointIndex = toleranceMap[index]
-                val pointResult = testPoint(pointsData[pointIndex].value, tolerance)
-
-                //if ((pointResult == PointResult.CRITICAL) and ((index == shiftDownIndex) or (index == shiftUpIndex))) {
-                //    pointResult = PointResult.CRITICAL_LIMITED
-                //}
+                val pointResult =
+                    if (tolerance.offset < 0.0) PointResult.OK
+                    else testPoint(pointsData[pointIndex].value, tolerance)
 
                 if (result != PointResult.INVALID) {
                     if (pointResult == PointResult.INVALID) {
@@ -121,7 +130,8 @@ class PointsAligner {
             pointsData: Array<PointData>,
         ): PointResult {
             updatePointsFromText(pointsData)
-            return shiftAndCheckPoints(pointsData, tolerances, toleranceMap)
+            shiftPoints(pointsData, tolerances, toleranceMap)
+            return checkPoints(pointsData, tolerances, toleranceMap)
         }
     }
 }
