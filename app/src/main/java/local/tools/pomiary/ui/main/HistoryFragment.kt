@@ -311,9 +311,10 @@ class HistoryFragment : Fragment() {
 
 
     private class ViewCanvas(context: Context?) : View(context) {
-        var paint = Paint()
+        private val paint = Paint()
+        private val path = Path()
 
-        val titlesP6 = listOf(
+        private val titlesP6 = listOf(
             resources.getString(R.string.text_P6_0),
             resources.getString(R.string.text_P6_1),
             resources.getString(R.string.text_P6_2),
@@ -327,28 +328,18 @@ class HistoryFragment : Fragment() {
             resources.getString(R.string.text_P6_10),
         )
 
-        val titlesP7 = listOf(
+        private val titlesP7 = listOf(
             resources.getString(R.string.text_P7_0),
             resources.getString(R.string.text_P7_1),
             resources.getString(R.string.text_P7_2),
             resources.getString(R.string.text_P7_3),
         )
 
-        var pointInRow = 1
-        var pointWidth = 0
-        val pointHeight = 210
-        var isPointsRaw = false
-        var graphData: GraphData = GraphData()
-
-        fun setData(data: GraphData)
-        {
-            graphData = data
-        }
-
-
-        fun setDrawRaw(isRaw: Boolean) {
-            isPointsRaw = isRaw
-        }
+        private var pointInRow = 1
+        private var pointWidth = 0
+        private val pointHeight = 210
+        private var isPointsRaw = false
+        private var graphData: GraphData = GraphData()
 
 
         init {
@@ -370,6 +361,18 @@ class HistoryFragment : Fragment() {
                 }
             }
         }
+
+
+        fun setData(data: GraphData)
+        {
+            graphData = data
+        }
+
+
+        fun setDrawRaw(isRaw: Boolean) {
+            isPointsRaw = isRaw
+        }
+
 
         public override fun onDraw(canvas: Canvas) {
 
@@ -419,12 +422,14 @@ class HistoryFragment : Fragment() {
             val dxw = hw - 15F
             val x0 = offsetX + hw
             val y0 = offsetY + 3.5F * dyt
+            val xpl = x0 - dxw
+            val xpr = x0 + dxw
 
             // draw units
             val dy0 = 20F
             val dyu = 12.5F
             paint.color = Color.GRAY
-            canvas.drawLine(x0 - dxw, y0, x0 + dxw, y0, paint)
+            canvas.drawLine(xpl, y0, xpr, y0, paint)
             canvas.drawLine(x0, y0, x0, y0 + dy0, paint)
             var xu = scale
             while (xu < dxw) {
@@ -470,10 +475,8 @@ class HistoryFragment : Fragment() {
                 if (isBasePoint) Color.LTGRAY
                 else if (isPointsRaw) Color.WHITE
                 else point.result.toColor()
-            val xpl = x0 - dxw
-            val xpr = x0 + dxw
 
-            val path = Path()
+            path.reset()
             when {
                 xp < xpl -> {
                     path.moveTo(xpl, yp)
