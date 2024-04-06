@@ -33,4 +33,5 @@
     <string name="show_base_point">Show base point (*)</string>
     <string name="show_profile_point">Show profile point</string>
     <string name="raw">RAW</string>
+    <string name="input_format">Input format\n(w/o decimal point)</string>
 </resources>
