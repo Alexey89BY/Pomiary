@@ -179,8 +179,8 @@ class StandardFragment : Fragment() {
         PointViewsLink( R.id.editStandardP7_P1, R.id.textResultStandardP7_P1, R.id.graphRangeP7_P1 ),
         PointViewsLink( R.id.editStandardP7_1, R.id.textResultStandardP7_1, R.id.graphRangeP7_1 ),
         PointViewsLink( R.id.editStandardP7_2, R.id.textResultStandardP7_2, R.id.graphRangeP7_2 ),
-        PointViewsLink( R.id.editStandardP7_P2,R.id.textResultStandardP7_P2, R.id.graphRangeP7_3 ),
-        PointViewsLink( R.id.editStandardP7_3, R.id.textResultStandardP7_3, R.id.graphRangeP7_P2 ),
+        PointViewsLink( R.id.editStandardP7_P2,R.id.textResultStandardP7_P2, R.id.graphRangeP7_P2 ),
+        PointViewsLink( R.id.editStandardP7_3, R.id.textResultStandardP7_3, R.id.graphRangeP7_3 ),
     )
 
 
