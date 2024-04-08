@@ -4,11 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.res.Configuration
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,7 +16,6 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import local.tools.pomiary.DataStorage
@@ -35,20 +29,13 @@ import java.time.format.DateTimeFormatter
 
 class HistoryFragment : Fragment() {
     private lateinit var viewOfLayout: View
-    private var historyData = emptyArray<List<String>>()
+    private lateinit var viewGraph: HistoryViewCanvas
+    private lateinit var historySpinner: Spinner
+    private lateinit var spinnerAdapter: ArrayAdapter<String>
+    private val historyTitles = emptyList<String>().toMutableList()
+    private var historyData = emptyList<List<String>>()
     private var currentData: List<String>? = null
 
-    @Suppress("ArrayInDataClass")
-    data class GraphData (
-        //var title: String = String(),
-        //var timeStamp: String = String(),
-        var pointsP6: Array<PointData> = emptyArray(),
-        var tolerancesP6: Array<DataStorage.PointTolerance> = emptyArray(),
-        var pointsP7: Array<PointData> = emptyArray(),
-        var tolerancesP7: Array<DataStorage.PointTolerance> = emptyArray(),
-    )
-
-    private lateinit var viewGraph: ViewCanvas
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +51,7 @@ class HistoryFragment : Fragment() {
     ): View {
         viewOfLayout = inflater.inflate(R.layout.fragment_history, container, false)
 
-        val refreshButton = viewOfLayout.findViewById<FloatingActionButton>(R.id.buttonRefreshHistory)
+        val refreshButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonRefreshHistory)
         refreshButton.setOnClickListener { refreshHistory() }
 
         val copyButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonCopy)
@@ -76,12 +63,36 @@ class HistoryFragment : Fragment() {
             viewGraph.invalidate()
         }
 
-        viewGraph = ViewCanvas(activity)
+        val switchGraphs = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchValuesOnly)
+        switchGraphs.setOnCheckedChangeListener { _, checked ->
+            viewGraph.setValuesOnly(checked)
+            viewGraph.invalidate()
+        }
+
+        val prevButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonPrev)
+        prevButton.setOnClickListener {
+            val newIndex = historySpinner.selectedItemPosition - 1
+            if (newIndex >= 0)
+                historySpinner.setSelection(newIndex)
+        }
+
+        val nextButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonNext)
+        nextButton.setOnClickListener {
+            val newIndex = historySpinner.selectedItemPosition + 1
+            if (newIndex < spinnerAdapter.count)
+                historySpinner.setSelection(newIndex)
+        }
+
+        viewGraph = HistoryViewCanvas(activity)
         viewGraph.setDrawRaw(switchRaw.isChecked)
         viewOfLayout.findViewById<LinearLayout>(R.id.containerGraph).addView(viewGraph)
 
-        val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerGraph)
-        spinner.onItemSelectedListener = spinnerListener
+        historySpinner = viewOfLayout.findViewById(R.id.spinnerGraph)
+        historySpinner.onItemSelectedListener = spinnerListener
+
+        spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, historyTitles)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        historySpinner.adapter = spinnerAdapter
 
         return viewOfLayout
     }
@@ -93,8 +104,12 @@ class HistoryFragment : Fragment() {
         ) {
             val itemData = historyData[position]
 
-            val graphData = GraphData()
-            when (itemData[1]) {
+            val graphData = HistoryViewCanvas.GraphData()
+            graphData.timeStamp = itemData[0]
+            graphData.title = itemData[1]
+            graphData.sideLR = itemData[2]
+
+            when (graphData.title) {
                 DataStorage.getStorageStandard().title -> {
                     graphData.tolerancesP6 = DataStorage.getToleranceStandardP6()
                     graphData.tolerancesP7 = DataStorage.getToleranceStandardP7()
@@ -127,7 +142,7 @@ class HistoryFragment : Fragment() {
         }
 
         override fun onNothingSelected(parentView: AdapterView<*>?) {
-            viewGraph.setData(GraphData())
+            viewGraph.setData(HistoryViewCanvas.GraphData())
             currentData = null
             viewGraph.invalidate()
         }
@@ -150,22 +165,19 @@ class HistoryFragment : Fragment() {
             //historyLines = fileLines.asReversed().take(historyLimit)
         }
 
-        historyData = Array(historyLines.size) {
+        historyData = List(historyLines.size) {
             historyLines[it].split(historyDelimiter)
         }
 
         val prefixSize = 3
         val separator = " "
-        val historyTitles = Array(historyData.size) {
-            val number = it+1
-            "$number) " + historyData[it].take(prefixSize).joinToString(separator)
+
+        historyTitles.clear()
+        historyData.forEach {
+            historyTitles.add(it.take(prefixSize).joinToString(separator))
         }
 
-        val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, historyTitles)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerGraph)
-        spinner.adapter = spinnerAdapter
+        spinnerAdapter.notifyDataSetChanged()
     }
 
 
@@ -307,199 +319,6 @@ class HistoryFragment : Fragment() {
                 builder.append(PointData.valueToString(point.rawValue))
             }
         }
-    }
 
-
-    private class ViewCanvas(context: Context?) : View(context) {
-        private val paint = Paint()
-        private val path = Path()
-
-        private val titlesP6 = listOf(
-            resources.getString(R.string.text_P6_0),
-            resources.getString(R.string.text_P6_1),
-            resources.getString(R.string.text_P6_2),
-            resources.getString(R.string.text_P6_3),
-            resources.getString(R.string.text_P6_4),
-            resources.getString(R.string.text_P6_5),
-            resources.getString(R.string.text_P6_6),
-            resources.getString(R.string.text_P6_7),
-            resources.getString(R.string.text_P6_8),
-            resources.getString(R.string.text_P6_9),
-            resources.getString(R.string.text_P6_10),
-        )
-
-        private val titlesP7 = listOf(
-            resources.getString(R.string.text_P7_0),
-            resources.getString(R.string.text_P7_1),
-            resources.getString(R.string.text_P7_2),
-            resources.getString(R.string.text_P7_3),
-        )
-
-        private var pointInRow = 1
-        private var pointWidth = 0
-        private val pointHeight = 210
-        private var isPointsRaw = false
-        private var graphData: GraphData = GraphData()
-
-
-        init {
-            when (resources.configuration.orientation) {
-                Configuration.ORIENTATION_LANDSCAPE -> {
-                    pointInRow = 5
-                    pointWidth = 450
-                    minimumWidth = 60 + pointInRow * pointWidth
-                    minimumHeight = 4 * pointHeight
-                }
-                Configuration.ORIENTATION_PORTRAIT -> {
-                    pointInRow = 2
-                    pointWidth = 500
-                    minimumWidth = 60 + pointInRow * pointWidth
-                    minimumHeight = 8 * pointHeight
-                }
-                else -> {
-
-                }
-            }
-        }
-
-
-        fun setData(data: GraphData)
-        {
-            graphData = data
-        }
-
-
-        fun setDrawRaw(isRaw: Boolean) {
-            isPointsRaw = isRaw
-        }
-
-
-        public override fun onDraw(canvas: Canvas) {
-
-            paint.color = Color.WHITE
-            paint.textSize = 38F
-
-            //canvas.drawText(graphData.title, 40F, 40F, paint)
-            //canvas.drawText(graphData.timeStamp, 350F, 40F, paint)
-
-            paint.strokeWidth = 3F
-            paint.textSize = 32F
-
-            val offsetX = 30F
-            val offsetYP6 = 0F
-
-            graphData.pointsP6.forEachIndexed { index, point ->
-                val x = offsetX + pointWidth * index.mod(pointInRow)
-                val y = offsetYP6 + pointHeight * index.div(pointInRow)
-                drawDataPoint(canvas, x, y, titlesP6[index], point, graphData.tolerancesP6[index], index == 0)
-            }
-
-            val offsetYP7 = offsetYP6 + pointHeight * (graphData.pointsP6.size.div(pointInRow) + if (graphData.pointsP6.size.mod(pointInRow) != 0) 1 else 0)
-
-            graphData.pointsP7.forEachIndexed {index, point ->
-                val x = offsetX + pointWidth * index.mod(pointInRow)
-                val y = offsetYP7 + pointHeight * index.div(pointInRow)
-                drawDataPoint(canvas, x, y, titlesP7[index], point, graphData.tolerancesP7[index], index == 0)
-            }
-        }
-
-
-        private fun drawDataPoint(
-            canvas: Canvas,
-            offsetX: Float,
-            offsetY: Float,
-            title: String,
-            point: PointData,
-            tolerance: DataStorage.PointTolerance,
-            isBasePoint: Boolean
-        ) {
-            val dyt = paint.textSize * 1.2F
-            paint.color = Color.WHITE
-            canvas.drawText(title, offsetX, offsetY + dyt, paint)
-
-            val hw = pointWidth * 0.5F
-            val scale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
-            val dxw = hw - 15F
-            val x0 = offsetX + hw
-            val y0 = offsetY + 3.5F * dyt
-            val xpl = x0 - dxw
-            val xpr = x0 + dxw
-
-            // draw units
-            val dy0 = 20F
-            val dyu = 12.5F
-            paint.color = Color.GRAY
-            canvas.drawLine(xpl, y0, xpr, y0, paint)
-            canvas.drawLine(x0, y0, x0, y0 + dy0, paint)
-            var xu = scale
-            while (xu < dxw) {
-                canvas.drawLine(x0 + xu, y0, x0 + xu, y0 + dyu, paint)
-                canvas.drawLine(x0 - xu, y0, x0 - xu, y0 + dyu, paint)
-                xu += scale
-            }
-
-            // draw tolerance
-            val pointZero = if (isBasePoint) 0.0 else tolerance.origin
-            val ptl = tolerance.origin - tolerance.offset
-            val ptr = tolerance.origin + tolerance.offset
-            val dxl = x0 + (ptl - pointZero).toFloat() * scale
-            val dxr = x0 + (ptr - pointZero).toFloat() * scale
-            val dyb = 35F
-
-            canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
-            canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
-
-            val toleranceString1  = String.format("%.1f\u2026%.1f",
-                ptl,
-                ptr
-            )
-            canvas.drawText(toleranceString1, offsetX, offsetY + 2F * dyt, paint)
-
-            if (! isBasePoint) {
-                val toleranceString2 = String.format("%.1f\u00B1%.1f",
-                    tolerance.origin,
-                    tolerance.offset,
-                )
-                canvas.drawText(toleranceString2, offsetX + hw, offsetY + 2F * dyt, paint)
-            }
-
-            // draw point
-            val yp = y0 - paint.strokeWidth
-            val pointValue =
-                if (isPointsRaw) point.rawValue
-                else point.value
-            val xp = x0 + (pointValue - pointZero).toFloat() * scale
-            val dpy = 35F
-            val dpx = 15F
-            paint.color =
-                if (isBasePoint) Color.LTGRAY
-                else if (isPointsRaw) Color.WHITE
-                else point.result.toColor()
-
-            path.reset()
-            when {
-                xp < xpl -> {
-                    path.moveTo(xpl, yp)
-                    path.lineTo(xpl, yp - dpy)
-                    path.lineTo(xpl + dpx, yp - dpy)
-                }
-                xp > xpr -> {
-                    path.moveTo(xpr, yp)
-                    path.lineTo(xpr - dpx, yp - dpy)
-                    path.lineTo(xpr, yp - dpy)
-                }
-                else -> {
-                    path.moveTo(xp, yp)
-                    path.lineTo(xp - dpx, yp - dpy)
-                    path.lineTo(xp + dpx, yp - dpy)
-                }
-            }
-            canvas.drawPath(path, paint)
-
-            val valueString  =
-                if (isPointsRaw) String.format("%.2f", pointValue)
-                else String.format("%.1f", pointValue)
-            canvas.drawText(valueString, offsetX + hw, offsetY + 1F * dyt, paint)
-        }
     }
 }

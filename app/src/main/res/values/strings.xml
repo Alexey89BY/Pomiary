@@ -32,6 +32,9 @@
     <string name="tolerance_nok_value">Tolerance NOK, mm</string>
     <string name="show_base_point">Show base point (*)</string>
     <string name="show_profile_point">Show profile point</string>
-    <string name="raw">RAW</string>
     <string name="input_format">Input format\n(w/o decimal point)</string>
+    <string name="prev_msg">Previous</string>
+    <string name="next_msg">Next</string>
+    <string name="show_raw">Show RAW</string>
+    <string name="show_values">Show values</string>
 </resources>
