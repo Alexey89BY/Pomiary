@@ -102,12 +102,12 @@ class HistoryFragment : Fragment() {
         override fun onItemSelected(
             parent: AdapterView<*>?, view: View?, position: Int, id: Long
         ) {
-            val itemData = historyData[position]
-
             val graphData = HistoryViewCanvas.GraphData()
-            graphData.timeStamp = itemData[0]
-            graphData.title = itemData[1]
-            graphData.sideLR = itemData[2]
+
+            val pointsData = historyData[position]
+            graphData.timeStamp = getSafe(pointsData, 0)
+            graphData.title = getSafe(pointsData, 1)
+            graphData.sideLR = getSafe(pointsData, 2)
 
             when (graphData.title) {
                 DataStorage.getStorageStandard().title -> {
@@ -116,11 +116,11 @@ class HistoryFragment : Fragment() {
 
                     val mapAlignedP6 = listOf(3, 4, 5, 6, 7, 8, 9, 10, 11)
                     val mapRawP6 = listOf(17, 18, 19, 20, 21, 22, 23, 24, 26)
-                    graphData.pointsP6 = decodePoints(itemData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
+                    graphData.pointsP6 = decodePoints(pointsData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
 
                     val mapAlignedP7 = listOf(12, 13, 14, 15)
                     val mapRawP7 = listOf(27, 29, 30, 32)
-                    graphData.pointsP7 = decodePoints(itemData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
+                    graphData.pointsP7 = decodePoints(pointsData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
                 }
                 DataStorage.getStorageMaxi().title -> {
                     graphData.tolerancesP6 = DataStorage.getToleranceMaxiP6()
@@ -128,16 +128,16 @@ class HistoryFragment : Fragment() {
 
                     val mapAlignedP6 = listOf(3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
                     val mapRawP6 = listOf(19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30)
-                    graphData.pointsP6 = decodePoints(itemData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
+                    graphData.pointsP6 = decodePoints(pointsData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
 
                     val mapAlignedP7 = listOf(14, 15, 16, 17)
                     val mapRawP7 = listOf(31, 33, 34, 36)
-                    graphData.pointsP7 = decodePoints(itemData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
+                    graphData.pointsP7 = decodePoints(pointsData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
                 }
             }
 
             viewGraph.setData(graphData)
-            currentData = itemData
+            currentData = pointsData
             viewGraph.invalidate()
         }
 
@@ -182,14 +182,14 @@ class HistoryFragment : Fragment() {
 
 
     private fun decodePoints(
-        pointsText: List<String>,
+        pointsData: List<String>,
         indexesAligned: List<Int>,
         indexesRaw: List<Int>,
         tolerances: Array<DataStorage.PointTolerance>
     ): Array<PointData> {
         return Array(tolerances.size) { index ->
-            val valueRaw = decodeValue(index, indexesRaw, pointsText)
-            val valueAligned = decodeValue(index, indexesAligned, pointsText)
+            val valueRaw = decodeValue(index, indexesRaw, pointsData)
+            val valueAligned = decodeValue(index, indexesAligned, pointsData)
             val pointResult = PointsAligner.testPoint(valueAligned, tolerances[index])
             PointData(
                 rawValue = valueRaw,
@@ -202,14 +202,11 @@ class HistoryFragment : Fragment() {
     private fun decodeValue(
         index: Int,
         indexesRemap: List<Int>,
-        pointsText: List<String>
+        pointsData: List<String>
     ): Double {
         val textIndex = indexesRemap[index]
-        return if (textIndex < pointsText.size) {
-            pointsText[textIndex].toDoubleOrNull() ?: 0.0
-        } else {
-            0.0
-        }
+        val textValue = getSafe(pointsData, textIndex)
+        return PointData.valueFromIntString(textValue)
     }
 
 
@@ -301,7 +298,7 @@ class HistoryFragment : Fragment() {
             toleranceMap.forEach { pointIndex ->
                 val point = pointsData[pointIndex]
                 builder.append(historyDelimiter)
-                builder.append(PointData.valueToString(point.value))
+                builder.append(PointData.valueToIntString(point.value))
                 //if (it == 0) {
                 //    builder.append("!")
                 //} else if (point.result != DataStorage.PointResult.OK) {
@@ -316,9 +313,16 @@ class HistoryFragment : Fragment() {
         ) {
             pointsData.forEach { point ->
                 builder.append(historyDelimiter)
-                builder.append(PointData.valueToString(point.rawValue))
+                builder.append(PointData.valueToIntString(point.rawValue))
             }
         }
 
+
+        private fun getSafe(
+            list: List<String>,
+            index: Int
+        ): String {
+            return list.getOrElse(index) { "" }
+        }
     }
 }
