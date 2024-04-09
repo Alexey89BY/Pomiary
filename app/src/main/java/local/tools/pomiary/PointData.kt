@@ -1,6 +1,5 @@
 package local.tools.pomiary
 
-import java.util.Locale
 import kotlin.math.roundToInt
 
 
@@ -28,8 +27,14 @@ data class PointData(
             return if (string.contains(decimalSeparator)) value else (value / stringScale)
         }
 
-        fun valueToString(value: Double): String {
-            return String.format(Locale.US, "%.2f", value)
+        fun valueFromIntString(string: String): Double {
+            val intValue = string.toIntOrNull() ?: 0
+            return valueFromInt(intValue)
+        }
+
+        fun valueToIntString(value: Double): String {
+            val intValue = valueToInt(value)
+            return intValue.toString()
         }
     }
 }
