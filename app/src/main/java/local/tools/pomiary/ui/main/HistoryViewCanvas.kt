@@ -8,52 +8,38 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.view.View
 import local.tools.pomiary.DataStorage
-import local.tools.pomiary.PointData
-import local.tools.pomiary.R
+import local.tools.pomiary.PointResult
 
 
 class HistoryViewCanvas(context: Context?) : View(context) {
+
+    data class GraphPoint (
+        val title: String,
+        val tolerance: DataStorage.PointTolerance,
+        val value: Double,
+        val result: PointResult,
+    )
+
     @Suppress("ArrayInDataClass")
     data class GraphData (
         var title: String = String(),
         var timeStamp: String = String(),
         var sideLR: String = String(),
-        var pointsP6: Array<PointData> = emptyArray(),
-        var tolerancesP6: Array<DataStorage.PointTolerance> = emptyArray(),
-        var pointsP7: Array<PointData> = emptyArray(),
-        var tolerancesP7: Array<DataStorage.PointTolerance> = emptyArray(),
+        var points: Array<GraphPoint> = emptyArray(),
+        var isPrecise: Boolean = false,
+        var isZeroBase: Boolean = false,
     )
+
 
     private val paint = Paint()
     private val path = Path()
 
-    private val titlesP6 = listOf(
-        resources.getString(R.string.text_P6_0),
-        resources.getString(R.string.text_P6_1),
-        resources.getString(R.string.text_P6_2),
-        resources.getString(R.string.text_P6_3),
-        resources.getString(R.string.text_P6_4),
-        resources.getString(R.string.text_P6_5),
-        resources.getString(R.string.text_P6_6),
-        resources.getString(R.string.text_P6_7),
-        resources.getString(R.string.text_P6_8),
-        resources.getString(R.string.text_P6_9),
-        resources.getString(R.string.text_P6_10),
-    )
-
-    private val titlesP7 = listOf(
-        resources.getString(R.string.text_P7_0),
-        resources.getString(R.string.text_P7_1),
-        resources.getString(R.string.text_P7_2),
-        resources.getString(R.string.text_P7_3),
-    )
-
     private var pointInRow = 1
     private var pointWidth = 0
     private val pointHeight = 200
-    private var isPointsRaw = false
     private var isPointsGraph = false
     private var graphData = GraphData()
+    private var pointScale = 1.0F
 
 
     init {
@@ -61,68 +47,60 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             Configuration.ORIENTATION_LANDSCAPE -> {
                 pointInRow = 5
                 pointWidth = 450
-                minimumWidth = 60 + pointInRow * pointWidth
-                minimumHeight = 4 * pointHeight + 55
-            }
-            Configuration.ORIENTATION_PORTRAIT -> {
-                pointInRow = 2
-                pointWidth = 500
-                minimumWidth = 60 + pointInRow * pointWidth
-                minimumHeight = 8 * pointHeight + 55
             }
             else -> {
-
+                pointInRow = 2
+                pointWidth = 500
             }
         }
+
+        minimumWidth = 60 + pointInRow * pointWidth
+
+        pointScale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
     }
 
 
     fun setData(data: GraphData)
     {
         graphData = data
-    }
 
+        minimumHeight = ((data.points.size + (pointInRow - 1)) / pointInRow) * pointHeight
 
-    fun setDrawRaw(isRaw: Boolean) {
-        isPointsRaw = isRaw
+        invalidate()
     }
 
 
     fun setValuesOnly(isRaw: Boolean) {
         isPointsGraph = isRaw
+        invalidate()
     }
 
 
     public override fun onDraw(canvas: Canvas) {
         val offsetX = 30F
+        val offsetY = 0F
 
+        // for test only
+/*
         val titleString = String.format(
             "%s %s %s",
             graphData.timeStamp,
             graphData.title,
             graphData.sideLR
         )
-        paint.color = Color.GRAY
-        paint.textSize = 38F
+        paint.color = Color.DKGRAY
+        paint.textSize = 72F
         paint.textAlign = Paint.Align.LEFT
-        canvas.drawText(titleString, offsetX, 40F, paint)
+        canvas.drawText(titleString, offsetX, paint.textSize, paint)
+*/
 
         paint.strokeWidth = 3F
 
-        val offsetYP6 = 55F
-
-        graphData.pointsP6.forEachIndexed { index, point ->
+        graphData.points.forEachIndexed { index, point ->
             val x = offsetX + pointWidth * index.mod(pointInRow)
-            val y = offsetYP6 + pointHeight * index.div(pointInRow)
-            drawDataPoint(canvas, x, y, titlesP6[index], point, graphData.tolerancesP6[index], index == 0)
-        }
-
-        val offsetYP7 = offsetYP6 + pointHeight * (graphData.pointsP6.size.div(pointInRow) + if (graphData.pointsP6.size.mod(pointInRow) != 0) 1 else 0)
-
-        graphData.pointsP7.forEachIndexed {index, point ->
-            val x = offsetX + pointWidth * index.mod(pointInRow)
-            val y = offsetYP7 + pointHeight * index.div(pointInRow)
-            drawDataPoint(canvas, x, y, titlesP7[index], point, graphData.tolerancesP7[index], index == 0)
+            val y = offsetY + pointHeight * index.div(pointInRow)
+            val isBasePoint = graphData.isZeroBase && (index == 0)
+            drawDataPoint(canvas, x, y, point, isBasePoint)
         }
     }
 
@@ -131,19 +109,16 @@ class HistoryViewCanvas(context: Context?) : View(context) {
         canvas: Canvas,
         offsetX: Float,
         offsetY: Float,
-        title: String,
-        point: PointData,
-        tolerance: DataStorage.PointTolerance,
+        point: GraphPoint,
         isBasePoint: Boolean
     ) {
-        val ptl = tolerance.origin - tolerance.offset
-        val ptr = tolerance.origin + tolerance.offset
-        val pointValue = if (isPointsRaw) point.rawValue
-        else point.value
+        val ptl = point.tolerance.origin - point.tolerance.offset
+        val ptr = point.tolerance.origin + point.tolerance.offset
+        val pointValue = point.value
 
-        val pointColor = if (isBasePoint) Color.LTGRAY
-        else if (isPointsRaw) Color.WHITE
-        else point.result.toColor()
+        val pointColor =
+            if (isBasePoint) Color.LTGRAY
+            else point.result.toColor()
 
         val toleranceString1 = String.format(
             "%.1f\u2026%.1f",
@@ -153,12 +128,12 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
         val toleranceString2 = String.format(
             "%.1f\u00B1%.1f",
-            tolerance.origin,
-            tolerance.offset,
+            point.tolerance.origin,
+            point.tolerance.offset,
         )
 
         val valueString =
-            if (isPointsRaw) String.format("%.2f", pointValue)
+            if (graphData.isPrecise) String.format("%.2f", pointValue)
             else String.format("%.1f", pointValue)
 
         paint.textSize = 34F
@@ -169,7 +144,7 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
         // draw title
         paint.color = Color.WHITE
-        canvas.drawText(title, offsetX, offsetY + dyt, paint)
+        canvas.drawText(point.title, offsetX, offsetY + dyt, paint)
 
         if (isPointsGraph) {
 
@@ -183,10 +158,7 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             // draw result
             paint.color = pointColor
 
-            val pointMessage = if (isBasePoint) ""
-            else if (isPointsRaw) ""
-            else point.result.toMessage()
-
+            val pointMessage = point.result.toMessage()
             canvas.drawText(pointMessage, offsetX + hw, offsetY + 1F * dyt, paint)
 
             // draw point
@@ -200,7 +172,7 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
         } else {
 
-            val scale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
+            val scale = pointScale
             val dxw = hw - 15F
             val x0 = offsetX + hw
             val y0 = offsetY + 3.5F * dyt
@@ -224,7 +196,7 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
             // draw tolerance
             val pointZero = if (isBasePoint) 0.0
-            else tolerance.origin
+            else point.tolerance.origin
 
             val dxl = x0 + (ptl - pointZero).toFloat() * scale
             val dxr = x0 + (ptr - pointZero).toFloat() * scale

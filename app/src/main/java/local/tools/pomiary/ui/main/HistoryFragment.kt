@@ -29,9 +29,10 @@ import java.time.format.DateTimeFormatter
 
 class HistoryFragment : Fragment() {
     private lateinit var viewOfLayout: View
-    private lateinit var viewGraph: HistoryViewCanvas
+    private lateinit var viewGraphP6: HistoryViewCanvas
+    private lateinit var viewGraphP7: HistoryViewCanvas
     private lateinit var historySpinner: Spinner
-    private lateinit var spinnerAdapter: ArrayAdapter<String>
+    private lateinit var historySpinnerAdapter: ArrayAdapter<String>
     private val historyTitles = emptyList<String>().toMutableList()
     private var historyData = emptyList<List<String>>()
     private var currentData: List<String>? = null
@@ -57,16 +58,10 @@ class HistoryFragment : Fragment() {
         val copyButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonCopy)
         copyButton.setOnClickListener { copyToClipboard() }
 
-        val switchRaw = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchShowRaw)
-        switchRaw.setOnCheckedChangeListener { _, checked ->
-            viewGraph.setDrawRaw(checked)
-            viewGraph.invalidate()
-        }
-
         val switchGraphs = viewOfLayout.findViewById<SwitchMaterial>(R.id.switchValuesOnly)
         switchGraphs.setOnCheckedChangeListener { _, checked ->
-            viewGraph.setValuesOnly(checked)
-            viewGraph.invalidate()
+            viewGraphP6.setValuesOnly(checked)
+            viewGraphP7.setValuesOnly(checked)
         }
 
         val prevButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonPrev)
@@ -79,20 +74,23 @@ class HistoryFragment : Fragment() {
         val nextButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonNext)
         nextButton.setOnClickListener {
             val newIndex = historySpinner.selectedItemPosition + 1
-            if (newIndex < spinnerAdapter.count)
+            if (newIndex < historySpinnerAdapter.count)
                 historySpinner.setSelection(newIndex)
         }
 
-        viewGraph = HistoryViewCanvas(activity)
-        viewGraph.setDrawRaw(switchRaw.isChecked)
-        viewOfLayout.findViewById<LinearLayout>(R.id.containerGraph).addView(viewGraph)
+        viewGraphP6 = HistoryViewCanvas(activity)
+        viewGraphP7 = HistoryViewCanvas(activity)
+        val graphsLayout = viewOfLayout.findViewById<LinearLayout>(R.id.containerGraph)
+        graphsLayout.addView(viewGraphP6)
+        graphsLayout.addView(viewGraphP7)
 
-        historySpinner = viewOfLayout.findViewById(R.id.spinnerGraph)
+        historySpinner = viewOfLayout.findViewById(R.id.spinnerHistory)
+        historySpinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, historyTitles)
+        historySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        historySpinner.adapter = historySpinnerAdapter
         historySpinner.onItemSelectedListener = spinnerListener
 
-        spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, historyTitles)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        historySpinner.adapter = spinnerAdapter
+
 
         return viewOfLayout
     }
@@ -102,49 +100,123 @@ class HistoryFragment : Fragment() {
         override fun onItemSelected(
             parent: AdapterView<*>?, view: View?, position: Int, id: Long
         ) {
-            val graphData = HistoryViewCanvas.GraphData()
+            val graphDataP6 = HistoryViewCanvas.GraphData()
+            val graphDataP7 = HistoryViewCanvas.GraphData()
 
             val pointsData = historyData[position]
-            graphData.timeStamp = getSafe(pointsData, 0)
-            graphData.title = getSafe(pointsData, 1)
-            graphData.sideLR = getSafe(pointsData, 2)
+            currentData = pointsData
 
-            when (graphData.title) {
+            graphDataP6.timeStamp = getSafe(pointsData, 0)
+            graphDataP6.title = getSafe(pointsData, 1)
+            graphDataP6.sideLR = getSafe(pointsData, 2)
+
+            val titlesSillSealP6 = listOf(
+                "P6 (*), mm",
+                "P6 (1), mm",
+                "P6 (2), mm",
+                "P6 (3), mm",
+                "P6 (4), mm",
+                "P6 (5), mm",
+                "P6 (6), mm",
+                "P6 (7), mm",
+                "P6 (8), mm",
+                "P6 (9), mm",
+                "P6 (10), mm",
+            )
+
+            val titlesSillSealP7 = listOf(
+                "P7 (*), mm",
+                "P7 (1), mm",
+                "P7 (2), mm",
+                "P7 (3), mm",
+            )
+
+            val titlesStandardP6 = titlesSillSealP6
+            val titlesStandardP7 = titlesSillSealP7
+            val titlesMaxiP6 = titlesSillSealP6
+            val titlesMaxiP7 = titlesSillSealP7
+
+            val tolerancesStandardP6 = DataStorage.getToleranceStandardP6()
+            val tolerancesStandardP7 = DataStorage.getToleranceStandardP7()
+            val tolerancesMaxiP6 = DataStorage.getToleranceMaxiP6()
+            val tolerancesMaxiP7 = DataStorage.getToleranceMaxiP7()
+
+            val mapStandardAlignedP6 = listOf(
+                Pair(3, -1),
+                Pair(4, -1),
+                Pair(5, -1),
+                Pair(6, -1),
+                Pair(7, -1),
+                Pair(8, -1),
+                Pair(9, -1),
+                Pair(10, -1),
+                Pair(11, -1),
+            )
+
+            val mapStandardAlignedP7 = listOf(
+                Pair(12, -1),
+                Pair(13, -1),
+                Pair(14, -1),
+                Pair(15, -1),
+            )
+
+            val mapMaxiAlignedP6 = listOf(
+                Pair(3, -1),
+                Pair(4, -1),
+                Pair(5, -1),
+                Pair(6, -1),
+                Pair(7, -1),
+                Pair(8, -1),
+                Pair(9, -1),
+                Pair(10, -1),
+                Pair(11, -1),
+                Pair(12, -1),
+                Pair(13, -1),
+            )
+
+            val mapMaxiAlignedP7 = listOf(
+                Pair(14, -1),
+                Pair(15, -1),
+                Pair(16, -1),
+                Pair(17, -1),
+            )
+
+            val mapStandardPointsP6 = mapStandardAlignedP6
+            val mapStandardPointsP7 = mapStandardAlignedP7
+            val mapMaxiPointsP6 = mapMaxiAlignedP6
+            val mapMaxiPointsP7 = mapMaxiAlignedP7
+
+            when (graphDataP6.title) {
                 DataStorage.getStorageStandard().title -> {
-                    graphData.tolerancesP6 = DataStorage.getToleranceStandardP6()
-                    graphData.tolerancesP7 = DataStorage.getToleranceStandardP7()
-
-                    val mapAlignedP6 = listOf(3, 4, 5, 6, 7, 8, 9, 10, 11)
-                    val mapRawP6 = listOf(17, 18, 19, 20, 21, 22, 23, 24, 26)
-                    graphData.pointsP6 = decodePoints(pointsData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
-
-                    val mapAlignedP7 = listOf(12, 13, 14, 15)
-                    val mapRawP7 = listOf(27, 29, 30, 32)
-                    graphData.pointsP7 = decodePoints(pointsData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
+                    graphDataP6.points = decodePoints(titlesStandardP6, pointsData, mapStandardPointsP6, tolerancesStandardP6)
                 }
                 DataStorage.getStorageMaxi().title -> {
-                    graphData.tolerancesP6 = DataStorage.getToleranceMaxiP6()
-                    graphData.tolerancesP7 = DataStorage.getToleranceMaxiP7()
-
-                    val mapAlignedP6 = listOf(3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
-                    val mapRawP6 = listOf(19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30)
-                    graphData.pointsP6 = decodePoints(pointsData, mapAlignedP6, mapRawP6,  graphData.tolerancesP6)
-
-                    val mapAlignedP7 = listOf(14, 15, 16, 17)
-                    val mapRawP7 = listOf(31, 33, 34, 36)
-                    graphData.pointsP7 = decodePoints(pointsData, mapAlignedP7, mapRawP7, graphData.tolerancesP7)
+                    graphDataP6.points = decodePoints(titlesMaxiP6, pointsData, mapMaxiPointsP6, tolerancesMaxiP6)
                 }
             }
 
-            viewGraph.setData(graphData)
-            currentData = pointsData
-            viewGraph.invalidate()
+            viewGraphP6.setData(graphDataP6)
+
+            graphDataP7.timeStamp = graphDataP6.timeStamp
+            graphDataP7.title = graphDataP6.title
+            graphDataP7.sideLR = graphDataP6.sideLR
+
+            when (graphDataP7.title) {
+                DataStorage.getStorageStandard().title -> {
+                    graphDataP7.points = decodePoints(titlesStandardP7, pointsData, mapStandardPointsP7, tolerancesStandardP7)
+                }
+                DataStorage.getStorageMaxi().title -> {
+                    graphDataP7.points = decodePoints(titlesMaxiP7, pointsData, mapMaxiPointsP7, tolerancesMaxiP7)
+                }
+            }
+
+            viewGraphP7.setData(graphDataP7)
         }
 
         override fun onNothingSelected(parentView: AdapterView<*>?) {
-            viewGraph.setData(HistoryViewCanvas.GraphData())
+            viewGraphP6.setData(HistoryViewCanvas.GraphData())
+            viewGraphP7.setData(HistoryViewCanvas.GraphData())
             currentData = null
-            viewGraph.invalidate()
         }
     }
 
@@ -177,36 +249,38 @@ class HistoryFragment : Fragment() {
             historyTitles.add(it.take(prefixSize).joinToString(separator))
         }
 
-        spinnerAdapter.notifyDataSetChanged()
+        historySpinnerAdapter.notifyDataSetChanged()
     }
 
 
     private fun decodePoints(
+        pointsTitles: List<String>,
         pointsData: List<String>,
-        indexesAligned: List<Int>,
-        indexesRaw: List<Int>,
+        indexesValues: List<Pair<Int, Int>>,
         tolerances: Array<DataStorage.PointTolerance>
-    ): Array<PointData> {
+    ): Array<HistoryViewCanvas.GraphPoint> {
         return Array(tolerances.size) { index ->
-            val valueRaw = decodeValue(index, indexesRaw, pointsData)
-            val valueAligned = decodeValue(index, indexesAligned, pointsData)
-            val pointResult = PointsAligner.testPoint(valueAligned, tolerances[index])
-            PointData(
-                rawValue = valueRaw,
-                value = valueAligned,
-                result = pointResult
+            val pointValue = decodeValue(index, indexesValues, pointsData)
+            HistoryViewCanvas.GraphPoint(
+                value = pointValue,
+                result = PointsAligner.testPoint(pointValue, tolerances[index]),
+                title = pointsTitles[index],
+                tolerance = tolerances[index],
             )
         }
     }
 
     private fun decodeValue(
         index: Int,
-        indexesRemap: List<Int>,
+        indexesRemap: List<Pair<Int,Int>>,
         pointsData: List<String>
     ): Double {
-        val textIndex = indexesRemap[index]
-        val textValue = getSafe(pointsData, textIndex)
-        return PointData.valueFromIntString(textValue)
+        val (indexValue, indexZero) = indexesRemap[index]
+        val textValue = getSafe(pointsData, indexValue)
+        val textZero = getSafe(pointsData, indexZero)
+        val value = PointData.valueFromIntString(textValue)
+        val zero = PointData.valueFromIntString(textZero)
+        return (value - zero)
     }
 
 
