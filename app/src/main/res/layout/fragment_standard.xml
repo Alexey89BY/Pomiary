@@ -27,14 +27,14 @@
                 android:id="@+id/buttonRefreshStandard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/save_msg"
+                android:contentDescription="@string/check_msg"
                 android:src="@android:drawable/ic_popup_sync" />
 
             <ImageButton
                 android:id="@+id/buttonSaveStandard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/check_msg"
+                android:contentDescription="@string/save_msg"
                 android:src="@android:drawable/ic_menu_save" />
 
         </LinearLayout>
