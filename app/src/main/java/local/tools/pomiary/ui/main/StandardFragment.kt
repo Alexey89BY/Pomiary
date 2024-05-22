@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import local.tools.pomiary.DataStorage
 import local.tools.pomiary.PointData
-import local.tools.pomiary.PointResult
 import local.tools.pomiary.PointsAligner
 import local.tools.pomiary.R
 
@@ -279,16 +278,23 @@ class StandardFragment : Fragment() {
         refreshSpinner()
 
         isModified = false
+
+        if (currentStorage.isResultInvalid()) {
+            val dialog = AlertDialog.Builder(context)
+                .setTitle("Measurements are invalid")
+                .setPositiveButton("OK") {_, _ ->
+                }
+                .create()
+            dialog.show()
+            return
+        }
     }
 
 
     private fun saveValues() {
         val currentStorage = dataStorage.getData(storageCurrentIndex)
 
-        if (
-            (currentStorage.sectionP6.result == PointResult.UNKNOWN)
-            || (currentStorage.sectionP7.result == PointResult.UNKNOWN)
-        ) {
+        if (currentStorage.isResultUnknown()) {
             val dialog = AlertDialog.Builder(context)
                 .setTitle("Measurements are not checked")
                 .setPositiveButton("OK") {_, _ ->
@@ -298,10 +304,7 @@ class StandardFragment : Fragment() {
             return
         }
 
-        if (
-            (currentStorage.sectionP6.result == PointResult.INVALID)
-            || (currentStorage.sectionP7.result == PointResult.INVALID)
-        ) {
+        if (currentStorage.isResultInvalid()) {
             val dialog = AlertDialog.Builder(context)
                 .setTitle("Measurements are invalid")
                 .setPositiveButton("OK") {_, _ ->
@@ -311,14 +314,16 @@ class StandardFragment : Fragment() {
             return
         }
 
+        val timeStampNew = HistoryFragment.generateTimeStamp()
+
         val dialog = AlertDialog.Builder(context)
             .setTitle("Save to history ?")
-            .setMessage(dataStorage.storageTitle(currentStorage))
+            .setMessage("${dataStorage.title}\n${currentStorage.dataTitle()}\n@ $timeStampNew")
             .setPositiveButton("Save") { _, _ ->
                 val message: String = requireContext().resources.getString(R.string.save_msg)
                 Snackbar.make(viewOfLayout, message, 250).show()
 
-                currentStorage.timeStamp = HistoryFragment.generateTimeStamp()
+                currentStorage.timeStamp = timeStampNew
                 HistoryFragment.savePoints(
                     this, dataStorage, currentStorage
                 )
@@ -423,8 +428,7 @@ class StandardFragment : Fragment() {
         if (! isModified) {
             val currentStorage = dataStorage.getData(storageCurrentIndex)
             currentStorage.timeStamp = ""
-            currentStorage.sectionP6.result = PointResult.UNKNOWN
-            currentStorage.sectionP7.result = PointResult.UNKNOWN
+            currentStorage.resetResult()
             refreshSpinner()
 
             isModified = true
