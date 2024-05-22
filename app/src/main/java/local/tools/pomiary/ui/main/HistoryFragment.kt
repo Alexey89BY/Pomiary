@@ -36,6 +36,8 @@ class HistoryFragment : Fragment() {
     private val historyTitles = emptyList<String>().toMutableList()
     private var historyData = emptyList<List<String>>()
     private var currentData: List<String>? = null
+    private var currentDataPosition = -1
+    private var currentAnalysisType = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,136 +90,447 @@ class HistoryFragment : Fragment() {
         historySpinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, historyTitles)
         historySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         historySpinner.adapter = historySpinnerAdapter
-        historySpinner.onItemSelectedListener = spinnerListener
+        historySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                currentDataPosition = position
+                refreshGraph()
+            }
 
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                currentDataPosition = -1
+                refreshGraph()
+            }
+        }
 
+        val analysisSpinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerAnalysis)
+        val analysisTitles = resources.getStringArray(R.array.analysis)
+        val analysisSpinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, analysisTitles)
+        analysisSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        analysisSpinner.adapter = analysisSpinnerAdapter
+        analysisSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                currentAnalysisType = position
+                refreshGraph()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                currentAnalysisType = -1
+                refreshGraph()
+            }
+        }
 
         return viewOfLayout
     }
 
 
-    private val spinnerListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?, view: View?, position: Int, id: Long
-        ) {
-            val graphDataP6 = HistoryViewCanvas.GraphData()
-            val graphDataP7 = HistoryViewCanvas.GraphData()
+    // Sill Seal
 
-            val pointsData = historyData[position]
-            currentData = pointsData
+    private val titlesSillSealP6 = listOf(
+        "P6 (*), mm",
+        "P6 (1), mm",
+        "P6 (2), mm",
+        "P6 (3), mm",
+        "P6 (4), mm",
+        "P6 (5), mm",
+        "P6 (6), mm",
+        "P6 (7), mm",
+        "P6 (8), mm",
+        "P6 (9), mm",
+        "P6 (10), mm",
+    )
 
-            graphDataP6.timeStamp = getSafe(pointsData, 0)
-            graphDataP6.title = getSafe(pointsData, 1)
-            graphDataP6.sideLR = getSafe(pointsData, 2)
+    private val titlesSillSealP7 = listOf(
+        "P7 (*), mm",
+        "P7 (1), mm",
+        "P7 (2), mm",
+        "P7 (3), mm",
+    )
 
-            val titlesSillSealP6 = listOf(
-                "P6 (*), mm",
-                "P6 (1), mm",
-                "P6 (2), mm",
-                "P6 (3), mm",
-                "P6 (4), mm",
-                "P6 (5), mm",
-                "P6 (6), mm",
-                "P6 (7), mm",
-                "P6 (8), mm",
-                "P6 (9), mm",
-                "P6 (10), mm",
-            )
+    // Cutting
 
-            val titlesSillSealP7 = listOf(
-                "P7 (*), mm",
-                "P7 (1), mm",
-                "P7 (2), mm",
-                "P7 (3), mm",
-            )
+    private val titlesCuttingP6 = listOf(
+        "P6, mm",
+        "P6 (0-1), mm",
+        "P6 (1-2), mm",
+        "P6 (2-3), mm",
+        "P6 (3-4), mm",
+        "P6 (4-5), mm",
+        "P6 (5-6), mm",
+        "P6 (6-7), mm",
+        "P6 (7-8), mm",
+        "P6 (8-9), mm",
+        "P6 (9-10), mm",
+    )
 
-            val titlesStandardP6 = titlesSillSealP6
-            val titlesStandardP7 = titlesSillSealP7
-            val titlesMaxiP6 = titlesSillSealP6
-            val titlesMaxiP7 = titlesSillSealP7
+    private val titlesCuttingP7 = listOf(
+        "P7, mm",
+        "P7 (0-1), mm",
+        "P7 (1-2), mm",
+        "P7 (2-3), mm",
+    )
 
-            val tolerancesStandardP6 = DataStorage.getToleranceStandardP6()
-            val tolerancesStandardP7 = DataStorage.getToleranceStandardP7()
-            val tolerancesMaxiP6 = DataStorage.getToleranceMaxiP6()
-            val tolerancesMaxiP7 = DataStorage.getToleranceMaxiP7()
+    private val toleranceMaxiCuttingP6 = arrayOf(
+        DataStorage.PointTolerance(837.0, 2.0),
+        DataStorage.PointTolerance(14.0, 1.3),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(7.0, 1.0)
+    )
 
-            val mapStandardAlignedP6 = listOf(
-                Pair(3, -1),
-                Pair(4, -1),
-                Pair(5, -1),
-                Pair(6, -1),
-                Pair(7, -1),
-                Pair(8, -1),
-                Pair(9, -1),
-                Pair(10, -1),
-                Pair(11, -1),
-            )
+    private val toleranceMaxiCuttingP7 = arrayOf(
+        DataStorage.PointTolerance(123.0, 1.5),
+        DataStorage.PointTolerance(19.5, 1.0),
+        DataStorage.PointTolerance(84.0, 1.0),
+        DataStorage.PointTolerance(19.5, 1.0),
+    )
 
-            val mapStandardAlignedP7 = listOf(
-                Pair(12, -1),
-                Pair(13, -1),
-                Pair(14, -1),
-                Pair(15, -1),
-            )
+    private val toleranceStandardCuttingP6 = arrayOf(
+        DataStorage.PointTolerance(653.0, 2.0),
+        DataStorage.PointTolerance(21.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(102.0, 1.0),
+        DataStorage.PointTolerance(20.0, 1.3)
+    )
 
-            val mapMaxiAlignedP6 = listOf(
-                Pair(3, -1),
-                Pair(4, -1),
-                Pair(5, -1),
-                Pair(6, -1),
-                Pair(7, -1),
-                Pair(8, -1),
-                Pair(9, -1),
-                Pair(10, -1),
-                Pair(11, -1),
-                Pair(12, -1),
-                Pair(13, -1),
-            )
+    private val toleranceStandardCuttingP7 = arrayOf(
+        DataStorage.PointTolerance(142.5, 1.5),
+        DataStorage.PointTolerance(26.0, 1.0),
+        DataStorage.PointTolerance(84.0, 1.0),
+        DataStorage.PointTolerance(32.5, 1.0),
+    )
 
-            val mapMaxiAlignedP7 = listOf(
-                Pair(14, -1),
-                Pair(15, -1),
-                Pair(16, -1),
-                Pair(17, -1),
-            )
+    // Moldings
 
-            val mapStandardPointsP6 = mapStandardAlignedP6
-            val mapStandardPointsP7 = mapStandardAlignedP7
-            val mapMaxiPointsP6 = mapMaxiAlignedP6
-            val mapMaxiPointsP7 = mapMaxiAlignedP7
+    private val titlesStandardMoldingsP6 = listOf(
+        "P6 - M6, mm",
+    )
 
-            when (graphDataP6.title) {
-                DataStorage.getStorageStandard().title -> {
-                    graphDataP6.points = decodePoints(titlesStandardP6, pointsData, mapStandardPointsP6, tolerancesStandardP6)
-                }
-                DataStorage.getStorageMaxi().title -> {
-                    graphDataP6.points = decodePoints(titlesMaxiP6, pointsData, mapMaxiPointsP6, tolerancesMaxiP6)
-                }
-            }
+    private val titlesStandardMoldingsP7 = listOf(
+        "P7 - M6, mm",
+        "P7 - M7, mm",
+    )
 
-            viewGraphP6.setData(graphDataP6)
+    private val titlesMaxiMoldingsP6 = listOf(
+        "P6 - M8, mm",
+    )
 
-            graphDataP7.timeStamp = graphDataP6.timeStamp
-            graphDataP7.title = graphDataP6.title
-            graphDataP7.sideLR = graphDataP6.sideLR
+    private val titlesMaxiMoldingsP7 = listOf(
+        "P7 - M8, mm",
+        "P7 - M9, mm",
+    )
 
-            when (graphDataP7.title) {
-                DataStorage.getStorageStandard().title -> {
-                    graphDataP7.points = decodePoints(titlesStandardP7, pointsData, mapStandardPointsP7, tolerancesStandardP7)
-                }
-                DataStorage.getStorageMaxi().title -> {
-                    graphDataP7.points = decodePoints(titlesMaxiP7, pointsData, mapMaxiPointsP7, tolerancesMaxiP7)
-                }
-            }
+    private val toleranceStandardMoldingsP6 = arrayOf(
+        DataStorage.PointTolerance(2.0, 1.0),
+    )
 
-            viewGraphP7.setData(graphDataP7)
-        }
+    private val toleranceStandardMoldingsP7 = arrayOf(
+        DataStorage.PointTolerance(3.0, 1.0),
+        DataStorage.PointTolerance(3.5, 1.0),
+    )
 
-        override fun onNothingSelected(parentView: AdapterView<*>?) {
-            viewGraphP6.setData(HistoryViewCanvas.GraphData())
-            viewGraphP7.setData(HistoryViewCanvas.GraphData())
+    private val toleranceMaxiMoldingsP6 = arrayOf(
+        DataStorage.PointTolerance(2.5, 1.0),
+    )
+
+    private val toleranceMaxiMoldingsP7 = arrayOf(
+        DataStorage.PointTolerance(3.0, 1.0),
+        DataStorage.PointTolerance(4.5, 1.0),
+    )
+
+    // Maps
+
+    private val mapStandardAlignedP6 = listOf(
+        Pair(3, -1),
+        Pair(4, -1),
+        Pair(5, -1),
+        Pair(6, -1),
+        Pair(7, -1),
+        Pair(8, -1),
+        Pair(9, -1),
+        Pair(10, -1),
+        Pair(11, -1),
+    )
+
+    private val mapStandardAlignedP7 = listOf(
+        Pair(12, -1),
+        Pair(13, -1),
+        Pair(14, -1),
+        Pair(15, -1),
+    )
+
+    private val mapMaxiAlignedP6 = listOf(
+        Pair(3, -1),
+        Pair(4, -1),
+        Pair(5, -1),
+        Pair(6, -1),
+        Pair(7, -1),
+        Pair(8, -1),
+        Pair(9, -1),
+        Pair(10, -1),
+        Pair(11, -1),
+        Pair(12, -1),
+        Pair(13, -1),
+    )
+
+    private val mapMaxiAlignedP7 = listOf(
+        Pair(14, -1),
+        Pair(15, -1),
+        Pair(16, -1),
+        Pair(17, -1),
+    )
+
+    // Maps - RAW
+
+    private val mapStandardRawP6 = listOf(
+        Pair(17, -1),
+        Pair(18, 17),
+        Pair(19, 17),
+        Pair(20, 17),
+        Pair(21, 17),
+        Pair(22, 17),
+        Pair(23, 17),
+        Pair(24, 17),
+        Pair(26, 17),
+    )
+
+    private val mapStandardRawP7 = listOf(
+        Pair(27, -1),
+        Pair(29, 27),
+        Pair(30, 27),
+        Pair(32, 27),
+    )
+
+    private val mapMaxiRawP6 = listOf(
+        Pair(19, -1),
+        Pair(20, 19),
+        Pair(21, 19),
+        Pair(22, 19),
+        Pair(23, 19),
+        Pair(24, 19),
+        Pair(25, 19),
+        Pair(26, 19),
+        Pair(27, 19),
+        Pair(28, 19),
+        Pair(30, 19),
+    )
+
+    private val mapMaxiRawP7 = listOf(
+        Pair(31, -1),
+        Pair(33, 31),
+        Pair(34, 31),
+        Pair(36, 31),
+    )
+
+    // Maps - Cutting
+
+    private val mapStandardCuttingP6 = listOf(
+        Pair(25, 17),
+        Pair(18, 17),
+        Pair(19, 18),
+        Pair(20, 19),
+        Pair(21, 20),
+        Pair(22, 21),
+        Pair(23, 22),
+        Pair(24, 23),
+        Pair(25, 24),
+    )
+
+    private val mapStandardCuttingP7 = listOf(
+        Pair(31, 28),
+        Pair(29, 28),
+        Pair(30, 29),
+        Pair(31, 30),
+    )
+
+    private val mapMaxiCuttingP6 = listOf(
+        Pair(29, 19),
+        Pair(20, 19),
+        Pair(21, 20),
+        Pair(22, 21),
+        Pair(23, 22),
+        Pair(24, 23),
+        Pair(25, 24),
+        Pair(26, 25),
+        Pair(27, 26),
+        Pair(28, 27),
+        Pair(29, 28),
+    )
+
+    private val mapMaxiCuttingP7 = listOf(
+        Pair(35, 32),
+        Pair(33, 32),
+        Pair(34, 33),
+        Pair(35, 34),
+    )
+
+    // Maps - Moldings
+
+    private  val mapStandardMoldingsP7 = listOf(
+        Pair(28, 27),
+        Pair(32, 31),
+    )
+
+    private val mapStandardMoldingsP6 = listOf(
+        Pair(26, 25),
+    )
+
+    private val mapMaxiMoldingsP7 = listOf(
+        Pair(32, 31),
+        Pair(36, 35),
+    )
+
+    private val mapMaxiMoldingsP6 = listOf(
+        Pair(30, 29),
+    )
+
+    //
+
+    private fun refreshGraph() {
+
+        val graphDataP6 = HistoryViewCanvas.GraphData()
+        val graphDataP7 = HistoryViewCanvas.GraphData()
+
+        if (currentDataPosition < 0) {
             currentData = null
+            viewGraphP6.setData(graphDataP6)
+            viewGraphP7.setData(graphDataP7)
+            return
         }
+
+        val pointsData = historyData[currentDataPosition]
+        currentData = pointsData
+
+        graphDataP6.timeStamp = getSafe(pointsData, 0)
+        graphDataP6.title = getSafe(pointsData, 1)
+        graphDataP6.sideLR = getSafe(pointsData, 2)
+
+        val titlesStandardP6: List<String>
+        val titlesStandardP7: List<String>
+        val titlesMaxiP6: List<String>
+        val titlesMaxiP7: List<String>
+        val tolerancesStandardP6: Array<DataStorage.PointTolerance>
+        val tolerancesStandardP7: Array<DataStorage.PointTolerance>
+        val tolerancesMaxiP6: Array<DataStorage.PointTolerance>
+        val tolerancesMaxiP7: Array<DataStorage.PointTolerance>
+        val mapStandardPointsP6: List<Pair<Int,Int>>
+        val mapStandardPointsP7: List<Pair<Int,Int>>
+        val mapMaxiPointsP6: List<Pair<Int,Int>>
+        val mapMaxiPointsP7: List<Pair<Int,Int>>
+
+        when (currentAnalysisType) {
+            1 -> { // Sill Seal RAW
+                graphDataP6.isPrecise = true
+                graphDataP6.isZeroBase = true
+                graphDataP7.isPrecise = true
+                graphDataP7.isZeroBase = true
+                tolerancesStandardP6 = DataStorage.getToleranceStandardP6()
+                tolerancesStandardP7 = DataStorage.getToleranceStandardP7()
+                tolerancesMaxiP6 = DataStorage.getToleranceMaxiP6()
+                tolerancesMaxiP7 = DataStorage.getToleranceMaxiP7()
+                titlesStandardP6 = titlesSillSealP6
+                titlesStandardP7 = titlesSillSealP7
+                titlesMaxiP6 = titlesSillSealP6
+                titlesMaxiP7 = titlesSillSealP7
+                mapStandardPointsP6 = mapStandardRawP6
+                mapStandardPointsP7 = mapStandardRawP7
+                mapMaxiPointsP6 = mapMaxiRawP6
+                mapMaxiPointsP7 = mapMaxiRawP7
+            }
+            2 -> { // Cutting
+                graphDataP6.isPrecise = true
+                graphDataP6.isZeroBase = false
+                graphDataP7.isPrecise = true
+                graphDataP7.isZeroBase = false
+                tolerancesStandardP6 = toleranceStandardCuttingP6
+                tolerancesStandardP7 = toleranceStandardCuttingP7
+                tolerancesMaxiP6 = toleranceMaxiCuttingP6
+                tolerancesMaxiP7 = toleranceMaxiCuttingP7
+                titlesStandardP6 = titlesCuttingP6
+                titlesStandardP7 = titlesCuttingP7
+                titlesMaxiP6 = titlesCuttingP6
+                titlesMaxiP7 = titlesCuttingP7
+                mapStandardPointsP6 = mapStandardCuttingP6
+                mapStandardPointsP7 = mapStandardCuttingP7
+                mapMaxiPointsP6 = mapMaxiCuttingP6
+                mapMaxiPointsP7 = mapMaxiCuttingP7
+            }
+            3 -> { // Moldings
+                graphDataP6.isPrecise = true
+                graphDataP6.isZeroBase = false
+                graphDataP7.isPrecise = true
+                graphDataP7.isZeroBase = false
+                tolerancesStandardP6 = toleranceStandardMoldingsP6
+                tolerancesStandardP7 = toleranceStandardMoldingsP7
+                tolerancesMaxiP6 = toleranceMaxiMoldingsP6
+                tolerancesMaxiP7 = toleranceMaxiMoldingsP7
+                titlesStandardP6 = titlesStandardMoldingsP6
+                titlesStandardP7 = titlesStandardMoldingsP7
+                titlesMaxiP6 = titlesMaxiMoldingsP6
+                titlesMaxiP7 = titlesMaxiMoldingsP7
+                mapStandardPointsP6 = mapStandardMoldingsP6
+                mapStandardPointsP7 = mapStandardMoldingsP7
+                mapMaxiPointsP6 = mapMaxiMoldingsP6
+                mapMaxiPointsP7 = mapMaxiMoldingsP7
+            }
+            else -> { // Sill Seal aligned
+                graphDataP6.isPrecise = false
+                graphDataP6.isZeroBase = true
+                graphDataP7.isPrecise = false
+                graphDataP7.isZeroBase = true
+                tolerancesStandardP6 = DataStorage.getToleranceStandardP6()
+                tolerancesStandardP7 = DataStorage.getToleranceStandardP7()
+                tolerancesMaxiP6 = DataStorage.getToleranceMaxiP6()
+                tolerancesMaxiP7 = DataStorage.getToleranceMaxiP7()
+                titlesStandardP6 = titlesSillSealP6
+                titlesStandardP7 = titlesSillSealP7
+                titlesMaxiP6 = titlesSillSealP6
+                titlesMaxiP7 = titlesSillSealP7
+                mapStandardPointsP6 = mapStandardAlignedP6
+                mapStandardPointsP7 = mapStandardAlignedP7
+                mapMaxiPointsP6 = mapMaxiAlignedP6
+                mapMaxiPointsP7 = mapMaxiAlignedP7
+            }
+        }
+
+        when (graphDataP6.title) {
+            DataStorage.getStorageStandard().title -> {
+                graphDataP6.points = decodePoints(titlesStandardP6, pointsData, mapStandardPointsP6, tolerancesStandardP6)
+            }
+            DataStorage.getStorageMaxi().title -> {
+                graphDataP6.points = decodePoints(titlesMaxiP6, pointsData, mapMaxiPointsP6, tolerancesMaxiP6)
+            }
+        }
+
+        viewGraphP6.setData(graphDataP6)
+
+        graphDataP7.timeStamp = graphDataP6.timeStamp
+        graphDataP7.title = graphDataP6.title
+        graphDataP7.sideLR = graphDataP6.sideLR
+
+        when (graphDataP7.title) {
+            DataStorage.getStorageStandard().title -> {
+                graphDataP7.points = decodePoints(titlesStandardP7, pointsData, mapStandardPointsP7, tolerancesStandardP7)
+            }
+            DataStorage.getStorageMaxi().title -> {
+                graphDataP7.points = decodePoints(titlesMaxiP7, pointsData, mapMaxiPointsP7, tolerancesMaxiP7)
+            }
+        }
+
+        viewGraphP7.setData(graphDataP7)
     }
 
 
