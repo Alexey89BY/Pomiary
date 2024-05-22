@@ -23,6 +23,21 @@ class DataStorage {
             val resultP7 = sectionP7.result.toMessage()
             return "${title.first} ${title.second}: $timeStamp $resultP6/$resultP7"
         }
+
+        fun isResultInvalid(): Boolean {
+            return (sectionP6.result == PointResult.INVALID)
+                    || (sectionP7.result == PointResult.INVALID)
+        }
+
+        fun isResultUnknown(): Boolean {
+            return (sectionP6.result == PointResult.UNKNOWN)
+                    || (sectionP7.result == PointResult.UNKNOWN)
+        }
+
+        fun resetResult() {
+            sectionP6.result = PointResult.UNKNOWN
+            sectionP7.result = PointResult.UNKNOWN
+        }
     }
 
     @Suppress("ArrayInDataClass")
@@ -34,10 +49,12 @@ class DataStorage {
         var toleranceMapP6: List<Int>,
         var toleranceMapP7: List<Int>,
     ) {
+/*
         fun storageTitle(data: SillSealData): String {
             return title +
                     " " + data.dataTitle()
         }
+*/
 
         fun getData(index: Int): SillSealData {
             return data[index]
