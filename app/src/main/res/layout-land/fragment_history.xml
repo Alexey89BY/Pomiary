@@ -37,15 +37,6 @@
                 android:contentDescription="@string/copy_msg"
                 android:src="?attr/actionModeCopyDrawable" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-
             <Spinner
                 android:id="@+id/spinnerAnalysis"
                 android:layout_width="0dp"

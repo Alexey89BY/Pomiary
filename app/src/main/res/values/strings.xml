@@ -36,5 +36,12 @@
     <string name="prev_msg">Previous</string>
     <string name="next_msg">Next</string>
     <string name="show_raw">Show RAW</string>
-    <string name="show_values">Show values</string>
+    <string name="show_values">Values</string>
+
+    <string-array name="analysis">
+        <item>Sill Seal</item>
+        <item>Sill Seal (RAW)</item>
+        <item>Cutting</item>
+        <item>Moldings</item>
+    </string-array>
 </resources>
