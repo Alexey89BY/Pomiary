@@ -7,7 +7,7 @@ import kotlin.math.min
 class PointsAligner {
     companion object {
         private const val roundFactor = 0.1
-        private const val errorEpsilon = roundFactor / 2
+        private const val errorEpsilon = 0.01 / 2
 
 
         private fun updatePointsFromText(
@@ -42,8 +42,9 @@ class PointsAligner {
             val pointOffset = value - tolerance.origin
             val pointError = pointOffset.absoluteValue - tolerance.offset
             return when {
-                (pointError < errorEpsilon) -> PointResult.OK
-                (pointError < DataStorage.getToleranceNok()) -> PointResult.WARNING
+                (tolerance.offset < 0.0) -> PointResult.OK
+                (pointError < - DataStorage.getToleranceNok()) -> PointResult.OK
+                (pointError < errorEpsilon) -> PointResult.WARNING
                 (pointError < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
                 else -> PointResult.INVALID
             }
