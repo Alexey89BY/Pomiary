@@ -156,19 +156,19 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             }
 
             // draw result
+            val xp = offsetX + pointWidth - 30F
+
             paint.color = pointColor
+            paint.textAlign = Paint.Align.RIGHT
+            paint.textSize = 54F
 
             val pointMessage = point.result.toMessage()
-            canvas.drawText(pointMessage, offsetX + hw, offsetY + 1F * dyt, paint)
+            canvas.drawText(pointMessage, xp, offsetY + 1F * dyt, paint)
 
             // draw point
-            val xp = offsetX + pointWidth - 30F
-            val yp = offsetY + 3F * dyt
-
             paint.textSize = 72F
-            paint.textAlign = Paint.Align.RIGHT
 
-            canvas.drawText(valueString, xp, yp, paint)
+            canvas.drawText(valueString, xp, offsetY + 3F * dyt, paint)
 
         } else {
 

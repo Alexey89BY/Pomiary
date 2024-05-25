@@ -38,6 +38,7 @@ enum class PointResult {
     fun toColor(): Int {
         return when (this) {
             OK -> Color.GREEN
+            NOK -> Color.RED
             WARNING -> Color.YELLOW
             CRITICAL -> Color.RED
             INVALID -> Color.RED
@@ -52,7 +53,7 @@ enum class PointResult {
         return when (this) {
             OK -> "OK"
             NOK -> "NOK"
-            WARNING -> "NOK"
+            WARNING -> "OK"
             CRITICAL -> "NOK"
             INVALID -> "\u2048"
             else -> "?"

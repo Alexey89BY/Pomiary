@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:labelFor="@id/editNok_offset"
-                    android:text="@string/tolerance_nok_value" />
+                    android:text="@string/warning_nok_value" />
 
                 <EditText
                     android:id="@+id/editNok_offset"

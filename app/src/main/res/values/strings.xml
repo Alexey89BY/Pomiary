@@ -29,7 +29,7 @@
     <string name="result_Nok">NOK</string>
     <string name="tolerance_standard">Tolerance Standard</string>
     <string name="tolerance_maxi">Tolerance Maxi</string>
-    <string name="tolerance_nok_value">Tolerance NOK, mm</string>
+    <string name="warning_nok_value">Warning for NOK, mm</string>
     <string name="show_base_point">Show base point (*)</string>
     <string name="show_profile_point">Show profile point</string>
     <string name="input_format">Input format\n(w/o decimal point)</string>
