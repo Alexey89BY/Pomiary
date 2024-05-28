@@ -39,13 +39,13 @@ class PointsAligner {
 
 
         fun testPoint(value: Double, tolerance: DataStorage.PointTolerance): PointResult {
-            val pointOffset = value - tolerance.origin
-            val pointError = pointOffset.absoluteValue - tolerance.offset
+            val pointOffset = (value - tolerance.origin).absoluteValue
+            val pointError = pointOffset - tolerance.offset
             return when {
                 (tolerance.offset < 0.0) -> PointResult.OK
                 (pointError < - DataStorage.getToleranceNok()) -> PointResult.OK
                 (pointError < errorEpsilon) -> PointResult.WARNING
-                (pointError < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
+                (pointOffset < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
                 else -> PointResult.INVALID
             }
         }
