@@ -34,9 +34,10 @@ class HistoryViewCanvas(context: Context?) : View(context) {
     private val paint = Paint()
     private val path = Path()
 
+    private val pointBorder = 30
     private var pointInRow = 1
     private var pointWidth = 0
-    private val pointHeight = 200
+    private var pointHeight = 0
     private var isPointsGraph = false
     private var graphData = GraphData()
     private var pointScale = 1.0F
@@ -45,8 +46,8 @@ class HistoryViewCanvas(context: Context?) : View(context) {
     init {
         when (resources.configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> {
-                pointInRow = 5
-                pointWidth = 450
+                pointInRow = 4
+                pointWidth = 550
             }
             else -> {
                 pointInRow = 2
@@ -54,28 +55,35 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             }
         }
 
-        minimumWidth = 60 + pointInRow * pointWidth
+        minimumWidth = 2 * pointBorder + pointInRow * pointWidth
     }
 
 
     fun setData(data: GraphData)
     {
         graphData = data
-
-        minimumHeight = ((data.points.size + (pointInRow - 1)) / pointInRow) * pointHeight
-
+        updatePointHeight()
         invalidate()
     }
 
 
     fun setValuesOnly(isRaw: Boolean) {
         isPointsGraph = isRaw
+        updatePointHeight()
         invalidate()
     }
 
 
+    private fun updatePointHeight() {
+        pointHeight =
+            if (isPointsGraph) 152
+            else 190
+        minimumHeight = ((graphData.points.size + (pointInRow - 1)) / pointInRow) * pointHeight
+    }
+
+
     public override fun onDraw(canvas: Canvas) {
-        val offsetX = 30F
+        val offsetX = pointBorder.toFloat()
         val offsetY = 0F
 
         // for test only
@@ -160,13 +168,13 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
             paint.color = pointColor
             paint.textAlign = Paint.Align.RIGHT
-            paint.textSize = 54F
+            paint.textSize = 50F
 
             val pointMessage = point.result.toMessage()
-            canvas.drawText(pointMessage, xp, offsetY + 1F * dyt, paint)
+            canvas.drawText(pointMessage, xp, offsetY + 1.2F * dyt, paint)
 
             // draw point
-            paint.textSize = 72F
+            paint.textSize = 68F
 
             canvas.drawText(valueString, xp, offsetY + 3F * dyt, paint)
 
