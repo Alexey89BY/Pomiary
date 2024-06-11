@@ -33,6 +33,7 @@
     <string name="show_base_point">Show base point (*)</string>
     <string name="show_profile_point">Show profile point</string>
     <string name="input_format">Input format\n(w/o decimal point)</string>
+    <string name="tolerance_invalid">Tolerance for valid input, mm</string>
     <string name="prev_msg">Previous</string>
     <string name="next_msg">Next</string>
     <string name="show_raw">Show RAW</string>

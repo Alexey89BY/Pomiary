@@ -134,7 +134,7 @@ class DataStorage {
         )
 
         private var toleranceNok = arrayOf(
-            PointTolerance(0.0, 0.5),
+            PointTolerance(5.0, 0.5), // NOK invalid, NOK warning
         )
 
         private val storageStandard = Array(storageDataSize) { index ->
@@ -235,7 +235,7 @@ class DataStorage {
 
 
         fun getToleranceInvalid(): Double {
-            return 5.0
+            return toleranceNok[0].origin
         }
 
 
