@@ -15,6 +15,7 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
 
     private var pageStandard: StandardFragment? = null
     private var pageMaxi: StandardFragment? = null
+    private var pageHistory: HistoryFragment? = null
 
     private val pagesList = listOf(
         R.string.tab_std,
@@ -41,7 +42,10 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
                 pageMaxi = StandardFragment.newInstance(DataStorage.getStorageMaxi().title)
                 pageMaxi as Fragment
             }
-            2 -> HistoryFragment.newInstance()
+            2 -> {
+                pageHistory = HistoryFragment.newInstance()
+                pageHistory as Fragment
+            }
             else -> SettingsFragment.newInstance()
         }
     }
@@ -49,5 +53,6 @@ class SectionsPagerAdapter(private val fa: FragmentActivity) :
     fun broadcastSettingsChange() {
         pageStandard?.onSettingsChange()
         pageMaxi?.onSettingsChange()
+        pageHistory?.onSettingsChange()
     }
 }

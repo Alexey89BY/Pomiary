@@ -47,53 +47,77 @@
                 android:ems="13"
                 android:text="@string/show_profile_point" />
 
-            <LinearLayout
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/textInputFormat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:labelFor="@id/editInputFormat"
-                    android:text="@string/input_format" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/editInputFormat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:ems="4"
-                    android:enabled="false"
-                    android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true"
-                    android:text=".00" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textInputFormat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:labelFor="@id/editInputFormat"
+                        android:text="@string/input_format" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/editInputFormat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:ems="3"
+                        android:enabled="false"
+                        android:inputType="text"
+                        android:selectAllOnFocus="true"
+                        android:text=".00" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/textToleranceNokValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/editNok_offset"
-                    android:text="@string/warning_nok_value" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/editNok_offset"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberSigned|numberDecimal"
-                    android:selectAllOnFocus="true"
-                    android:autofillHints="" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textToleranceNokValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/editNok_warning"
+                        android:text="@string/warning_nok_value" />
+
+                    <EditText
+                        android:id="@+id/editNok_warning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:ems="3"
+                        android:inputType="number|numberDecimal"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textToleranceInvalid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/editNok_invalid"
+                        android:text="@string/tolerance_invalid" />
+
+                    <EditText
+                        android:id="@+id/editNok_invalid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:ems="3"
+                        android:inputType="number|numberDecimal"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
+
+            </TableLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

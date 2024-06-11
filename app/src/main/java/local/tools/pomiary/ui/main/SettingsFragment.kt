@@ -112,11 +112,11 @@ class SettingsFragment : Fragment() {
         )
 
         private val editsNok_zeros = listOf(
-            0,
+            R.id.editNok_invalid,
         )
 
         private val editsNok_offsets = listOf(
-            R.id.editNok_offset,
+            R.id.editNok_warning,
         )
 
         private const val settingsFileName = "tolerances"
@@ -199,24 +199,18 @@ class SettingsFragment : Fragment() {
 
     private fun writeEdits(view: View, tolerances: Array<DataStorage.PointTolerance>, editsZeros: List<Int>, editsOffsets: List<Int>) {
         tolerances.forEachIndexed { index, tolerance ->
-            if (editsZeros[index] != 0) {
-                val editZero = view.findViewById<EditText>(editsZeros[index])
-                editZero.setText(String.format(Locale.US, "%.1f", tolerance.origin))
-            }
+            val editZero = view.findViewById<EditText>(editsZeros[index])
+            editZero.setText(String.format(Locale.US, "%.2f", tolerance.origin))
 
             val editOffset = view.findViewById<EditText>(editsOffsets[index])
-            editOffset.setText(String.format(Locale.US, "%.1f", tolerance.offset))
+            editOffset.setText(String.format(Locale.US, "%.2f", tolerance.offset))
         }
     }
 
     private fun readEdits(view: View, tolerances: Array<DataStorage.PointTolerance>, editsZeros: List<Int>, editsOffsets: List<Int>) {
         tolerances.forEachIndexed { index, _ ->
-            val zeroValue = if (editsZeros[index] != 0) {
-                val editZero = view.findViewById<EditText>(editsZeros[index])
-                editZero.text.toString().toDoubleOrNull() ?: 0.0
-            } else {
-                0.0
-            }
+            val editZero = view.findViewById<EditText>(editsZeros[index])
+            val zeroValue = editZero.text.toString().toDoubleOrNull() ?: 0.0
 
             val editOffset = view.findViewById<EditText>(editsOffsets[index])
             val offsetValue = editOffset.text.toString().toDoubleOrNull() ?: 0.0

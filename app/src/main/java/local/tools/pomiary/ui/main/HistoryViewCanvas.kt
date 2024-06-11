@@ -55,8 +55,6 @@ class HistoryViewCanvas(context: Context?) : View(context) {
         }
 
         minimumWidth = 60 + pointInRow * pointWidth
-
-        pointScale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
     }
 
 
@@ -95,6 +93,8 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 */
 
         paint.strokeWidth = 3F
+
+        pointScale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
 
         graphData.points.forEachIndexed { index, point ->
             val x = offsetX + pointWidth * index.mod(pointInRow)
