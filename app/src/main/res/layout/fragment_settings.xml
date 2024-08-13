@@ -104,6 +104,7 @@
                         android:id="@+id/textToleranceInvalid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:labelFor="@id/editNok_invalid"
                         android:text="@string/tolerance_invalid" />
 

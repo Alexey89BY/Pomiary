@@ -134,7 +134,7 @@ class DataStorage {
         )
 
         private var toleranceNok = arrayOf(
-            PointTolerance(5.0, 0.5), // NOK invalid, NOK warning
+            PointTolerance(3.0, 0.5), // NOK invalid, NOK warning
         )
 
         private val storageStandard = Array(storageDataSize) { index ->

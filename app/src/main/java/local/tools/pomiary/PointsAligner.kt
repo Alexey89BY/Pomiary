@@ -45,7 +45,7 @@ class PointsAligner {
                 (tolerance.offset < 0.0) -> PointResult.OK
                 (pointError < - DataStorage.getToleranceNok()) -> PointResult.OK
                 (pointError < errorEpsilon) -> PointResult.WARNING
-                (pointOffset < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
+                (pointError < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
                 else -> PointResult.INVALID
             }
         }
