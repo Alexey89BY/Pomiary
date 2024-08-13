@@ -48,6 +48,10 @@ class DataStorage {
         var tolerancesP7: Array<PointTolerance>,
         var toleranceMapP6: List<Int>,
         var toleranceMapP7: List<Int>,
+        var tolerancesMoldingsP6: Array<PointTolerance>,
+        var tolerancesMoldingsP7: Array<PointTolerance>,
+        var toleranceMapMoldingsP6: List<Pair<Int,Int>>,
+        var toleranceMapMoldingsP7: List<Pair<Int,Int>>,
     ) {
 /*
         fun storageTitle(data: SillSealData): String {
@@ -94,6 +98,14 @@ class DataStorage {
             PointTolerance(655.0, 3.0)
         )
 
+        private val toleranceMapMoldingsStandardP6 = listOf(
+            Pair(8, 9)
+        )
+
+        private val toleranceMoldingsStandardP6 = arrayOf(
+            PointTolerance(2.0, 1.0),
+        )
+
         private const val standardSectionP7Size = 6
         private val toleranceMapStandardP7 = listOf(0, 2, 3, 5)
         private var toleranceStandardP7 = arrayOf(
@@ -103,6 +115,16 @@ class DataStorage {
             PointTolerance(114.0, 2.5),
             //PointTolerance(0.0, -1.0),
             PointTolerance(149.0, 2.5)
+        )
+
+        private val toleranceMapMoldingsStandardP7 = listOf(
+            Pair(1, 0),
+            Pair(4, 5),
+        )
+
+        private val toleranceMoldingsStandardP7 = arrayOf(
+            PointTolerance(3.0, 1.0),
+            PointTolerance(3.5, 1.0),
         )
 
         private const val maxiSectionP6Size = 12
@@ -122,6 +144,14 @@ class DataStorage {
             PointTolerance(839.5, 3.0)
         )
 
+        private val toleranceMapMoldingsMaxiP6 = listOf(
+            Pair(10, 11)
+        )
+
+        private val toleranceMoldingsMaxiP6 = arrayOf(
+            PointTolerance(2.5, 1.0),
+        )
+
         private const val maxiSectionP7Size = 6
         private val toleranceMapMaxiP7 = listOf(0, 2, 3, 5)
         private var toleranceMaxiP7 = arrayOf(
@@ -131,6 +161,16 @@ class DataStorage {
             PointTolerance(107.5, 2.5),
             //PointTolerance(0.0, -1.0),
             PointTolerance(130.5, 2.5)
+        )
+
+        private val toleranceMapMoldingsMaxiP7 = listOf(
+            Pair(1, 0),
+            Pair(4, 5),
+        )
+
+        private val toleranceMoldingsMaxiP7 = arrayOf(
+            PointTolerance(3.0, 1.0),
+            PointTolerance(4.5, 1.0),
         )
 
         private var toleranceNok = arrayOf(
@@ -174,6 +214,10 @@ class DataStorage {
             tolerancesP7 = toleranceStandardP7,
             toleranceMapP6 = toleranceMapStandardP6,
             toleranceMapP7 = toleranceMapStandardP7,
+            tolerancesMoldingsP6 = toleranceMoldingsStandardP6,
+            tolerancesMoldingsP7 = toleranceMoldingsStandardP7,
+            toleranceMapMoldingsP6 = toleranceMapMoldingsStandardP6,
+            toleranceMapMoldingsP7 = toleranceMapMoldingsStandardP7,
         )
 
         private val subsetMaxi = DataSubSet(
@@ -183,6 +227,10 @@ class DataStorage {
             tolerancesP7 = toleranceMaxiP7,
             toleranceMapP6 = toleranceMapMaxiP6,
             toleranceMapP7 = toleranceMapMaxiP7,
+            tolerancesMoldingsP6 = toleranceMoldingsMaxiP6,
+            tolerancesMoldingsP7 = toleranceMoldingsMaxiP7,
+            toleranceMapMoldingsP6 = toleranceMapMoldingsMaxiP6,
+            toleranceMapMoldingsP7 = toleranceMapMoldingsMaxiP7,
         )
 
 
@@ -223,6 +271,24 @@ class DataStorage {
             return toleranceMaxiP7
         }
 
+        fun getToleranceStandardMoldingsP6(): Array<PointTolerance> {
+            return toleranceMoldingsStandardP6
+        }
+
+
+        fun getToleranceStandardMoldingsP7(): Array<PointTolerance> {
+            return toleranceMoldingsStandardP7
+        }
+
+
+        fun getToleranceMaxiMoldingsP6(): Array<PointTolerance> {
+            return toleranceMoldingsMaxiP6
+        }
+
+
+        fun getToleranceMaxiMoldingsP7(): Array<PointTolerance> {
+            return toleranceMoldingsMaxiP7
+        }
 
         fun getTolerancesNok(): Array<PointTolerance> {
             return toleranceNok

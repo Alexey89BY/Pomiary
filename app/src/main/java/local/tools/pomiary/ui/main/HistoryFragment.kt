@@ -233,24 +233,6 @@ class HistoryFragment : Fragment() {
         "P7 - M9, mm",
     )
 
-    private val toleranceStandardMoldingsP6 = arrayOf(
-        DataStorage.PointTolerance(2.0, 1.0),
-    )
-
-    private val toleranceStandardMoldingsP7 = arrayOf(
-        DataStorage.PointTolerance(3.0, 1.0),
-        DataStorage.PointTolerance(3.5, 1.0),
-    )
-
-    private val toleranceMaxiMoldingsP6 = arrayOf(
-        DataStorage.PointTolerance(2.5, 1.0),
-    )
-
-    private val toleranceMaxiMoldingsP7 = arrayOf(
-        DataStorage.PointTolerance(3.0, 1.0),
-        DataStorage.PointTolerance(4.5, 1.0),
-    )
-
     // Maps
 
     private val mapStandardAlignedP6 = listOf(
@@ -473,10 +455,10 @@ class HistoryFragment : Fragment() {
                 graphDataP6.isZeroBase = false
                 graphDataP7.isPrecise = true
                 graphDataP7.isZeroBase = false
-                tolerancesStandardP6 = toleranceStandardMoldingsP6
-                tolerancesStandardP7 = toleranceStandardMoldingsP7
-                tolerancesMaxiP6 = toleranceMaxiMoldingsP6
-                tolerancesMaxiP7 = toleranceMaxiMoldingsP7
+                tolerancesStandardP6 = DataStorage.getToleranceStandardMoldingsP6()
+                tolerancesStandardP7 = DataStorage.getToleranceStandardMoldingsP7()
+                tolerancesMaxiP6 = DataStorage.getToleranceMaxiMoldingsP6()
+                tolerancesMaxiP7 = DataStorage.getToleranceMaxiMoldingsP7()
                 titlesStandardP6 = titlesStandardMoldingsP6
                 titlesStandardP7 = titlesStandardMoldingsP7
                 titlesMaxiP6 = titlesMaxiMoldingsP6
@@ -593,7 +575,7 @@ class HistoryFragment : Fragment() {
         val textZero = getSafe(pointsData, indexZero)
         val value = PointData.valueFromIntString(textValue)
         val zero = PointData.valueFromIntString(textZero)
-        return (value - zero)
+        return PointsAligner.pointsDistance(value, zero, Pair(indexValue, indexZero))
     }
 
 

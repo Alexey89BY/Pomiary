@@ -19,7 +19,7 @@ class PointTextWatcher(
 
     private var isSelfModify = false
     private var parentPoint: PointTextWatcher? = null
-    private var childrenPoints: Array<PointTextWatcher>? = null
+    private var childrenPoints: MutableList<PointTextWatcher> = emptyList<PointTextWatcher>().toMutableList()
     private var graphRange: PointRangeGraph? = null
     private val pointData = PointData()
 
@@ -33,10 +33,6 @@ class PointTextWatcher(
 
         pointData.rawInput = s.toString()
         updateData()
-
-        childrenPoints?.forEach {
-            it.updateData()
-        }
 
         fragment.setModified()
     }
@@ -61,8 +57,14 @@ class PointTextWatcher(
             }
         }
 
-        val resultForMessage = if (pointData.result == PointResult.INVALID) PointResult.INVALID else PointResult.UNKNOWN
+        val resultForMessage =
+            if (pointData.result == PointResult.INVALID) PointResult.INVALID
+            else PointResult.UNKNOWN
         updateResult(pointData.rawValue, pointData.value, pointData.result, resultForMessage)
+
+        childrenPoints.forEach {
+            it.updateData()
+        }
     }
 
     fun updateResult(
@@ -77,9 +79,15 @@ class PointTextWatcher(
                 rawValue,
                 alignedValue
             )
-        } else if (getTolerance() == null) {
+        } else if (resultForColor == PointResult.UNKNOWN) {
             viewResult.setTextColor(PointResult.UNKNOWN.toColor())
-            viewResult.text = String.format(" %.1f ",
+            viewResult.text = String.format(" %.2f ",
+                alignedValue
+            )
+        } else if (resultForMessage == PointResult.UNKNOWN) {
+            viewResult.setTextColor(resultForColor.toColor())
+            viewResult.text = String.format(" %s %.2f ",
+                resultForMessage.toMessage(),
                 alignedValue
             )
         } else {
@@ -96,6 +104,11 @@ class PointTextWatcher(
     fun clear() {
         viewResult.text = String()
         setRawInput(String(), 0.0)
+        updateResult(0.0, 0.0, PointResult.UNKNOWN, PointResult.UNKNOWN)
+
+        childrenPoints.forEach {
+            it.clear()
+        }
     }
 
     fun getRawInput(): String {
@@ -120,11 +133,12 @@ class PointTextWatcher(
         graphRange = graph
     }
 
-    fun setChildrenPoints(children: Array<PointTextWatcher>) {
-        childrenPoints = children
+    fun addChild(childPoint: PointTextWatcher) {
+        childrenPoints.add(childPoint)
+        childPoint.setParent(this)
     }
 
-    fun setParent(parent: PointTextWatcher) {
+    private fun setParent(parent: PointTextWatcher) {
         parentPoint = parent
     }
 }

@@ -98,7 +98,12 @@ class StandardFragment : Fragment() {
         val viewsP7 = viewsStandardP7
 
         watchersPointsP6 = setupWatchers(viewsP6)
+        linkWatchersProfile(watchersPointsP6, dataStorage.toleranceMapP6)
+        linkWatchersMoldings(watchersPointsP6, dataStorage.toleranceMapMoldingsP6)
+
         watchersPointsP7 = setupWatchers(viewsP7)
+        linkWatchersProfile(watchersPointsP7, dataStorage.toleranceMapP7)
+        linkWatchersMoldings(watchersPointsP7, dataStorage.toleranceMapMoldingsP7)
 
         graphsPointsP6 = setupResultGraphs(viewsP6, watchersPointsP6)
         graphsPointsP7 = setupResultGraphs(viewsP7, watchersPointsP7)
@@ -126,8 +131,11 @@ class StandardFragment : Fragment() {
 
 
     fun onSettingsChange() {
-        setRangesToViews(dataStorage.tolerancesP6, dataStorage.toleranceMapP6, graphsPointsP6)
-        setRangesToViews(dataStorage.tolerancesP7, dataStorage.toleranceMapP7, graphsPointsP7)
+        setProfileRangesToViews(dataStorage.tolerancesP6, dataStorage.toleranceMapP6, graphsPointsP6)
+        setMoldingsRangesToViews(dataStorage.tolerancesMoldingsP6, dataStorage.toleranceMapMoldingsP6, graphsPointsP6)
+
+        setProfileRangesToViews(dataStorage.tolerancesP7, dataStorage.toleranceMapP7, graphsPointsP7)
+        setMoldingsRangesToViews(dataStorage.tolerancesMoldingsP7, dataStorage.toleranceMapMoldingsP7, graphsPointsP7)
 
         enableRow(R.id.rowStandardP6_0, R.id.editStandardP6_0, SettingsFragment.getShowBasePoint(), true)
         enableRow(R.id.rowStandardP7_0, R.id.editStandardP7_0, SettingsFragment.getShowBasePoint(), true)
@@ -186,7 +194,7 @@ class StandardFragment : Fragment() {
     private fun setupWatchers(
         viewsLinksList: List<PointViewsLink>
     ): Array<PointTextWatcher> {
-        val watchers = Array(viewsLinksList.size) {
+        return Array(viewsLinksList.size) {
             val viewsLink = viewsLinksList[it]
             val editText = viewOfLayout.findViewById<EditText>(viewsLink.editId)
             val textView = viewOfLayout.findViewById<TextView>(viewsLink.textResultId)
@@ -194,12 +202,30 @@ class StandardFragment : Fragment() {
             editText.addTextChangedListener(watcher)
             watcher
         }
+    }
 
-        val watchersChildren = Array(watchers.size - 1) { watchers[it + 1] }
-        watchers[0].setChildrenPoints(watchersChildren)
-        watchersChildren.forEach { it.setParent(watchers[0]) }
 
-        return watchers
+    private fun linkWatchersProfile(watchers: Array<PointTextWatcher>, toleranceMap: List<Int>) {
+        toleranceMap.forEach { mapIndex ->
+            if (mapIndex != 0) {
+                val watcherChildren = watchers[mapIndex]
+                val watcherBase = watchers[0]
+                watcherBase.addChild(watcherChildren)
+            }
+        }
+    }
+
+
+    private fun linkWatchersMoldings(watchers: Array<PointTextWatcher>, toleranceMap: List<Pair<Int,Int>>) {
+        toleranceMap.forEach { tolerance ->
+            val index = tolerance.first
+            val watcherChildren = watchers[index]
+
+            val indexBase = tolerance.second
+            val watcherBase = watchers[indexBase]
+
+            watcherBase.addChild(watcherChildren)
+        }
     }
 
 
@@ -265,10 +291,14 @@ class StandardFragment : Fragment() {
         getPointInputsFromEdits(watchersPointsP7, currentStorage.sectionP7.points)
 
         currentStorage.sectionP6.result = PointsAligner.alignPoints(
-            dataStorage.tolerancesP6, dataStorage.toleranceMapP6, currentStorage.sectionP6.points
+            dataStorage.tolerancesP6, dataStorage.tolerancesMoldingsP6,
+            dataStorage.toleranceMapP6, dataStorage.toleranceMapMoldingsP6,
+            currentStorage.sectionP6.points
         )
         currentStorage.sectionP7.result = PointsAligner.alignPoints(
-            dataStorage.tolerancesP7, dataStorage.toleranceMapP7, currentStorage.sectionP7.points
+            dataStorage.tolerancesP7, dataStorage.tolerancesMoldingsP7,
+            dataStorage.toleranceMapP7, dataStorage.toleranceMapMoldingsP7,
+            currentStorage.sectionP7.points
         )
 
         setPointResultsToView(currentStorage.sectionP6.points, watchersPointsP6)
@@ -356,12 +386,11 @@ class StandardFragment : Fragment() {
     }
 
     private fun clearPoints(pointsWatchers: Array<PointTextWatcher>) {
-        pointsWatchers.forEach {
-            it.clear()
-        }
+        pointsWatchers[0].clear()
     }
 
-    private fun setRangesToViews(
+
+    private fun setProfileRangesToViews(
         tolerances: Array<DataStorage.PointTolerance>,
         tolerancesMap: List<Int>,
         rangeGraphs: Array<PointRangeGraph>
@@ -371,6 +400,19 @@ class StandardFragment : Fragment() {
             rangeGraphs[rangeIndex].setTolerance(tolerance)
         }
     }
+
+
+    private fun setMoldingsRangesToViews(
+        tolerances: Array<DataStorage.PointTolerance>,
+        tolerancesMap: List<Pair<Int,Int>>,
+        rangeGraphs: Array<PointRangeGraph>
+    ) {
+        tolerances.forEachIndexed { index, tolerance ->
+            val rangeIndex = tolerancesMap[index].first
+            rangeGraphs[rangeIndex].setTolerance(tolerance)
+        }
+    }
+
 
     private fun setPointResultsToView (
         points: Array<PointData>,
@@ -419,7 +461,9 @@ class StandardFragment : Fragment() {
 
             val editText = viewOfLayout.findViewById<EditText>(editId)
             editText.isEnabled = isEnabled
-            editText.text.clear()
+            if (! isEnabled) {
+                editText.text.clear()
+            }
         }
     }
 
