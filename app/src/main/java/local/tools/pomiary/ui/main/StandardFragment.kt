@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.Spinner
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -36,6 +37,8 @@ private const val ARG_STORAGE_NAME = "storage_name"
 class StandardFragment : Fragment() {
     private var storageName: String? = null
     private lateinit var viewOfLayout: View
+    private lateinit var spinnerStorage: Spinner
+    private lateinit var profileScrollView: ScrollView
     private lateinit var dataStorage: DataStorage.DataSubSet
     private lateinit var spinnerItems: Array<String>
     private lateinit var spinnerAdapter: ArrayAdapter<String>
@@ -67,18 +70,23 @@ class StandardFragment : Fragment() {
         val saveButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonSaveStandard)
         saveButton.setOnClickListener { saveValues() }
 
+        val newButton = viewOfLayout.findViewById<ImageButton>(R.id.buttonNew)
+        newButton.setOnClickListener { createNewValues() }
+
+        profileScrollView = viewOfLayout.findViewById(R.id.scrollProfile)
+
         dataStorage = DataStorage.getStorageByName(storageName)
         spinnerItems = buildStoragesSpinnerArray()
 
-        val spinner = viewOfLayout.findViewById<Spinner>(R.id.spinnerStandard)
+        spinnerStorage = viewOfLayout.findViewById(R.id.spinnerStandard)
         spinnerAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
             spinnerItems
         )
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = spinnerAdapter
-        spinner.onItemSelectedListener = spinnerListener
+        spinnerStorage.adapter = spinnerAdapter
+        spinnerStorage.onItemSelectedListener = spinnerListener
 
         val isMaxi = dataStorage.title == DataStorage.getStorageMaxi().title
         val viewsP6: List<PointViewsLink>
@@ -276,6 +284,8 @@ class StandardFragment : Fragment() {
             }
 
             isModified = false
+            hideKeyboard()
+            scrollToTop()
         }
     }
 
@@ -321,7 +331,39 @@ class StandardFragment : Fragment() {
     }
 
 
+    private fun createNewValues() {
+        var newStorageIndex = storageCurrentIndex
+        //val currentStorage = dataStorage.getData(storageCurrentIndex)
+
+        val dialog = AlertDialog.Builder(context)
+            .setTitle("Create new ${dataStorage.title} ?")
+            .setSingleChoiceItems(DataStorage.getStorageDataSteps(), storageCurrentIndex) { _, index ->
+                newStorageIndex = index
+            }
+            .setPositiveButton("Create") { _, _ ->
+                storageCurrentIndex = newStorageIndex
+                spinnerStorage.setSelection(storageCurrentIndex)
+                spinnerStorage.post {
+                    clearPoints(watchersPointsP6)
+                    clearPoints(watchersPointsP7)
+                    isModified = false
+                    setModified()
+
+                    val editText = watchersPointsP6[0].getEditTextView()
+                    showKeyboard(editText)
+                }
+            }
+            .setNeutralButton("Cancel") {_, _ ->
+            }
+            .create()
+        dialog.show()
+    }
+
+
     private fun saveValues() {
+        hideKeyboard()
+        scrollToTop()
+
         val currentStorage = dataStorage.getData(storageCurrentIndex)
 
         if (currentStorage.isResultUnknown()) {
@@ -479,14 +521,30 @@ class StandardFragment : Fragment() {
         }
     }
 
-    private fun hideKeyboard() {
-        val view = activity?.findViewById<View>(android.R.id.content)
-        if (view != null) {
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+    private fun showKeyboard(
+        viewForFocus: View
+    ) {
+        viewForFocus.requestFocus()
+        viewForFocus.post {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm?.showSoftInput(viewForFocus, 0)
         }
     }
 
+
+    private fun hideKeyboard() {
+        viewOfLayout.clearFocus()
+        viewOfLayout.post {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm?.hideSoftInputFromWindow(viewOfLayout.windowToken, 0)
+        }
+    }
+
+
+    private fun scrollToTop() {
+        profileScrollView.smoothScrollTo(0, 0)
+    }
 
     /*
     fun sendToGraph(fragmentTitle: String, currentStorage: DataStorage.SillSealData) {

@@ -141,4 +141,8 @@ class PointTextWatcher(
     private fun setParent(parent: PointTextWatcher) {
         parentPoint = parent
     }
+
+    fun getEditTextView(): EditText {
+        return viewEdit
+    }
 }

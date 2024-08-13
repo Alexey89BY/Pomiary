@@ -17,6 +17,13 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <ImageButton
+                android:id="@+id/buttonNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/new_msg"
+                android:src="@android:drawable/ic_menu_add" />
+
             <Spinner
                 android:id="@+id/spinnerStandard"
                 android:layout_width="0dp"
@@ -28,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/check_msg"
-                android:src="@android:drawable/ic_popup_sync" />
+                android:src="@android:drawable/ic_menu_rotate" />
 
             <ImageButton
                 android:id="@+id/buttonSaveStandard"
@@ -40,6 +47,7 @@
         </LinearLayout>
 
         <ScrollView
+            android:id="@+id/scrollProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"

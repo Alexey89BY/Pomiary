@@ -244,6 +244,13 @@ class DataStorage {
         }
 
 
+        fun getStorageDataSteps(): Array<String> {
+            return Array(storageDataSteps.size) { index ->
+                "${storageDataSteps[index].first} ${storageDataSteps[index].second}"
+            }
+        }
+
+
         fun getStorageByName(name: String?): DataSubSet {
             return when (name) {
                 subsetMaxi.title -> subsetMaxi
