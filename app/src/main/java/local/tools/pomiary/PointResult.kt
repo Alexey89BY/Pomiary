@@ -7,7 +7,6 @@ enum class PointResult {
     OK,
     NOK,
     WARNING,
-    CRITICAL,
     INVALID
     ;
 
@@ -16,8 +15,7 @@ enum class PointResult {
             OK -> 1
             NOK -> 2
             WARNING -> 3
-            CRITICAL -> 4
-            INVALID -> 5
+            INVALID -> 4
             else -> 0
         }
     }
@@ -28,8 +26,7 @@ enum class PointResult {
                 1 -> OK
                 2 -> NOK
                 3 -> WARNING
-                4 -> CRITICAL
-                5 -> INVALID
+                4 -> INVALID
                 else -> UNKNOWN
             }
         }
@@ -40,7 +37,6 @@ enum class PointResult {
             OK -> Color.GREEN
             NOK -> Color.RED
             WARNING -> Color.YELLOW
-            CRITICAL -> Color.RED
             INVALID -> Color.RED
             else -> Color.LTGRAY
         }
@@ -54,7 +50,6 @@ enum class PointResult {
             OK -> "OK"
             NOK -> "NOK"
             WARNING -> "OK"
-            CRITICAL -> "NOK"
             INVALID -> "\u2048"
             else -> "?"
         }

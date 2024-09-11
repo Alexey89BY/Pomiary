@@ -66,7 +66,7 @@ class PointsAligner {
                 (tolerance.offset < 0.0) -> PointResult.OK
                 (pointError < - DataStorage.getToleranceNok()) -> PointResult.OK
                 (pointError < errorEpsilon) -> PointResult.WARNING
-                (pointError < DataStorage.getToleranceInvalid()) -> PointResult.CRITICAL
+                (pointError < DataStorage.getToleranceInvalid()) -> PointResult.NOK
                 else -> PointResult.INVALID
             }
         }
@@ -144,16 +144,16 @@ class PointsAligner {
             }
 
             pointsData.forEach { point ->
+               when (point.result) {
+                   PointResult.INVALID ->  return PointResult.INVALID
+                   else -> {}
+               }
+            }
+
+            pointsData.forEach { point ->
                 when (point.result) {
-                    PointResult.UNKNOWN,
-                    PointResult.OK -> {
-                    }
-                    PointResult.INVALID -> {
-                        return PointResult.INVALID
-                    }
-                    else -> {
-                        return PointResult.NOK
-                    }
+                    PointResult.NOK ->  return PointResult.NOK
+                    else -> {}
                 }
             }
 
