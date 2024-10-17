@@ -687,7 +687,7 @@ class HistoryFragment : Fragment() {
         ) {
             pointsData.forEach { point ->
                 builder.append(historyDelimiter)
-                builder.append(PointData.valueToIntString(point.rawValue))
+                builder.append(point.rawInput)
             }
         }
 
