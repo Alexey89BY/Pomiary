@@ -40,7 +40,6 @@ class HistoryViewCanvas(context: Context?) : View(context) {
     private var pointHeight = 0
     private var isPointsGraph = false
     private var graphData = GraphData()
-    private var pointScale = 1.0F
 
 
     init {
@@ -77,7 +76,7 @@ class HistoryViewCanvas(context: Context?) : View(context) {
     private fun updatePointHeight() {
         pointHeight =
             if (isPointsGraph) 152
-            else 190
+            else 152
         minimumHeight = ((graphData.points.size + (pointInRow - 1)) / pointInRow) * pointHeight
     }
 
@@ -88,21 +87,19 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
         // for test only
 /*
+        paint.color = Color.DKGRAY
+        paint.textSize = 72F
+        paint.textAlign = Paint.Align.LEFT
         val titleString = String.format(
             "%s %s %s",
             graphData.timeStamp,
             graphData.title,
             graphData.sideLR
         )
-        paint.color = Color.DKGRAY
-        paint.textSize = 72F
-        paint.textAlign = Paint.Align.LEFT
         canvas.drawText(titleString, offsetX, paint.textSize, paint)
 */
 
         paint.strokeWidth = 3F
-
-        pointScale = pointWidth / (2.0F * DataStorage.getToleranceInvalid().toFloat()) // in point +-
 
         graphData.points.forEachIndexed { index, point ->
             val x = offsetX + pointWidth * index.mod(pointInRow)
@@ -180,7 +177,7 @@ class HistoryViewCanvas(context: Context?) : View(context) {
 
         } else {
 
-            val scale = pointScale
+            val scale = pointWidth / (2.0F * (point.tolerance.offset + DataStorage.getToleranceInvalid()).toFloat()) // in point +-
             val dxw = hw - 15F
             val x0 = offsetX + hw
             val y0 = offsetY + 3.5F * dyt
@@ -188,12 +185,10 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             val xpr = x0 + dxw
 
             // draw units
-            val dy0 = 20F
-            val dyu = 12.5F
+            val dyu = -15F
 
             paint.color = Color.GRAY
             canvas.drawLine(xpl, y0, xpr, y0, paint)
-            canvas.drawLine(x0, y0, x0, y0 + dy0, paint)
 
             var xu = scale
             while (xu < dxw) {
@@ -206,21 +201,14 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             val pointZero = if (isBasePoint) 0.0
             else point.tolerance.origin
 
-            val dxl = x0 + (ptl - pointZero).toFloat() * scale
-            val dxr = x0 + (ptr - pointZero).toFloat() * scale
-            val dyb = 35F
-
-            canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
-            canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
-
             canvas.drawText(toleranceString1, offsetX, offsetY + 2F * dyt, paint)
 
             if (! isBasePoint) {
                 canvas.drawText(toleranceString2, offsetX + hw, offsetY + 2F * dyt, paint)
             }
 
-            // draw point
-            val yp = y0 - paint.strokeWidth
+            // draw point mark
+            val yp = y0
             val xp = x0 + (pointValue - pointZero).toFloat() * scale
             val dpy = 35F
             val dpx = 15F
@@ -248,6 +236,15 @@ class HistoryViewCanvas(context: Context?) : View(context) {
             canvas.drawPath(path, paint)
             canvas.drawText(valueString, offsetX + hw, offsetY + 1F * dyt, paint)
 
+            // draw range marks
+            paint.color = Color.WHITE
+            val dxl = x0 + (ptl - pointZero).toFloat() * scale
+            val dxr = x0 + (ptr - pointZero).toFloat() * scale
+            val dyb = -25F
+
+            canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
+            canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
+            canvas.drawLine(x0, y0, x0, y0 + dyb, paint)
         }
     }
 }
