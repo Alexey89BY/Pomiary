@@ -41,13 +41,12 @@ class PointRangeGraph(context: Context?) : View(context) {
 
     public override fun onDraw(canvas: Canvas) {
         paint.strokeWidth = 3F
-        paint.textSize = 40F
+        paint.textSize = 32F
 
-        val dyt = paint.textSize
         val xpl = 0F
         val xpr = width.toFloat()
         val x0 = (xpr + xpl) * 0.5F
-        val y0 = 1.5F * dyt
+        val y0 = height.toFloat() * 0.5F
 
         paint.color = Color.GRAY
         canvas.drawLine(xpl, y0, xpr, y0, paint)
@@ -60,24 +59,25 @@ class PointRangeGraph(context: Context?) : View(context) {
         if (tolerance.offset < 0)
             return
 
-        val scale = (xpr - xpl) / (1.2F * 2.0F * (tolerance.offset + DataStorage.getToleranceNok()).toFloat()) // zoom * offset+-
+        val scale = (xpr - xpl) / (2.0F * (tolerance.offset.toFloat() + 1.0F)) // zoom * offset+-
 
-        // draw zero
-        val dy0 = 20F
+        // draw mm
+        val dyu = -15F
+        val dxw = (xpr - xpl) * 0.5F
 
-        canvas.drawLine(x0, y0, x0, y0 + dy0, paint)
+        var xu = scale
+        while (xu < dxw) {
+            canvas.drawLine(x0 + xu, y0, x0 + xu, y0 + dyu, paint)
+            canvas.drawLine(x0 - xu, y0, x0 - xu, y0 + dyu, paint)
+            xu += scale
+        }
 
         // draw tolerance
         paint.color = Color.LTGRAY
         val pointZero = tolerance.origin
         val ptl = pointZero - tolerance.offset
         val ptr = pointZero + tolerance.offset
-        val dxl = x0 + (ptl - pointZero).toFloat() * scale
-        val dxr = x0 + (ptr - pointZero).toFloat() * scale
-        val dyb = 25F
-
-        canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
-        canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
+        val dyt = y0 + paint.textSize * 1.1F
 
         val toleranceString1 = String.format(
             "%.1f",
@@ -93,10 +93,17 @@ class PointRangeGraph(context: Context?) : View(context) {
         paint.textAlign = Paint.Align.RIGHT
         canvas.drawText(toleranceString2, xpr, dyt, paint)
 
-        // draw point
-        val yp = y0 + paint.strokeWidth
+        val toleranceString3 = String.format(
+            "%.1f",
+            pointZero,
+        )
+        paint.textAlign = Paint.Align.CENTER
+        canvas.drawText(toleranceString3, x0, dyt, paint)
+
+        // draw point mark
+        val yp = y0
         val xp = x0 + (pointValue - pointZero).toFloat() * scale
-        val dpy = -30F
+        val dpy = 35F
         val dpx = 15F
         paint.color = pointColor
 
@@ -120,5 +127,15 @@ class PointRangeGraph(context: Context?) : View(context) {
         }
 
         canvas.drawPath(path, paint)
+
+        // draw range marks
+        paint.color = Color.WHITE
+        val dxl = x0 + (ptl - pointZero).toFloat() * scale
+        val dxr = x0 + (ptr - pointZero).toFloat() * scale
+        val dyb = -25F
+
+        canvas.drawLine(dxl, y0, dxl, y0 + dyb, paint)
+        canvas.drawLine(dxr, y0, dxr, y0 + dyb, paint)
+        canvas.drawLine(x0, y0, x0, y0 + dyb, paint)
     }
 }
